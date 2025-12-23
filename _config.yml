@@ -49,10 +49,6 @@ author:
 
 # Add links to the sidebar.
 menu:
-  - title:             Papers
-    url:               /example/
-  - title:             Documentation
-    url:               /docs/
   - title:             About
     url:               /about/
 
