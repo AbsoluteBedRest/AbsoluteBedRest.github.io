@@ -6,7 +6,7 @@ hide_description: true
 ---
 
 <div style="display: flex; align-items: center;">
-  <img src="/study/assets/img/profile.jpg" ... style="border-radius: 50%;">
+  <img src="/study/assets/img/profile.png" ... style="border-radius: 50%;">
   <div>
     <h2>SangYeop Jeong (정상엽)</h2>
     <p>Undergraduate Research Assistant → Incoming Graduate Student</p>
