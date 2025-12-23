@@ -25,7 +25,7 @@ My research focuses on the intersection of **Computer Vision**, **Computer Graph
 ### Education
 
 <div style="display: flex; align-items: center; margin-bottom: 20px;">
-  <img src="/study/assets/img/seoultech-logo.jpg" alt="SeoulTech Logo" width="80" style="margin-right: 20px;">
+  <img src="/study/assets/img/seoultech-logo.jpg" alt="SeoulTech Logo" width="100" style="margin-right: 20px;">
   <div>
     <strong>Seoul National University of Science and Technology (SeoulTech)</strong><br>
     서울과학기술대학교<br>
