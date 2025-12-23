@@ -53,14 +53,6 @@ The BrAIn Lab focuses on developing cutting-edge AI technologies inspired by bra
 - **AI for Healthcare**: Intelligent systems for medical diagnosis and patient monitoring
 - **Neuromorphic Computing**: Energy-efficient computing inspired by brain structures
 
-\
-**Research Highlights**:
-
-- Spike-driven neural networks for energy-efficient signal processing
-- EEG decoding for reliable brain-computer interface systems
-- Multi-modal AI systems combining various sensory inputs
-- Real-time processing systems for clinical applications
-
 The lab is supported by the National Research Foundation of Korea, SeoulTech, and ETRI, with various scholarship opportunities for graduate students. \
 \
 **Lab Website**: www.brainailab.com
