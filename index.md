@@ -106,6 +106,20 @@ Classification of reaction time from EEG signals using deep learning models (EEG
 
 ---
 
+### <u>Publications & Presentations</u>
+
+**Conference Papers**
+- Coming soon...
+
+**Poster Presentations**
+- "EEG-based Reaction Time Classification using Deep Learning",
+  *The Institute of Electronics and Information Engineers(IEIE)*, 2025.06
+
+**Workshop Papers**
+- Coming soon...
+
+---
+
 ### <u>Contact</u>
 
 **Email**: yeobi5840@gmail.com  
