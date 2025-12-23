@@ -18,17 +18,6 @@ hide_description: true
 
 ---
 
-### <u>Research Interests</u>
-
-My research focuses on the intersection of **Computer Vision**, **Computer Graphics**, **Virtual Reality**, and **AI applications**. I'm particularly interested in:
-
-- 3D & 4D Scene Generation (3D Gaussian Splatting)
-- VR/AR with AI application
-- Multimodal AI Systems(ex. Vision + Audio)
-- Human and Computer Interaction(HCI)
-
----
-
 ### <u>Education</u>
 
 <div style="display: flex; align-items: center; margin-bottom: 20px;">
@@ -74,10 +63,21 @@ The BrAIn Lab focuses on developing cutting-edge AI technologies inspired by bra
 
 The lab is supported by the National Research Foundation of Korea, SeoulTech, and ETRI, with various scholarship opportunities for graduate students. \
 \
-**Lab Website**: [BrAIn]www.brainailab.com \
-\
-**My Research Focus**:\
-Currently working on Computer Vision projects, with particular interest in integrating vision-based AI with VR/AR applications and exploring multimodal systems that combine visual and audio processing.
+**Lab Website**: www.brainailab.com
+
+---
+
+
+
+### <u>Research Interests</u>
+
+My research focuses on the intersection of **Computer Vision**, **Computer Graphics**, **Virtual Reality**, and **AI applications**. 
+
+I'm particularly interested in:
+- 3D & 4D Scene Generation (3D Gaussian Splatting)
+- VR/AR with AI application
+- Multimodal AI Systems(ex. Vision + Audio)
+- Human and Computer Interaction(HCI)
 
 ---
 
@@ -89,7 +89,6 @@ Currently working on Computer Vision projects, with particular interest in integ
 - html
 - java
 
-\
 **Frameworks & Tools**  :
 - Unreal Engine
 - Unity Engine
@@ -102,7 +101,7 @@ Currently working on Computer Vision projects, with particular interest in integ
 #### User Experience in VR Emotion Recognition Platform (2025.11.15  ~2025.01.22)
 Unity-based VR application integrating Convai AI avatars with real-time emotion analysis using acoustic features on Meta Quest 3.
 
-#### EEG-based Reaction Time Classification using Deep Learning
+#### EEG-based Reaction Time Classification using Deep Learning (2025.05.28 ~ 2025.08.31)
 Classification of reaction time from EEG signals using deep learning models (EEGNet, ATCNet, LSTM) to explore the potential for predicting cognitive enhancement on Random Dot Kinematogram dataset.
 
 ---
