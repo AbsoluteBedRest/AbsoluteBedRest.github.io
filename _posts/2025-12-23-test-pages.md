@@ -10,9 +10,9 @@ tags:
   - Test
   - CVPR
 
-no_toc: true
-no_anchor: true
 ---
+
+## Test Paper: Neural Rendering with Magic
 
 ## Abstract
 이 문서는 **Papers 페이지 테스트용** 더미 논문 리뷰입니다.
