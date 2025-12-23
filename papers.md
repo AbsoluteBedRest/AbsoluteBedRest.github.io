@@ -13,7 +13,7 @@ permalink: /papers/
 {% for post in papers %}
 <article class="post-item">
   <h2>
-    <a href="{{ post.url }}">{{ post.title }}</a>
+    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
   </h2>
 
   <div class="post-meta">
