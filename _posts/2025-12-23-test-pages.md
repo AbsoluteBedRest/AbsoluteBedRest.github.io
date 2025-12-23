@@ -1,17 +1,13 @@
 ---
 layout: post
-title: "Hypercorrelation Squeeze for Few-Shot Segmentation"
-date: 2021-12-05
+title: "[논문리뷰] Bridging Diffusion Models and 3D Representations: A 3D Consistent Super-Resolution Framework"
+date: 2025-12-13
 categories: [papers]
-venue: ICCV 2021
+description: "3DSR 논문 리뷰 (ICCV 2025)"
+tags:
+  - 3D Vision
+  - Diffusion
+  - Gaussian Splatting
+  - ICCV
+  - Novel View Synthesis
 ---
-
-## Abstract
-논문 요약
-
-## Key Contributions
-- Contribution 1
-- Contribution 2
-
-## My Notes
-개인 해설

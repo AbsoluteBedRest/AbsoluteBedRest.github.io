@@ -1,7 +1,10 @@
 ---
-layout: page
+layout: blog
 title: Papers
 permalink: /papers/
+pagination:
+  enabled: true
+  category: papers
 ---
 
 {% assign papers = site.posts
