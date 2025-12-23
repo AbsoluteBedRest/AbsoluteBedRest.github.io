@@ -54,7 +54,7 @@ The BrAIn Lab focuses on developing cutting-edge AI technologies inspired by bra
 - **Neuromorphic Computing**: Energy-efficient computing inspired by brain structures
 
 The lab is supported by the National Research Foundation of Korea, SeoulTech, and ETRI, with various scholarship opportunities for graduate students. \
-\
+
 **Lab Website**: www.brainailab.com
 
 ---
