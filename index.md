@@ -5,10 +5,13 @@ permalink: /
 hide_description: true
 ---
 
-## SangYeop Jeong (정상엽)
-
-**Undergraduate Research Assistant → Incoming Graduate Student**  
-Artificial Intelligence, Seoul National University of Science and Technology
+<div style="display: flex; align-items: center;">
+  <img src="/study/assets/img/profile.jpg" ... style="border-radius: 50%;">
+  <div>
+    <h2>SangYeop Jeong (정상엽)</h2>
+    <p>Undergraduate Research Assistant → Incoming Graduate Student</p>
+  </div>
+</div>
 
 ---
 
@@ -38,6 +41,41 @@ My research focuses on the intersection of **Computer Vision**, **Computer Graph
 </div>
 
 ---
+### Our Lab
+
+<div style="display: flex; align-items: center; margin-bottom: 20px;">
+  <img src="/study/assets/img/brainailab-logo.png" alt="BrAIn Lab Logo" width="120" style="margin-right: 20px;">
+  <div>
+    <strong>BrAIn Lab (Brain and Artificial Intelligence Lab)</strong><br>
+    Department of Applied Artificial Intelligence, SeoulTech<br>
+    <strong>Advisor:</strong> Prof. Seong-Eun Kim<br>
+    <strong>Position:</strong> Undergraduate Research Intern (Winter 2024 ~ Present)
+  </div>
+</div>
+About BrAIn Lab:
+The BrAIn Lab focuses on developing cutting-edge AI technologies inspired by brain functions. Our research spans multiple domains at the intersection of neuroscience and artificial intelligence:
+
+- **Brain-Computer Interfaces (BCI)**: EEG-based systems for real-world applications
+- **Deep Learning for Signal Processing**: Advanced neural architectures for biomedical signals
+- **AI for Healthcare**: Intelligent systems for medical diagnosis and patient monitoring
+- **Neuromorphic Computing**: Energy-efficient computing inspired by brain structures
+
+\
+**Research Highlights**:
+
+- Spike-driven neural networks for energy-efficient signal processing
+- EEG decoding for reliable brain-computer interface systems
+- Multi-modal AI systems combining various sensory inputs
+- Real-time processing systems for clinical applications
+
+The lab is supported by the National Research Foundation of Korea, SeoulTech, and ETRI, with various scholarship opportunities for graduate students. \
+\
+**Lab Website**: www.brainailab.com \
+\
+**My Research Focus**:\
+Currently working on Computer Vision projects, with particular interest in integrating vision-based AI with VR/AR applications and exploring multimodal systems that combine visual and audio processing.
+
+---
 
 ### Current Research
 
@@ -52,13 +90,12 @@ Developed emotion recognition systems integrating VR interactions with acoustic 
 ### Technical Skills
 
 **Programming Languages**  
-Python, C++, C#, html
+Python, C++, C#, html, java
 
 **Frameworks & Tools**  
-- Computer Vision: OpenCV, PyTorch, TensorFlow
-- Graphics: OpenGL, Unity, Blender
-- AI/ML: HuggingFace, Scikit-learn
-- VR: Meta Quest SDK, XR Toolkit
+- Unity Engine
+- Unreal Engine
+- 
 
 **Research Tools**  
 Git, LaTeX, Jupyter Notebook
