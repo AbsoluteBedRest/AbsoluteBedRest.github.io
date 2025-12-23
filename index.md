@@ -55,8 +55,9 @@ My research focuses on the intersection of **Computer Vision**, **Computer Graph
     <strong>Position:</strong> Undergraduate Research Intern (Winter 2024 ~ Present)
   </div>
 </div>
-About BrAIn Lab:
-The BrAIn Lab focuses on developing cutting-edge AI technologies inspired by brain functions. Our research spans multiple domains at the intersection of neuroscience and artificial intelligence:
+
+The BrAIn Lab focuses on developing cutting-edge AI technologies inspired by brain functions. \
+ Our research spans multiple domains at the intersection of neuroscience and artificial intelligence:
 
 - **Brain-Computer Interfaces (BCI)**: EEG-based systems for real-world applications
 - **Deep Learning for Signal Processing**: Advanced neural architectures for biomedical signals
@@ -82,24 +83,27 @@ Currently working on Computer Vision projects, with particular interest in integ
 
 ### <u>Technical Skills</u>
 
-**Programming Languages**  
-Python, C++, C#, html, java
+**Programming Languages**  :
+- Python
+- C / C++ / C#
+- html
+- java
 
-**Frameworks & Tools**  
-- Unity Engine
+\
+**Frameworks & Tools**  :
 - Unreal Engine
+- Unity Engine
 - MATLAB
-- 
 
 ---
 
 ### <u>Projects</u>
 
-#### VR Emotion Recognition Platform
+#### User Experience in VR Emotion Recognition Platform (2025.11.15  ~2025.01.22)
 Unity-based VR application integrating Convai AI avatars with real-time emotion analysis using acoustic features on Meta Quest 3.
 
-#### Computer Graphics Rendering
-3D solar system visualization with hierarchical transformations, Blinn-Phong lighting, and advanced texture mapping using OpenGL.
+#### EEG-based Reaction Time Classification using Deep Learning
+Classification of reaction time from EEG signals using deep learning models (EEGNet, ATCNet, LSTM) to explore the potential for predicting cognitive enhancement on Random Dot Kinematogram dataset.
 
 ---
 
