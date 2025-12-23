@@ -39,6 +39,9 @@ keywords:              []
 # It also used by the `jekyll-seo-tag` plugin.
 logo:                  /assets/img/logo.jpg
 
+# Favicon (브라우저 탭 아이콘) - 이 부분 추가
+favicon: /assets/img/logo.jpg
+
 # This should be the same author as first entry in `_data/authors.yml`.
 author:
   # Used by `jekyll-feed`:
