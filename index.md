@@ -47,7 +47,7 @@ My research focuses on the intersection of **Computer Vision**, **Computer Graph
 ### <u>Our Lab</u>
 
 <div style="display: flex; align-items: center; margin-bottom: 20px;">
-  <img src="/study/assets/img/brainailab-logo.png" alt="BrAIn Lab Logo" width="120" style="margin-right: 20px;">
+  <img src="/study/assets/img/brainailab-logo.png" alt="BrAIn Lab Logo" width="200" style="margin-right: 20px;">
   <div>
     <strong>BrAIn Lab (Brain and Artificial Intelligence Lab)</strong><br>
     Department of Applied Artificial Intelligence, SeoulTech<br>
@@ -80,16 +80,6 @@ Currently working on Computer Vision projects, with particular interest in integ
 
 ---
 
-### <u>Current Research</u>
-
-**Computer Vision Lab**  
-Working on multi-scale object detection systems using Feature Pyramid Networks (FPN) and advanced techniques for handling class imbalance in vision tasks.
-
-**VR & Multimodal AI**  
-Developed emotion recognition systems integrating VR interactions with acoustic analysis using models like HuBERT and Emotion2Vec on Meta Quest 3.
-
----
-
 ### <u>Technical Skills</u>
 
 **Programming Languages**  
@@ -98,31 +88,18 @@ Python, C++, C#, html, java
 **Frameworks & Tools**  
 - Unity Engine
 - Unreal Engine
+- MATLAB
 - 
-
-**Research Tools**  
-Git, LaTeX, Jupyter Notebook
 
 ---
 
 ### <u>Projects</u>
-
-#### Multi-Scale Object Detection System
-Implementation of FPN-based object detection with focal loss for handling class imbalance in cat/dog classification tasks.
 
 #### VR Emotion Recognition Platform
 Unity-based VR application integrating Convai AI avatars with real-time emotion analysis using acoustic features on Meta Quest 3.
 
 #### Computer Graphics Rendering
 3D solar system visualization with hierarchical transformations, Blinn-Phong lighting, and advanced texture mapping using OpenGL.
-
----
-
-### Philosophy
-
-> *"The better the AI, the more time to sleep"*
-
-I believe in building intelligent systems that automate complex tasks, giving researchers and developers more time to focus on creative and strategic thinking.
 
 ---
 
@@ -133,4 +110,4 @@ I believe in building intelligent systems that automate complex tasks, giving re
 
 ---
 
-*Last updated: December 2024*
+*Last updated: December 2025*
