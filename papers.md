@@ -4,10 +4,12 @@ title: Papers
 permalink: /papers/
 ---
 
-{% assign papers = site.posts 
-   | where_exp: "post", "post.categories contains 'papers'" 
-   | sort: "date" 
-   | reverse %}
+{% assign papers = site.posts
+  | where_exp: "post", "post.categories contains 'papers'"
+  | sort: "date"
+  | reverse %}
+
+<div class="timeline">
 
 {% assign current_year = "" %}
 
@@ -15,28 +17,22 @@ permalink: /papers/
   {% assign year = post.date | date: "%Y" %}
 
   {% if year != current_year %}
-## {{ year }}
-  {% assign current_year = year %}
+    <div class="timeline-year">{{ year }}</div>
+    {% assign current_year = year %}
   {% endif %}
 
-<div style="margin-bottom: 1.8rem; padding-bottom: 1.2rem; border-bottom: 1px solid #eee;">
-
-  <div style="font-size: 0.9rem; color: #999;">
-    {{ post.date | date: "%Y · %m" }}
-    {% if post.venue %}
-      · <em>{{ post.venue }}</em>
-    {% endif %}
+  <div class="timeline-item">
+    <div class="timeline-date">
+      {{ post.date | date: "%d %b" }}
+    </div>
+    <div class="timeline-content">
+      <a href="{{ post.url }}">{{ post.title }}</a>
+      {% if post.venue %}
+        <div class="timeline-venue">{{ post.venue }}</div>
+      {% endif %}
+    </div>
   </div>
 
-  <div style="font-size: 1.15rem; font-weight: 600; margin-top: 0.3rem;">
-    <a href="{{ post.url }}">{{ post.title }}</a>
-  </div>
-
-  {% if post.excerpt %}
-  <div style="color: #666; margin-top: 0.4rem; font-size: 0.95rem;">
-    {{ post.excerpt | strip_html | truncate: 160 }}
-  </div>
-  {% endif %}
+{% endfor %}
 
 </div>
-{% endfor %}

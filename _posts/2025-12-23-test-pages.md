@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "My First Paper"
-date: 2024-03-01
+title: "Hypercorrelation Squeeze for Few-Shot Segmentation"
+date: 2021-12-05
 categories: [papers]
-venue: NeurIPS 2024
+venue: ICCV 2021
 ---
 
 ## Abstract
