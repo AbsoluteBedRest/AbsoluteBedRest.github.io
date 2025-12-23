@@ -1,6 +1,8 @@
 ---
 layout: page
 title: About
+permalink: /
+hide_description: true
 ---
 
 ## SangYeop Jeong (정상엽)
