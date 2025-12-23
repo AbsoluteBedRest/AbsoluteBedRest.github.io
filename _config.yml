@@ -45,9 +45,7 @@ author:
   name:  SangYeop Jeong
   email: yeobi5840@gmail.com
   # # Used by `jekyll-seo-tag`:
-  social:
-    github: absolutebedrest
-
+  username: author1 
 # Add links to the sidebar.
 menu:
   - title: Papers
