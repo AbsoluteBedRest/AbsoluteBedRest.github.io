@@ -1,41 +1,39 @@
 ---
-layout: blog
+layout: page
 title: Papers
 permalink: /papers/
-pagination:
-  enabled: true
-  category: papers
 ---
 
-{% assign papers = site.posts
-  | where_exp: "post", "post.categories contains 'papers'"
-  | sort: "date"
-  | reverse %}
+{% assign papers = site.categories.papers | sort: "date" | reverse %}
 
-<div class="timeline">
-
-{% assign current_year = "" %}
+{% if papers.size == 0 %}
+<p>아직 등록된 논문이 없습니다.</p>
+{% endif %}
 
 {% for post in papers %}
-  {% assign year = post.date | date: "%Y" %}
+<article class="post-item">
+  <h2>
+    <a href="{{ post.url }}">{{ post.title }}</a>
+  </h2>
 
-  {% if year != current_year %}
-    <div class="timeline-year">{{ year }}</div>
-    {% assign current_year = year %}
-  {% endif %}
-
-  <div class="timeline-item">
-    <div class="timeline-date">
-      {{ post.date | date: "%d %b" }}
-    </div>
-    <div class="timeline-content">
-      <a href="{{ post.url }}">{{ post.title }}</a>
-      {% if post.venue %}
-        <div class="timeline-venue">{{ post.venue }}</div>
-      {% endif %}
-    </div>
+  <div class="post-meta">
+    📅 {{ post.date | date: "%Y년 %m월 %d일" }}
   </div>
 
-{% endfor %}
+  {% if post.description %}
+  <p class="post-description">
+    {{ post.description }}
+  </p>
+  {% endif %}
 
-</div>
+  {% if post.tags %}
+  <div class="post-tags">
+    {% for tag in post.tags %}
+      <span class="tag">{{ tag }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+</article>
+
+<hr />
+{% endfor %}
