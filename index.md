@@ -18,7 +18,7 @@ hide_description: true
 
 ---
 
-### Research Interests
+### <u>Research Interests</u>
 
 My research focuses on the intersection of **Computer Vision**, **Computer Graphics**, **Virtual Reality**, and **AI applications**. I'm particularly interested in:
 
@@ -29,7 +29,7 @@ My research focuses on the intersection of **Computer Vision**, **Computer Graph
 
 ---
 
-### Education
+### <u>Education</u>
 
 <div style="display: flex; align-items: center; margin-bottom: 20px;">
   <img src="/study/assets/img/seoultech-logo.png" alt="SeoulTech Logo" width="150" style="margin-right: 20px;">
@@ -44,7 +44,7 @@ My research focuses on the intersection of **Computer Vision**, **Computer Graph
 </div>
 
 ---
-### Our Lab
+### <u>Our Lab</u>
 
 <div style="display: flex; align-items: center; margin-bottom: 20px;">
   <img src="/study/assets/img/brainailab-logo.png" alt="BrAIn Lab Logo" width="120" style="margin-right: 20px;">
@@ -73,14 +73,14 @@ The BrAIn Lab focuses on developing cutting-edge AI technologies inspired by bra
 
 The lab is supported by the National Research Foundation of Korea, SeoulTech, and ETRI, with various scholarship opportunities for graduate students. \
 \
-**Lab Website**: www.brainailab.com \
+**Lab Website**: [BrAIn]www.brainailab.com \
 \
 **My Research Focus**:\
 Currently working on Computer Vision projects, with particular interest in integrating vision-based AI with VR/AR applications and exploring multimodal systems that combine visual and audio processing.
 
 ---
 
-### Current Research
+### <u>Current Research</u>
 
 **Computer Vision Lab**  
 Working on multi-scale object detection systems using Feature Pyramid Networks (FPN) and advanced techniques for handling class imbalance in vision tasks.
@@ -90,7 +90,7 @@ Developed emotion recognition systems integrating VR interactions with acoustic 
 
 ---
 
-### Technical Skills
+### <u>Technical Skills</u>
 
 **Programming Languages**  
 Python, C++, C#, html, java
@@ -105,7 +105,7 @@ Git, LaTeX, Jupyter Notebook
 
 ---
 
-### Projects
+### <u>Projects</u>
 
 #### Multi-Scale Object Detection System
 Implementation of FPN-based object detection with focal loss for handling class imbalance in cat/dog classification tasks.
@@ -126,7 +126,7 @@ I believe in building intelligent systems that automate complex tasks, giving re
 
 ---
 
-### Contact
+### <u>Contact</u>
 
 **Email**: yeobi5840@gmail.com  
 **GitHub**: [github.com/absolutebedrest](https://github.com/absolutebedrest)
