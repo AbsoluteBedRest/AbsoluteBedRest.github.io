@@ -47,7 +47,7 @@ My research focuses on the intersection of **Computer Vision**, **Computer Graph
 ### <u>Our Lab</u>
 
 <div style="display: flex; align-items: center; margin-bottom: 20px;">
-  <img src="/study/assets/img/brainailab-logo.png" alt="BrAIn Lab Logo" width="200" style="margin-right: 20px;">
+  <img src="/study/assets/img/brainailab-logo.png" alt="BrAIn Lab Logo" width="250" style="margin-right: 20px;">
   <div>
     <strong>BrAIn Lab (Brain and Artificial Intelligence Lab)</strong><br>
     Department of Applied Artificial Intelligence, SeoulTech<br>
