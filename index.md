@@ -5,11 +5,14 @@ permalink: /
 hide_description: true
 ---
 
-<div style="display: flex; align-items: center;">
-  <img src="/study/assets/img/profile.png" ... style="border-radius: 50%;">
+<div style="display: flex; align-items: center; margin-bottom: 30px; gap: 30px;">
+  <img src="/study/assets/img/profile.png" alt="SangYeop Jeong" width="200" style="border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
   <div>
-    <h2>SangYeop Jeong (정상엽)</h2>
-    <p>Undergraduate Research Assistant → Incoming Graduate Student</p>
+    <h2 style="margin: 0;">SangYeop Jeong (정상엽)</h2>
+    <p style="margin: 10px 0; font-size: 1.1em; color: #666;">
+      <strong>Undergraduate Research Assistant → Incoming Graduate Student</strong><br>
+      Artificial Intelligence, Seoul National University of Science and Technology
+    </p>
   </div>
 </div>
 
