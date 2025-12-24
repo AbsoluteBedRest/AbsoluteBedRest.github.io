@@ -4,10 +4,6 @@ title: Papers
 permalink: /papers/
 ---
 
-{% assign papers_count = site.categories.papers | size %}
-
-# Papers {% if papers_count > 0 %}({{ papers_count }}){% endif %}
-
 {% assign papers = site.categories.papers | sort: "date" | reverse %}
 
 {% if papers.size == 0 %}

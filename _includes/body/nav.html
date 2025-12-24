@@ -1,0 +1,27 @@
+<!--
+  사이드바 메뉴 - Papers 개수 표시 기능 추가
+-->
+
+<span class="sr-only">{{ site.data.strings.navigation | default:"Navigation" }}{{ site.data.strings.colon | default:":" }}</span>
+<ul>
+  {% for node in site.menu %}
+    <li>
+      <a 
+        id="_{{ node.title | downcase }}" 
+        href="{% include_cached smart-url url=node.url %}" 
+        class="sidebar-nav-item{% if page.url contains node.url %} active{% endif %}"
+        {% if node.rel %}rel="{{ node.rel }}"{% endif %}
+      >
+        {{ node.title }}
+        
+        {%- comment -%} Papers 카테고리 개수 표시 {%- endcomment -%}
+        {% if node.title == "Papers" %}
+          {% assign papers_count = site.categories.papers | size %}
+          {% if papers_count > 0 %}
+            <span style="color:#4f9eba; font-weight:bold; margin-left:4px;">({{ papers_count }})</span>
+          {% endif %}
+        {% endif %}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
