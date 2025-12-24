@@ -91,3 +91,18 @@ Example code for using Matamo as alternative analytics solution.
 </script>
 {% endif %}
 {% endcomment %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const papersCount = {{ site.categories.papers | size }};
+  const papersMenu = document.querySelector('a[href*="/papers/"]');
+  
+  if (papersMenu && papersCount > 0) {
+    const badge = document.createElement('span');
+    badge.className = 'post-count-badge';
+    badge.textContent = papersCount;
+    badge.style.cssText = 'background:#4f9eba; color:white; padding:2px 8px; border-radius:12px; font-size:0.75em; margin-left:5px; font-weight:bold;';
+    papersMenu.appendChild(badge);
+  }
+});
+</script>
