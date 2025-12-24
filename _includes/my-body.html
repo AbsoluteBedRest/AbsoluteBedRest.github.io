@@ -1,3 +1,6 @@
+<!--
+Code for integrating CloudFlare's email protection with Hydejack's single page app loading.
+-->
 <script>
   document.getElementById('_pushState').addEventListener('hy-push-state-after', function (e) {
     function e(e){
@@ -46,87 +49,45 @@
   });
 </script>
 
+{% comment %}
+<!--
+Example code for using Matamo as alternative analytics solution.
+-->
+{% if site.matomo_analytics %}
 <script>
-(function() {
-  // 안전하게 Liquid 변수 가져오기 (따옴표로 감싸서 문법 오류 방지)
-  var rawCount = "{{ site.categories.papers | size | default: 0 }}";
-  var papersCount = parseInt(rawCount, 10);
-  
-  if (isNaN(papersCount)) {
-    papersCount = 0;
-  }
+  var _paq = _paq || [];
 
-  console.log('=== Papers Badge Script Started. Count: ' + papersCount + ' ===');
+  /*{% if site.matomo_analytics.no_cookies %}*/
+  _paq.push(['disableCookies']);
+  /*{% endif %}*/
 
-  function updatePapersBadge() {
-    try {
-      // 사이드바 메뉴 찾기
-      var allLinks = document.querySelectorAll('a');
-      var targetLink = null;
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  _paq.push(['setTrackerUrl', u+'piwik.php']);
+  _paq.push(['setSiteId', '{{site.matomo_analytics.site_id}}']);
 
-      for (var i = 0; i < allLinks.length; i++) {
-        var link = allLinks[i];
-        // 링크 주소에 papers가 있고, 텍스트에 Papers가 있는 요소 찾기
-        if (link.href && link.href.indexOf('/papers/') > -1) {
-           var text = link.innerText || link.textContent;
-           if (text && text.toUpperCase().indexOf('PAPERS') > -1) {
-             targetLink = link;
-             break;
-           }
-        }
-      }
-
-      if (!targetLink) {
-        // 아직 DOM이 로드되지 않았을 수 있으므로 로그만 남김
-        // console.log('Papers menu link not found yet.');
-        return;
-      }
-
-      // 이미 배지가 있으면 내용만 갱신
-      var existingBadge = targetLink.querySelector('.papers-badge');
-      var badgeText = ' (' + papersCount + ')'; 
-
-      if (existingBadge) {
-        if (existingBadge.textContent !== badgeText) {
-            existingBadge.textContent = badgeText;
-        }
-      } else {
-        // 배지 새로 만들기
-        var badge = document.createElement('span');
-        badge.className = 'papers-badge';
-        badge.textContent = badgeText;
-        
-        // 스타일 적용
-        badge.style.opacity = '0.6';
-        badge.style.marginLeft = '5px';
-        badge.style.fontSize = '0.85em';
-        badge.style.fontWeight = 'normal';
-        
-        targetLink.appendChild(badge);
-        console.log('Badge attached: ' + badgeText);
-      }
-    } catch (e) {
-      console.error('Error in updatePapersBadge:', e);
-    }
-  }
-
-  // --- 실행 타이밍 설정 ---
-  
-  // 1. 즉시 실행 시도
-  updatePapersBadge();
-
-  // 2. DOM 로드 완료 시
-  document.addEventListener('DOMContentLoaded', updatePapersBadge);
-  
-  // 3. 윈도우 로드 완료 시 (이미지 등 포함)
-  window.addEventListener('load', updatePapersBadge);
-
-  // 4. Hydejack 페이지 전환(SPA) 대응
   var pushStateEl = document.getElementById('_pushState');
-  if (pushStateEl) {
-    pushStateEl.addEventListener('hy-push-state-after', function() {
-      setTimeout(updatePapersBadge, 200); // 0.2초 지연 실행
-    });
-  }
-})();
+  var timeStartLoadPage, referer, timeItTookToLoadPage;
+
+  pushStateEl.addEventListener('hy-push-state-start', function() {
+    timeStartLoadPage = new Date().getTime();
+    referer = window.location.toString();
+  });
+
+  pushStateEl.addEventListener('hy-push-state-ready', function() {
+    timeItTookToLoadPage = new Date().getTime() - timeStartLoadPage;
+  });
+
+  pushStateEl.addEventListener('hy-push-state-after', function() {
+    _paq.push(['setReferrerUrl', referer]);
+    _paq.push(['setCustomUrl', window.location.toString()]);
+    _paq.push(['setDocumentTitle', document.title]);
+    _paq.push(['deleteCustomVariables', 'page']);
+    _paq.push(['setGenerationTimeMs', timeItTookToLoadPage]);
+    _paq.push(['trackPageView']);
+  });
+
+  window.loadJSDeferred('{{site.matomo_analytics.root}}piwik.js');
 </script>
+{% endif %}
+{% endcomment %}
