@@ -93,23 +93,46 @@ Example code for using Matamo as alternative analytics solution.
 {% endcomment %}
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Papers 카테고리의 게시글 수
-  const papersCount = {{ site.categories.papers | size }};
+  // 초기 로드
+  addPapersCount();
   
-  // 사이드바의 Papers 메뉴만 찾기 (더 구체적인 선택자)
-  const sidebar = document.querySelector('.sidebar');
-  if (sidebar) {
-    const papersMenu = sidebar.querySelector('a[href*="/papers/"]');
+  // 페이지 전환 시마다 실행
+  document.getElementById('_pushState').addEventListener('hy-push-state-after', function() {
+    addPapersCount();
+  });
+  
+  function addPapersCount() {
+    const papersCount = {{ site.categories.papers | size }};
+    
+    // 여러 선택자 시도
+    const selectors = [
+      '.sidebar .menu a[href*="/papers/"]',
+      '.sidebar-sticky a[href*="/papers/"]', 
+      'aside a[href*="/papers/"]',
+      '.sidebar a[href="/study/papers/"]'
+    ];
+    
+    let papersMenu = null;
+    for (let selector of selectors) {
+      papersMenu = document.querySelector(selector);
+      if (papersMenu) break;
+    }
     
     if (papersMenu && papersCount > 0) {
-      // 카운트 뱃지 추가
+      // 이미 뱃지가 있으면 제거 (중복 방지)
+      const existingBadge = papersMenu.querySelector('.post-count-badge');
+      if (existingBadge) existingBadge.remove();
+      
+      // 새 뱃지 추가
       const badge = document.createElement('span');
       badge.className = 'post-count-badge';
       badge.textContent = papersCount;
       badge.style.cssText = 'background:#4f9eba; color:white; padding:2px 8px; border-radius:12px; font-size:0.75em; margin-left:5px; font-weight:bold;';
       papersMenu.appendChild(badge);
+      
+      console.log('Papers count badge added:', papersCount); // 디버깅용
+    } else {
+      console.log('Papers menu not found or count is 0'); // 디버깅용
     }
   }
-});
 </script>
