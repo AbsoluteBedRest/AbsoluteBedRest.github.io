@@ -151,27 +151,27 @@ Example code for using Matamo as alternative analytics solution.
     console.log('--- addPapersCount end ---');
   }
   
-  // 즉시 실행
-  addPapersCount();
-  
-  // DOMContentLoaded
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('DOMContentLoaded');
-      addPapersCount();
-    });
-  }
-  
-  // 지연 실행
-  setTimeout(function() {
-    console.log('setTimeout 500ms');
+  // window.onload 사용 (DOM + 모든 리소스 로드 완료 후)
+  window.addEventListener('load', function() {
+    console.log('window.onload');
     addPapersCount();
-  }, 500);
+  });
+  
+  // 지연 실행 (여러 타이밍 시도)
+  setTimeout(function() {
+    console.log('setTimeout 1000ms');
+    addPapersCount();
+  }, 1000);
   
   setTimeout(function() {
-    console.log('setTimeout 1500ms');
+    console.log('setTimeout 2000ms');
     addPapersCount();
-  }, 1500);
+  }, 2000);
+  
+  setTimeout(function() {
+    console.log('setTimeout 3000ms');
+    addPapersCount();
+  }, 3000);
   
   // Hydejack 이벤트
   var pushEl = document.getElementById('_pushState');
