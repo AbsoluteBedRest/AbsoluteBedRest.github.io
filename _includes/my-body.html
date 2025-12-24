@@ -94,15 +94,22 @@ Example code for using Matamo as alternative analytics solution.
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Papers 카테고리의 게시글 수
   const papersCount = {{ site.categories.papers | size }};
-  const papersMenu = document.querySelector('a[href*="/papers/"]');
   
-  if (papersMenu && papersCount > 0) {
-    const badge = document.createElement('span');
-    badge.className = 'post-count-badge';
-    badge.textContent = papersCount;
-    badge.style.cssText = 'background:#4f9eba; color:white; padding:2px 8px; border-radius:12px; font-size:0.75em; margin-left:5px; font-weight:bold;';
-    papersMenu.appendChild(badge);
+  // 사이드바의 Papers 메뉴만 찾기 (더 구체적인 선택자)
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar) {
+    const papersMenu = sidebar.querySelector('a[href*="/papers/"]');
+    
+    if (papersMenu && papersCount > 0) {
+      // 카운트 뱃지 추가
+      const badge = document.createElement('span');
+      badge.className = 'post-count-badge';
+      badge.textContent = papersCount;
+      badge.style.cssText = 'background:#4f9eba; color:white; padding:2px 8px; border-radius:12px; font-size:0.75em; margin-left:5px; font-weight:bold;';
+      papersMenu.appendChild(badge);
+    }
   }
 });
 </script>
