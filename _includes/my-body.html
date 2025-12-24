@@ -151,13 +151,19 @@ Example code for using Matamo as alternative analytics solution.
     console.log('--- addPapersCount end ---');
   }
   
-  // window.onload 사용 (DOM + 모든 리소스 로드 완료 후)
+  // 여러 방법으로 실행 시도
+  
+  // 1. 즉시 실행
+  addPapersCount();
+  console.log('Immediate execution');
+  
+  // 2. window.onload
   window.addEventListener('load', function() {
     console.log('window.onload');
     addPapersCount();
   });
   
-  // 지연 실행 (여러 타이밍 시도)
+  // 3. 지연 실행
   setTimeout(function() {
     console.log('setTimeout 1000ms');
     addPapersCount();
@@ -172,6 +178,33 @@ Example code for using Matamo as alternative analytics solution.
     console.log('setTimeout 3000ms');
     addPapersCount();
   }, 3000);
+  
+  // 4. 주기적으로 체크 (최대 5번, 1초마다)
+  var checkCount = 0;
+  var checkInterval = setInterval(function() {
+    checkCount++;
+    console.log('Interval check #' + checkCount);
+    
+    // Papers 메뉴가 있는지 확인
+    var allLinks = document.querySelectorAll('a');
+    var hasPapersMenu = false;
+    for (var i = 0; i < allLinks.length; i++) {
+      if (allLinks[i].href && allLinks[i].href.indexOf('/papers/') > -1 && 
+          allLinks[i].textContent.trim() === 'Papers') {
+        hasPapersMenu = true;
+        break;
+      }
+    }
+    
+    if (hasPapersMenu) {
+      console.log('Papers menu found in interval, adding badge');
+      addPapersCount();
+      clearInterval(checkInterval);
+    } else if (checkCount >= 5) {
+      console.log('Max checks reached, stopping interval');
+      clearInterval(checkInterval);
+    }
+  }, 1000);
   
   // Hydejack 이벤트
   var pushEl = document.getElementById('_pushState');
