@@ -92,32 +92,64 @@ Example code for using Matamo as alternative analytics solution.
 {% endif %}
 {% endcomment %}
 
-<!-- Papers 게시글 개수 표시 -->
+<!-- Papers 게시글 개수 표시 (디버깅 버전) -->
 <script>
+  console.log('=== Papers Count Script Loaded ===');
+  
   // 초기 로드 시 실행
-  setTimeout(addPapersCount, 500);
+  setTimeout(function() {
+    console.log('Running addPapersCount (initial load)');
+    addPapersCount();
+  }, 1000);
   
   // 페이지 전환 시 실행
   document.getElementById('_pushState').addEventListener('hy-push-state-after', function() {
-    setTimeout(addPapersCount, 300);
+    console.log('Running addPapersCount (page change)');
+    setTimeout(addPapersCount, 500);
   });
   
   function addPapersCount() {
+    console.log('--- addPapersCount function start ---');
+    
     const papersCount = {{ site.categories.papers | size }};
+    console.log('Papers count:', papersCount);
     
-    if (papersCount === 0) return;
+    if (papersCount === 0) {
+      console.log('Papers count is 0, exiting');
+      return;
+    }
     
-    // 사이드바의 모든 링크 찾기
-    const menuLinks = document.querySelectorAll('.sidebar a, .sidebar-sticky a, aside a, nav a');
+    // 모든 링크 찾기
+    const allLinks = document.querySelectorAll('a');
+    console.log('Total links on page:', allLinks.length);
     
-    for (let link of menuLinks) {
-      // Papers 메뉴인지 확인
-      if (link.href && link.href.includes('/papers/') && 
-          link.textContent.trim() === 'Papers') {
+    // Papers를 포함하는 모든 링크 찾기
+    let papersLinks = [];
+    allLinks.forEach(function(link) {
+      if (link.href && link.href.includes('/papers/')) {
+        papersLinks.push(link);
+        console.log('Found papers link:', {
+          href: link.href,
+          text: link.textContent.trim(),
+          classes: link.className
+        });
+      }
+    });
+    
+    console.log('Total papers links found:', papersLinks.length);
+    
+    // Papers 메뉴 찾기 (텍스트가 정확히 "Papers"인 것)
+    let menuFound = false;
+    for (let link of papersLinks) {
+      if (link.textContent.trim() === 'Papers') {
+        console.log('Found Papers menu link!');
         
         // 이미 뱃지가 있으면 제거
         const existingBadge = link.querySelector('.papers-count');
-        if (existingBadge) existingBadge.remove();
+        if (existingBadge) {
+          console.log('Removing existing badge');
+          existingBadge.remove();
+        }
         
         // 새 뱃지 추가
         const badge = document.createElement('span');
@@ -126,8 +158,19 @@ Example code for using Matamo as alternative analytics solution.
         badge.style.cssText = 'color:#4f9eba; font-weight:bold;';
         link.appendChild(badge);
         
-        break; // 첫 번째 Papers 메뉴만 수정
+        console.log('✅ Badge added successfully!');
+        menuFound = true;
+        break;
       }
     }
+    
+    if (!menuFound) {
+      console.log('❌ Papers menu not found. Checking all link texts:');
+      papersLinks.forEach(function(link) {
+        console.log('  - "' + link.textContent.trim() + '"');
+      });
+    }
+    
+    console.log('--- addPapersCount function end ---');
   }
 </script>
