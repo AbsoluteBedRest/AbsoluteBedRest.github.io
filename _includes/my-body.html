@@ -48,79 +48,84 @@
 
 <script>
 (function() {
-  // Papers 메뉴에 배지를 다는 메인 함수
-  function updatePapersBadge() {
-    console.log('--- Updating Papers Badge ---');
-    
-    // 1. Liquid로 개수 가져오기 (0개여도 0으로 반환)
-    var papersCount = {{ site.categories.papers | size | default: 0 }};
-    
-    // 2. Papers 메뉴 찾기 (Sidebar에 있는 링크)
-    // Sidebar 메뉴는 보통 id="sidebar" 또는 class="sidebar" 내부에 있거나, 
-    // Hydejack 구조상 nav 태그 안에 있습니다. 범용성을 위해 전체 a 태그 중 검색합니다.
-    var allLinks = document.querySelectorAll('a');
-    var targetLink = null;
+  // 안전하게 Liquid 변수 가져오기 (따옴표로 감싸서 문법 오류 방지)
+  var rawCount = "{{ site.categories.papers | size | default: 0 }}";
+  var papersCount = parseInt(rawCount, 10);
+  
+  if (isNaN(papersCount)) {
+    papersCount = 0;
+  }
 
-    for (var i = 0; i < allLinks.length; i++) {
-      var link = allLinks[i];
-      
-      // 조건: href에 '/papers/'가 있고, 텍스트에 'Papers'가 포함된 경우
-      // (이미지나 아이콘이 섞여 있을 수 있으므로 textContent로 텍스트만 추출해서 확인)
-      if (link.href && link.href.indexOf('/papers/') > -1) {
-        var text = link.textContent || link.innerText;
-        // 대소문자 구분 없이 Papers 확인
-        if (text.trim().toUpperCase().includes('PAPERS')) {
-          targetLink = link;
-          console.log('Found menu link:', link);
-          break; // 찾았으면 루프 중단
+  console.log('=== Papers Badge Script Started. Count: ' + papersCount + ' ===');
+
+  function updatePapersBadge() {
+    try {
+      // 사이드바 메뉴 찾기
+      var allLinks = document.querySelectorAll('a');
+      var targetLink = null;
+
+      for (var i = 0; i < allLinks.length; i++) {
+        var link = allLinks[i];
+        // 링크 주소에 papers가 있고, 텍스트에 Papers가 있는 요소 찾기
+        if (link.href && link.href.indexOf('/papers/') > -1) {
+           var text = link.innerText || link.textContent;
+           if (text && text.toUpperCase().indexOf('PAPERS') > -1) {
+             targetLink = link;
+             break;
+           }
         }
       }
-    }
 
-    // 메뉴를 못 찾았으면 종료
-    if (!targetLink) {
-      console.log('Papers menu link NOT found.');
-      return;
-    }
+      if (!targetLink) {
+        // 아직 DOM이 로드되지 않았을 수 있으므로 로그만 남김
+        // console.log('Papers menu link not found yet.');
+        return;
+      }
 
-    // 3. 이미 배지가 있는지 확인 (중복 추가 방지)
-    // 기존 배지가 있다면 내용만 업데이트
-    var existingBadge = targetLink.querySelector('.papers-badge');
-    var badgeText = ' (' + papersCount + ')'; // 요청하신 형식: (0), (3) 등
+      // 이미 배지가 있으면 내용만 갱신
+      var existingBadge = targetLink.querySelector('.papers-badge');
+      var badgeText = ' (' + papersCount + ')'; 
 
-    if (existingBadge) {
-      existingBadge.textContent = badgeText;
-    } else {
-      // 배지가 없으면 새로 생성
-      var badge = document.createElement('span');
-      badge.className = 'papers-badge';
-      badge.textContent = badgeText;
-      
-      // 스타일 적용 (사이드바 텍스트와 어우러지게)
-      badge.style.opacity = '0.7'; 
-      badge.style.fontSize = '0.9em';
-      badge.style.fontWeight = 'normal';
-      badge.style.marginLeft = '4px';
-
-      targetLink.appendChild(badge);
+      if (existingBadge) {
+        if (existingBadge.textContent !== badgeText) {
+            existingBadge.textContent = badgeText;
+        }
+      } else {
+        // 배지 새로 만들기
+        var badge = document.createElement('span');
+        badge.className = 'papers-badge';
+        badge.textContent = badgeText;
+        
+        // 스타일 적용
+        badge.style.opacity = '0.6';
+        badge.style.marginLeft = '5px';
+        badge.style.fontSize = '0.85em';
+        badge.style.fontWeight = 'normal';
+        
+        targetLink.appendChild(badge);
+        console.log('Badge attached: ' + badgeText);
+      }
+    } catch (e) {
+      console.error('Error in updatePapersBadge:', e);
     }
   }
 
-  // --- 실행 트리거 설정 ---
+  // --- 실행 타이밍 설정 ---
+  
+  // 1. 즉시 실행 시도
+  updatePapersBadge();
 
-  // 1. 최초 로드 시 실행
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updatePapersBadge);
-  } else {
-    updatePapersBadge();
-  }
+  // 2. DOM 로드 완료 시
+  document.addEventListener('DOMContentLoaded', updatePapersBadge);
+  
+  // 3. 윈도우 로드 완료 시 (이미지 등 포함)
+  window.addEventListener('load', updatePapersBadge);
 
-  // 2. Hydejack 페이지 전환(SPA) 시 실행
+  // 4. Hydejack 페이지 전환(SPA) 대응
   var pushStateEl = document.getElementById('_pushState');
   if (pushStateEl) {
     pushStateEl.addEventListener('hy-push-state-after', function() {
-      // DOM 변경 시간을 고려해 약간의 지연 후 실행
-      setTimeout(updatePapersBadge, 100);
+      setTimeout(updatePapersBadge, 200); // 0.2초 지연 실행
     });
   }
 })();
