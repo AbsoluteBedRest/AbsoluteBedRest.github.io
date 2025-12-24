@@ -153,55 +153,84 @@ Example code for using Matamo as alternative analytics solution.
   
   // 여러 방법으로 실행 시도
   
+  console.log('About to execute addPapersCount');
+  
   // 1. 즉시 실행
-  addPapersCount();
-  console.log('Immediate execution');
+  try {
+    addPapersCount();
+    console.log('Immediate execution - SUCCESS');
+  } catch (err) {
+    console.error('Immediate execution - ERROR:', err);
+  }
   
   // 2. window.onload
   window.addEventListener('load', function() {
-    console.log('window.onload');
-    addPapersCount();
+    console.log('window.onload event fired');
+    try {
+      addPapersCount();
+      console.log('window.onload execution - SUCCESS');
+    } catch (err) {
+      console.error('window.onload execution - ERROR:', err);
+    }
   });
   
   // 3. 지연 실행
   setTimeout(function() {
-    console.log('setTimeout 1000ms');
-    addPapersCount();
+    console.log('setTimeout 1000ms fired');
+    try {
+      addPapersCount();
+      console.log('setTimeout 1000ms - SUCCESS');
+    } catch (err) {
+      console.error('setTimeout 1000ms - ERROR:', err);
+    }
   }, 1000);
   
   setTimeout(function() {
-    console.log('setTimeout 2000ms');
-    addPapersCount();
+    console.log('setTimeout 2000ms fired');
+    try {
+      addPapersCount();
+    } catch (err) {
+      console.error('setTimeout 2000ms - ERROR:', err);
+    }
   }, 2000);
   
   setTimeout(function() {
-    console.log('setTimeout 3000ms');
-    addPapersCount();
+    console.log('setTimeout 3000ms fired');
+    try {
+      addPapersCount();
+    } catch (err) {
+      console.error('setTimeout 3000ms - ERROR:', err);
+    }
   }, 3000);
   
   // 4. 주기적으로 체크 (최대 5번, 1초마다)
   var checkCount = 0;
   var checkInterval = setInterval(function() {
-    checkCount++;
-    console.log('Interval check #' + checkCount);
-    
-    // Papers 메뉴가 있는지 확인
-    var allLinks = document.querySelectorAll('a');
-    var hasPapersMenu = false;
-    for (var i = 0; i < allLinks.length; i++) {
-      if (allLinks[i].href && allLinks[i].href.indexOf('/papers/') > -1 && 
-          allLinks[i].textContent.trim() === 'Papers') {
-        hasPapersMenu = true;
-        break;
+    try {
+      checkCount++;
+      console.log('Interval check #' + checkCount);
+      
+      // Papers 메뉴가 있는지 확인
+      var allLinks = document.querySelectorAll('a');
+      var hasPapersMenu = false;
+      for (var i = 0; i < allLinks.length; i++) {
+        if (allLinks[i].href && allLinks[i].href.indexOf('/papers/') > -1 && 
+            allLinks[i].textContent.trim() === 'Papers') {
+          hasPapersMenu = true;
+          break;
+        }
       }
-    }
-    
-    if (hasPapersMenu) {
-      console.log('Papers menu found in interval, adding badge');
-      addPapersCount();
-      clearInterval(checkInterval);
-    } else if (checkCount >= 5) {
-      console.log('Max checks reached, stopping interval');
+      
+      if (hasPapersMenu) {
+        console.log('Papers menu found in interval, adding badge');
+        addPapersCount();
+        clearInterval(checkInterval);
+      } else if (checkCount >= 5) {
+        console.log('Max checks reached, stopping interval');
+        clearInterval(checkInterval);
+      }
+    } catch (err) {
+      console.error('Interval check ERROR:', err);
       clearInterval(checkInterval);
     }
   }, 1000);
