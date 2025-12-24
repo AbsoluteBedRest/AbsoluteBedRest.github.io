@@ -92,93 +92,77 @@ Example code for using Matamo as alternative analytics solution.
 {% endif %}
 {% endcomment %}
 
-<!-- Papers 게시글 개수 표시 (즉시 실행) -->
+<!-- Papers 게시글 개수 표시 -->
 <script>
   console.log('=== Papers Count Script Loaded ===');
   
   function addPapersCount() {
-    console.log('--- addPapersCount function start ---');
+    console.log('--- addPapersCount start ---');
     
-    const papersCount = {{ site.categories.papers | size }};
+    var papersCount = {{ site.categories.papers | size }};
     console.log('Papers count:', papersCount);
     
     if (papersCount === 0) {
-      console.log('Papers count is 0, exiting');
+      console.log('No papers, exiting');
       return;
     }
     
-    // 모든 링크 찾기
-    const allLinks = document.querySelectorAll('a');
-    console.log('Total links on page:', allLinks.length);
+    var allLinks = document.querySelectorAll('a');
+    console.log('Total links:', allLinks.length);
     
-    // Papers를 포함하는 모든 링크 찾기
-    let papersLinks = [];
-    allLinks.forEach(function(link) {
-      if (link.href && link.href.includes('/papers/')) {
+    var papersLinks = [];
+    for (var i = 0; i < allLinks.length; i++) {
+      var link = allLinks[i];
+      if (link.href && link.href.indexOf('/papers/') > -1) {
         papersLinks.push(link);
-        console.log('Found papers link:', {
-          href: link.href,
-          text: link.textContent.trim(),
-          classes: link.className
-        });
+        console.log('Found papers link:', link.textContent.trim());
       }
-    });
+    }
     
-    console.log('Total papers links found:', papersLinks.length);
+    console.log('Papers links found:', papersLinks.length);
     
-    // Papers 메뉴 찾기 (텍스트가 정확히 "Papers"인 것)
-    let menuFound = false;
-    for (let i = 0; i < papersLinks.length; i++) {
-      let link = papersLinks[i];
+    var menuFound = false;
+    for (var j = 0; j < papersLinks.length; j++) {
+      var link = papersLinks[j];
       if (link.textContent.trim() === 'Papers') {
-        console.log('Found Papers menu link!');
+        console.log('Found Papers menu!');
         
-        // 이미 뱃지가 있으면 제거
-        const existingBadge = link.querySelector('.papers-count');
+        var existingBadge = link.querySelector('.papers-count');
         if (existingBadge) {
-          console.log('Removing existing badge');
           existingBadge.remove();
         }
         
-        // 새 뱃지 추가
-        const badge = document.createElement('span');
+        var badge = document.createElement('span');
         badge.className = 'papers-count';
         badge.textContent = ' (' + papersCount + ')';
         badge.style.cssText = 'color:#4f9eba; font-weight:bold;';
         link.appendChild(badge);
         
-        console.log('✅ Badge added successfully!');
+        console.log('Badge added!');
         menuFound = true;
         break;
       }
     }
     
     if (!menuFound) {
-      console.log('❌ Papers menu not found. Link texts:');
-      for (let i = 0; i < papersLinks.length; i++) {
-        console.log('  - "' + papersLinks[i].textContent.trim() + '"');
-      }
+      console.log('Papers menu not found');
     }
     
-    console.log('--- addPapersCount function end ---');
+    console.log('--- addPapersCount end ---');
   }
   
-  // 즉시 실행 시도 1
+  // 즉시 실행
   addPapersCount();
-  console.log('Immediate execution done');
   
-  // 지연 실행 시도 2
+  // DOMContentLoaded
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('DOMContentLoaded fired');
+      console.log('DOMContentLoaded');
       addPapersCount();
     });
-  } else {
-    console.log('DOM already loaded, running addPapersCount');
-    addPapersCount();
   }
   
-  // 추가 지연 실행
+  // 지연 실행
   setTimeout(function() {
     console.log('setTimeout 500ms');
     addPapersCount();
@@ -189,15 +173,13 @@ Example code for using Matamo as alternative analytics solution.
     addPapersCount();
   }, 1500);
   
-  // Hydejack 페이지 전환 이벤트
+  // Hydejack 이벤트
   var pushEl = document.getElementById('_pushState');
   if (pushEl) {
-    console.log('_pushState element found, adding listener');
+    console.log('Adding hy-push-state-after listener');
     pushEl.addEventListener('hy-push-state-after', function() {
-      console.log('hy-push-state-after fired');
+      console.log('Page changed');
       addPapersCount();
     });
-  } else {
-    console.log('_pushState element NOT found');
   }
 </script>
