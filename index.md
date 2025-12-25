@@ -6,7 +6,7 @@ hide_description: true
 ---
 
 <div style="display: flex; align-items: center; margin-bottom: 30px; gap: 30px;">
-  <img src="/study/assets/img/profile.png" alt="SangYeop Jeong" width="200" style="border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  <img src="/assets/img/profile.png" alt="SangYeop Jeong" width="200" style="border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
   <div>
     <h2 style="margin: 0;">SangYeop Jeong (정상엽)</h2>
     <p style="margin: 10px 0; font-size: 1.1em; color: #666;">
@@ -21,7 +21,7 @@ hide_description: true
 ### <u>Education</u>
 
 <div style="display: flex; align-items: center; margin-bottom: 20px;">
-  <img src="/study/assets/img/seoultech-logo.png" alt="SeoulTech Logo" width="150" style="margin-right: 20px;">
+  <img src="/assets/img/seoultech-logo.png" alt="SeoulTech Logo" width="150" style="margin-right: 20px;">
   <div>
     <strong>Seoul National University of Science and Technology (SeoulTech)</strong><br>
     서울과학기술대학교<br>
@@ -36,7 +36,7 @@ hide_description: true
 ### <u>Our Lab</u>
 
 <div style="display: flex; align-items: center; margin-bottom: 20px;">
-  <img src="/study/assets/img/brainailab-logo.png" alt="BrAIn Lab Logo" width="250" style="margin-right: 20px;">
+  <img src="/assets/img/brainailab-logo.png" alt="BrAIn Lab Logo" width="250" style="margin-right: 20px;">
   <div>
     <strong>BrAIn Lab (Brain and Artificial Intelligence Lab)</strong><br>
     Department of Applied Artificial Intelligence, SeoulTech<br>
