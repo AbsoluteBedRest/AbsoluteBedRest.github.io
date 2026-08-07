@@ -54,3 +54,6 @@ search_provider: lunr
 
 lunr:
   search_within_pages: true
+
+after_footer_scripts:
+  - /assets/js/custom-search.js

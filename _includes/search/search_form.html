@@ -1,0 +1,47 @@
+{% assign locale = include.locale | default: site.locale %}
+
+<div
+  class="search-content__inner-wrap custom-search"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Search posts"
+>
+  <div class="custom-search__header">
+
+    <i class="fas fa-search custom-search__icon" aria-hidden="true"></i>
+
+    <form
+      class="search-content__form custom-search__form"
+      onkeydown="return event.key != 'Enter';"
+      role="search"
+    >
+      <label class="sr-only" for="search">
+        Search posts
+      </label>
+
+      <input
+        type="search"
+        id="search"
+        class="search-input"
+        tabindex="-1"
+        placeholder="Search posts..."
+        autocomplete="off"
+      />
+    </form>
+
+    <button
+      type="button"
+      class="custom-search__close"
+      aria-label="Close search"
+    >
+      <i class="fas fa-times" aria-hidden="true"></i>
+    </button>
+
+  </div>
+
+  <div class="custom-search__hint">
+    Search by title, category, tag, or keyword
+  </div>
+
+  <div id="results" class="results" aria-live="polite"></div>
+</div>
