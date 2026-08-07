@@ -36,3 +36,14 @@ defaults:
       read_time: true
       share: true
       related: true
+
+include:
+  - _pages
+
+category_archive:
+  type: liquid
+  path: /categories/
+
+tag_archive:
+  type: liquid
+  path: /tags/
