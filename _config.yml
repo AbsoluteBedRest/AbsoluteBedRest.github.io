@@ -14,7 +14,10 @@ baseurl: ""
 
 author:
   name: "SangYeop Jeong"
+  avatar: "/assets/images/profile.jpg"
   bio: "AI / Computer Vision"
+  location: "Seoul, Korea"
+
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
