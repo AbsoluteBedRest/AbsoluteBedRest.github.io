@@ -382,9 +382,10 @@ body.search-modal-open {
 
 
 .author__urls a {
-  font-size: 0.82em !important;
+  font-size: 0.68em !important;
+  line-height: 1.1 !important;
 }
 
-.author__urls a i {
-  font-size: 0.9em;
+.author__urls li {
+  margin-bottom: 0.05em !important;
 }
