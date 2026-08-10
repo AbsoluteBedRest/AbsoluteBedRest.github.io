@@ -1,1 +1,27 @@
 main:
+
+sidebar_menu:
+  - title: "Home"
+    url: /
+
+  - title: "Posts"
+    url: /posts/
+
+  - title: "Categories"
+    url: /categories/
+
+  - title: "Paper Reviews"
+    children:
+      - title: "Computer Vision"
+        url: /categories/computer-vision/
+      - title: "3D Vision"
+        url: /categories/3d-vision/
+      - title: "Generative Models"
+        url: /categories/generative-models/
+
+  - title: "Research"
+    children:
+      - title: "Research Notes"
+        url: /categories/research-notes/
+      - title: "Implementation"
+        url: /categories/implementation/
