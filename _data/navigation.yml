@@ -1,27 +1,19 @@
 main:
 
 sidebar_menu:
-  - title: "Home"
-    url: /
 
-  - title: "Posts"
-    url: /posts/
-
-  - title: "Categories"
-    url: /categories/
-
-  - title: "Paper Reviews"
+  - title: "📄 Paper Reviews"
     children:
-      - title: "Computer Vision"
-        url: /categories/computer-vision/
-      - title: "3D Vision"
+      - title: "🧊 3D Vision"
         url: /categories/3d-vision/
-      - title: "Generative Models"
-        url: /categories/generative-models/
+      - title: "🎞️ 4D Vision"
+        url: /categories/4d-vision/
+      - title: "🥽 Extended Reality (VR/AR/MR)"
+        url: /categories/xr/
 
-  - title: "Research"
+  - title: "📚 Publications"
     children:
-      - title: "Research Notes"
-        url: /categories/research-notes/
-      - title: "Implementation"
-        url: /categories/implementation/
+      - title: "📑 Papers"
+        url: /categories/papers/
+      - title: "🖼️ Posters"
+        url: /categories/posters/
