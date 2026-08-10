@@ -38,11 +38,6 @@ My research interests focus on 3D and 4D scene understanding and generation, wit
 
 ### Papers
 
-**StrataDream: Layer-wise 3D Gaussian Reconstruction ...**  
-SangYeop Jeong, ...  
-*Conference / Under Review*, 2026
-
-[Paper] · [Code] · [Project Page]
 
 ### Posters
 
