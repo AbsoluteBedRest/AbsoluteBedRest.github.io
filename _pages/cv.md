@@ -27,9 +27,37 @@ classes: wide
       </p>
 
       <div class="ph-links">
-        <a href="mailto:YOUR_EMAIL_HERE">Email</a>
-        <a href="/cv/">CV</a>
-        <a href="https://github.com/AbsoluteBedRest">GitHub</a>
+        <a href="{{ '/cv/' | relative_url }}">
+          <i class="fas fa-file-alt" aria-hidden="true"></i>
+          <span>CV</span>
+        </a>
+
+        <a
+          href="https://scholar.google.com/citations?user=axhPQT8AAAAJ&hl=ko&oi=sra"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+          <span>Google Scholar</span>
+        </a>
+
+        <a
+          href="https://github.com/AbsoluteBedRest"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="fab fa-github" aria-hidden="true"></i>
+          <span>GitHub</span>
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/sangyeop-jeong-7994b039a/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+          <span>LinkedIn</span>
+        </a>
       </div>
     </div>
 

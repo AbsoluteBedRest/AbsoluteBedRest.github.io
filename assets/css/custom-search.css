@@ -847,12 +847,28 @@ body.search-modal-open {
 .ph-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.7rem 1rem;
-  font-size: 0.92rem;
+  align-items: center;
+  gap: 0.55rem 1.15rem;
+  margin-top: 0.8rem;
+  font-size: 0.86rem;
 }
 
 .ph-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  color: #0066cc;
   text-decoration: none;
+}
+
+.ph-links a:hover {
+  text-decoration: underline;
+}
+
+.ph-links a i {
+  width: 1.05rem;
+  text-align: center;
+  font-size: 0.95em;
 }
 
 .ph-hero-photo img {
@@ -860,7 +876,6 @@ body.search-modal-open {
   width: 100%;
   max-width: 220px;
   margin-left: auto;
-
   border: 1px solid #d9d9d9;
   border-radius: 0;
 }
