@@ -364,3 +364,26 @@ body.search-modal-open {
 .taxonomy__section {
   margin-top: 0 !important;
 }
+
+/* =========================================================
+   Sidebar Post Counts
+   ========================================================= */
+
+.nav__list .nav__items ul li a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sidebar-nav-label {
+  min-width: 0;
+}
+
+.sidebar-nav-count {
+  flex: 0 0 auto;
+
+  color: #999999;
+  font-size: 0.75em;
+  font-weight: 400;
+}
