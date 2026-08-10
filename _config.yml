@@ -19,6 +19,10 @@ author:
   location: "Seoul, Korea"
 
   links:
+    - label: "CV"
+      icon: "fas fa-fw fa-id-card"
+      url: "/cv/"
+
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/AbsoluteBedRest"
