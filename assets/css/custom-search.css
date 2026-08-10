@@ -349,4 +349,12 @@ body.search-modal-open {
     padding-left: 14px;
     padding-right: 14px;
   }
+  /* categories 페이지 상단의 "3D Vision 1" 목록 숨기기 */
+  .taxonomy__index {
+    display: none !important;
+  }
+  /* index를 숨긴 뒤 위쪽 여백이 너무 크면 조금 줄이기 */
+  .taxonomy__section {
+    margin-top: 0 !important;
+  }
 }
