@@ -387,16 +387,14 @@ body.search-modal-open {
   margin: 0 !important;
   padding: 0 !important;
 
-  font-size: 0.72em !important;
-  line-height: 1.2 !important;
+  font-size: 0.64em !important;
+  line-height: 1.15 !important;
 }
 
-/* 각 줄 사이 간격 */
 .author__urls li + li {
-  margin-top: 0.22em !important;
+  margin-top: 0.16em !important;
 }
 
-/* CV, GitHub 같은 링크 */
 .author__urls li > a {
   display: flex !important;
   align-items: center !important;
@@ -408,18 +406,17 @@ body.search-modal-open {
   line-height: inherit !important;
 }
 
-/* 모든 아이콘이 정확히 같은 폭을 차지하도록 */
 .author__urls li > i,
 .author__urls li > a > i {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
 
-  width: 1.35em !important;
-  min-width: 1.35em !important;
+  width: 1.25em !important;
+  min-width: 1.25em !important;
 
-  margin: 0 0.35em 0 0 !important;
+  margin: 0 0.28em 0 0 !important;
 
-  font-size: 1em !important;
+  font-size: 0.9em !important;
   line-height: 1 !important;
 }
