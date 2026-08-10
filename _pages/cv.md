@@ -70,9 +70,19 @@ Unity · Unreal Engine
 
 ## Awards & Honors
 
-### Capstone Design Grand Prize
-**1st Place** · Seoul National University of Science and Technology  
-*Year to be added*
+<div class="cv-entry">
+  <div>
+    <strong>Grand Prize (1st Place)</strong><br>
+    <span>2026 Capstone Design Demo Day, Department of Applied Artificial Intelligence</span><br>
+    <span>Seoul National University of Science and Technology</span>
+  </div>
+  <div class="cv-date">
+    May 2026
+  </div>
+</div>
+
+**Project:** *Motion-Chat: Bringing Human Motion into Conversational AI*  
+Awarded by the Dean of the College of Creativity and Convergence.
 
 ---
 
