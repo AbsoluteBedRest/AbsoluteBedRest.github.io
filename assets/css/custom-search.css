@@ -380,12 +380,21 @@ body.search-modal-open {
    Author Profile Links
    ========================================================= */
 
-
-.author__urls a {
-  font-size: 0.68em !important;
-  line-height: 1.1 !important;
+.author__urls li {
+  font-size: 0.72em !important;
+  line-height: 1.2 !important;
+  margin-bottom: 0.1em !important;
 }
 
-.author__urls li {
-  margin-bottom: 0.05em !important;
+.author__urls li a {
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+/* 아이콘 크기/정렬 통일 */
+.author__urls li i {
+  width: 1.25em !important;
+  font-size: 1em !important;
+  text-align: center;
+  margin-right: 0.2em !important;
 }
