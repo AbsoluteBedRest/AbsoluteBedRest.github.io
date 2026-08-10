@@ -6,22 +6,22 @@ sidebar_menu:
     children:
       - title: "🧊 3D Vision"
         category: "3D Vision"
-        url: /categories/#3d-vision
+        url: /categories/3d-vision/
 
       - title: "🎞️ 4D Vision"
         category: "4D Vision"
-        url: /categories/#4d-vision
+        url: /categories/4d-vision/
 
       - title: "🥽 Extended Reality (VR/AR/MR)"
         category: "XR"
-        url: /categories/#xr
+        url: /categories/xr/
 
   - title: "📚 PUBLICATIONS"
     children:
       - title: "📑 Papers"
         category: "Papers"
-        url: /categories/#papers
+        url: /categories/papers/
 
       - title: "🖼️ Posters"
         category: "Posters"
-        url: /categories/#posters
+        url: /categories/posters/
