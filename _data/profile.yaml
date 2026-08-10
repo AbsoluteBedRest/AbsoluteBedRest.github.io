@@ -1,0 +1,51 @@
+primary_name: "SangYeop Jeong"
+secondary_name: ""
+navbar_name: "SangYeop Jeong"
+
+positions:
+  - name: "Undergraduate Researcher @ MuLILAB"
+
+# email은 사용하지 않을 예정이므로 일단 비워둠
+email: ""
+
+gscholar: "axhPQT8AAAAJ"
+github: "AbsoluteBedRest"
+linkedin: "sangyeop-jeong-7994b039a"
+
+short_bio_text_justify: false
+
+short_bio: >-
+  <p>
+    I am an undergraduate student in the Department of Applied Artificial
+    Intelligence at Seoul National University of Science and Technology
+    and an undergraduate researcher at MuLILAB
+    (Multimodal Learning & Intelligence).
+  </p>
+
+  <p>
+    My research interests include 3D/4D scene generation and reconstruction,
+    Human-Computer Interaction (HCI), Extended Reality (XR),
+    Gaussian Splatting, and Neural Radiance Fields (NeRF).
+  </p>
+
+portrait_url: /assets/images/cv-profile.jpg
+
+education:
+  - name: "Seoul National University of Science and Technology"
+    position: >-
+      Department of Applied Artificial Intelligence <br/>
+      B.S. Student
+    date: "Mar. 2021 - Feb. 2027"
+
+experience:
+  - name: "MuLILAB"
+    position: >-
+      Multimodal Learning & Intelligence <br/>
+      Undergraduate Researcher
+    date: "Dec. 2024 - Present"
+
+awards:
+  - name: >-
+      Grand Prize (1st Place), 2026 Capstone Design Demo Day,
+      Department of Applied Artificial Intelligence
+    date: "May 2026"

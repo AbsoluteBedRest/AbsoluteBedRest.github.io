@@ -1,21 +1,146 @@
 @charset "utf-8";
-
 body {
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  padding-top: 5rem;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    padding-top: 5.0rem;
 }
 
-.cv-main {
-  margin-top: 1.5rem;
-  margin-bottom: 2rem;
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-weight: 700;
 }
 
-.cv-footer {
-  padding-bottom: 2rem;
+.card {
+    border-radius: 0.8rem!important;
+}
+
+.card-img-overlay {
+    border-radius: 0.8rem!important;
+}
+
+.rounded-xl {
+    border-radius: 0.8rem!important;
+}
+
+.rounded-xl-bottom {
+    border-bottom-right-radius: 0.8rem !important;
+    border-bottom-left-radius: 0.8rem !important;
+}
+
+.rounded-xl-top {
+    border-top-left-radius: 0.8rem !important;
+    border-top-right-radius: 0.8rem !important;
+}
+
+
+.text-profile-position {
+    font-weight: 400;
+}
+
+.text-profile-bio {
+    /* font-family: "Raleway"; */
+    font-weight: 400;
 }
 
 .navbar {
-  background-color: rgba(255, 255, 255, 0.9) !important;
-  border-bottom: 1px solid #eeeeee;
+    background-color: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.inline-badge {
+    height: 16px;
+    vertical-align: -10%;
+    margin-right: 2px;
+    line-break: unset;
+}
+
+.no-break {
+    white-space: nowrap;
+}
+
+.cover-image {
+    width: 180px;
+    max-height: 120px;
+}
+
+.abstract-body {
+    min-height: 100px;
+}
+
+img.lazy {
+    background-image: url('images/loading.gif');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 50px 50px;
+    min-height: 80px;
+}
+
+div.lazy {
+    background-image: url('images/loading.gif');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 50px 50px;
+    min-height: 80px;
+}
+
+.badge-publication {
+    font-size: 100%;
+}
+
+.email-text {
+    font-family: Source Code Pro, monospace;
+}
+
+/* =========================================================
+   SangYeop Jeong CV overrides
+   ========================================================= */
+
+/* 카드 완전 사각형 */
+.card {
+  border-radius: 0 !important;
+}
+
+.card-img-overlay,
+.rounded-xl,
+.rounded-xl-bottom,
+.rounded-xl-top {
+  border-radius: 0 !important;
+}
+
+/* 사진도 사각형 */
+.img-thumbnail,
+.rounded-circle {
+  border-radius: 0 !important;
+}
+
+/* 전체 폭 */
+.cv-main {
+  max-width: 1140px;
+}
+
+/* 약간 더 compact하게 */
+body {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Profile card의 이름 */
+.text-profile-position {
+  font-size: 0.95rem;
+}
+
+.text-profile-bio {
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+/* Experience card 내부 */
+.card-body {
+  font-size: 0.9rem;
+}
+
+/* 긴 정보가 너무 커지지 않도록 */
+.card h6 {
+  font-size: 1rem;
 }
