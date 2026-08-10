@@ -40,10 +40,9 @@ defaults:
         nav: "sidebar_menu"
 
   - scope:
-      path: "_pages"
+      path: ""
       type: pages
     values:
-      layout: single
       author_profile: true
       sidebar:
         nav: "sidebar_menu"
