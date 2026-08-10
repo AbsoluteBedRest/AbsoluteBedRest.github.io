@@ -375,3 +375,16 @@ body.search-modal-open {
   font-size: 0.78em;
   font-weight: 400;
 }
+
+/* =========================================================
+   Author Profile Links
+   ========================================================= */
+
+
+.author__urls a {
+  font-size: 0.82em !important;
+}
+
+.author__urls a i {
+  font-size: 0.9em;
+}
