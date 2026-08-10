@@ -32,20 +32,38 @@ portrait_url: /assets/images/cv-profile.jpg
 
 education:
   - name: "Seoul National University of Science and Technology"
-    position: >-
-      Department of Applied Artificial Intelligence <br/>
-      B.S. Student
-    date: "Mar. 2021 - Feb. 2027"
+    dept: "Department of Applied Artificial Intelligence"
+    position: "B.S. Student"
+    date: "Mar. 2021 – Feb. 2027"
+
 
 experience:
   - name: "MuLILAB"
-    position: >-
-      Multimodal Learning & Intelligence <br/>
-      Undergraduate Researcher
-    date: "Dec. 2024 - Present"
+    dept: "Multimodal Learning & Intelligence"
+    position: "Undergraduate Researcher"
+    date: "Dec. 2024 – Present"
+    description:
+      - "Research on 3D/4D scene generation and reconstruction, with a focus on Gaussian Splatting and neural scene representations."
+      - "Explore immersive visual content generation for VR, AR, and MR applications."
+      - "Study recent computer vision and generative modeling approaches for novel-view synthesis and dynamic scene representation."
+
 
 awards:
-  - name: >-
-      Grand Prize (1st Place), 2026 Capstone Design Demo Day,
-      Department of Applied Artificial Intelligence
+  - name: "Grand Prize (1st Place)"
+    detail: "Motion-Chat: Bringing Human Motion into Conversational AI"
+    organization: "2026 Capstone Design Demo Day, Department of Applied Artificial Intelligence"
     date: "May 2026"
+
+
+skills:
+  - name: "Languages"
+    value: "Python · C · C++ · C#"
+
+  - name: "Deep Learning"
+    value: "PyTorch · CUDA"
+
+  - name: "Graphics / XR"
+    value: "Unity · Unreal Engine"
+
+  - name: "Research"
+    value: "3D/4D Vision · HCI · XR · Gaussian Splatting · NeRF"

@@ -144,3 +144,196 @@ body {
 .card h6 {
   font-size: 1rem;
 }
+
+/* =========================================================
+   CV Information Card
+   ========================================================= */
+
+.cv-info-card {
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+.cv-info-card .card-body {
+  padding: 1.7rem 2rem;
+}
+
+
+/* =========================================================
+   2 x 2 Grid
+   ========================================================= */
+
+.cv-info-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  column-gap: 3.5rem;
+  row-gap: 2rem;
+}
+
+
+/* =========================================================
+   Individual Section
+   ========================================================= */
+
+.cv-info-block {
+  min-width: 0;
+}
+
+.cv-info-title {
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.35rem;
+
+  border-bottom: 1px solid #eeeeee;
+
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+
+/* =========================================================
+   Entry
+   ========================================================= */
+
+.cv-entry,
+.cv-award-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 1.25rem;
+}
+
+.cv-entry-main,
+.cv-award-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.cv-entry-heading {
+  margin-bottom: 0.12rem;
+
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.cv-entry-sub {
+  margin-top: 0.08rem;
+
+  color: #444;
+
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.cv-entry-date {
+  flex: 0 0 auto;
+
+  padding-top: 0.05rem;
+
+  color: #555;
+
+  font-size: 0.75rem;
+  font-style: italic;
+  font-weight: 400;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   Research Description
+   ========================================================= */
+
+.cv-entry-description {
+  margin: 0.65rem 0 0;
+  padding-left: 1.05rem;
+
+  color: #333;
+}
+
+.cv-entry-description li {
+  margin-bottom: 0.3rem;
+
+  font-size: 0.77rem;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   Awards
+   ========================================================= */
+
+.cv-award-detail {
+  margin-top: 0.2rem;
+
+  color: #666;
+}
+
+
+/* =========================================================
+   Technical Skills
+   ========================================================= */
+
+.cv-skills {
+  margin-top: 0.15rem;
+}
+
+.cv-skill-row {
+  display: grid;
+
+  grid-template-columns: 105px 1fr;
+
+  gap: 0.7rem;
+
+  margin-bottom: 0.35rem;
+
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.cv-skill-name {
+  font-weight: 700;
+}
+
+.cv-skill-value {
+  color: #444;
+}
+
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .cv-info-grid {
+    grid-template-columns: 1fr;
+
+    row-gap: 1.6rem;
+  }
+
+  .cv-info-card .card-body {
+    padding: 1.25rem;
+  }
+
+  .cv-entry,
+  .cv-award-entry {
+    display: block;
+  }
+
+  .cv-entry-date {
+    margin-top: 0.2rem;
+  }
+
+  .cv-skill-row {
+    grid-template-columns: 1fr;
+
+    gap: 0.05rem;
+  }
+
+}
