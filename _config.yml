@@ -61,11 +61,10 @@ tag_archive:
   path: /tags/
 
 search: true
-
 search_provider: lunr
 
 lunr:
-  search_within_pages: true
+  search_within_pages: false
 
 after_footer_scripts:
   - /assets/js/custom-search.js
