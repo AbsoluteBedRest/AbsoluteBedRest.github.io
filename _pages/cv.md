@@ -62,7 +62,8 @@ classes: wide
     </div>
 
     <div class="ph-hero-photo">
-      <img src="/assets/images/profile.png" alt="SangYeop Jeong">
+      <img src="{{ '/assets/images/cv-profile.jpg' | relative_url }}"
+      alt="SangYeop Jeong">
     </div>
   </section>
 
