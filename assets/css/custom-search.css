@@ -780,3 +780,8 @@ body.search-modal-open {
     margin-bottom: 0.08rem;
   }
 }
+
+/* 단독 카드와 다음 grid 사이 간격 */
+.cv-page > .cv-card {
+  margin-bottom: 1.2rem;
+}
