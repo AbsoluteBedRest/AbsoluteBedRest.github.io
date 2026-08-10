@@ -71,3 +71,7 @@ lunr:
 
 after_footer_scripts:
   - /assets/js/custom-search.js
+
+collections:
+  publications:
+    output: false
