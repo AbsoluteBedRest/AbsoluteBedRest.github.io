@@ -7,101 +7,148 @@ sidebar:
   nav: "sidebar_menu"
 ---
 
-## Education
+<div class="academic-cv">
 
-<div class="cv-entry">
-  <div>
-    <strong>Seoul National University of Science and Technology</strong><br>
-    <span>B.S. Student, Department of Applied Artificial Intelligence</span>
+<section class="cv-section">
+
+<h2>Education</h2>
+
+<div class="cv-item">
+  <div class="cv-item-main">
+    <div class="cv-item-title">
+      Seoul National University of Science and Technology
+    </div>
+    <div class="cv-item-subtitle">
+      B.S. in Applied Artificial Intelligence
+    </div>
   </div>
-  <div class="cv-date">
+
+  <div class="cv-item-date">
     Mar. 2021 – Feb. 2027
   </div>
 </div>
 
-Expected graduation: February 2027.  
-The enrollment period includes an 18-month leave of absence for mandatory military service.
+<div class="cv-note">
+  Expected graduation: February 2027
+</div>
 
----
+</section>
 
-## Research Interests
 
-**3D / 4D Scene Generation & Reconstruction** ·
-**Human-Computer Interaction (HCI)** ·
-**Extended Reality (XR)** ·
-**Gaussian Splatting** ·
-**Neural Radiance Fields (NeRF)**
+<section class="cv-section">
 
-My research interests focus on reconstructing and generating immersive 3D/4D environments from visual observations, with particular interests in explicit and neural scene representations and their applications to interactive XR systems.
+<h2>Research Interests</h2>
 
----
+<div class="cv-interests">
+  <span>3D / 4D Scene Generation & Reconstruction</span>
+  <span>Human-Computer Interaction</span>
+  <span>Extended Reality</span>
+  <span>Gaussian Splatting</span>
+  <span>NeRF</span>
+</div>
 
-## Research Experience
+<p>
+My research interests focus on 3D and 4D scene generation and reconstruction,
+with particular interests in neural and explicit scene representations and
+their applications to immersive and interactive XR systems.
+</p>
 
-<div class="cv-entry">
-  <div>
-    <strong>MuLILAB (Multimodal Learning & Intelligence)</strong><br>
-    <span>Undergraduate Researcher</span>
+</section>
+
+
+<section class="cv-section">
+
+<h2>Research Experience</h2>
+
+<div class="cv-item">
+  <div class="cv-item-main">
+    <div class="cv-item-title">
+      MuLILAB
+    </div>
+    <div class="cv-item-subtitle">
+      Multimodal Learning & Intelligence
+    </div>
+    <div class="cv-item-role">
+      Undergraduate Researcher
+    </div>
   </div>
-  <div class="cv-date">
+
+  <div class="cv-item-date">
     Dec. 2024 – Present
   </div>
 </div>
 
-- Conduct research on **3D/4D scene generation and reconstruction**, with a focus on representations such as Gaussian Splatting and NeRF.
-- Explore methods for generating geometrically and temporally consistent immersive visual content for **VR, AR, and MR** applications.
-- Study and implement recent computer vision and generative-model approaches for novel-view synthesis and dynamic scene representation.
-- Develop and evaluate research prototypes using deep-learning and real-time 3D graphics frameworks.
+<ul class="cv-description">
+  <li>
+    Conduct research on 3D/4D scene generation and reconstruction,
+    with a focus on Gaussian Splatting and neural scene representations.
+  </li>
+  <li>
+    Explore methods for generating geometrically and temporally consistent
+    immersive visual content for VR, AR, and MR applications.
+  </li>
+  <li>
+    Study and implement recent computer vision and generative modeling
+    approaches for novel-view synthesis and dynamic scene representation.
+  </li>
+</ul>
 
----
+</section>
 
-## Technical Skills
 
-**Programming Languages**  
-Python · C · C++ · C#
+<section class="cv-section">
 
-**Deep Learning & GPU Computing**  
-PyTorch · CUDA
+<h2>Technical Skills</h2>
 
-**XR & Real-Time Graphics**  
-Unity · Unreal Engine
+<div class="cv-skill-row">
+  <span class="cv-skill-label">Languages</span>
+  <span>Python · C · C++ · C#</span>
+</div>
 
----
+<div class="cv-skill-row">
+  <span class="cv-skill-label">Deep Learning</span>
+  <span>PyTorch · CUDA</span>
+</div>
 
-## Awards & Honors
+<div class="cv-skill-row">
+  <span class="cv-skill-label">Graphics / XR</span>
+  <span>Unity · Unreal Engine</span>
+</div>
 
-<div class="cv-entry">
-  <div>
-    <strong>Grand Prize (1st Place)</strong><br>
-    <span>2026 Capstone Design Demo Day, Department of Applied Artificial Intelligence</span><br>
-    <span>Seoul National University of Science and Technology</span>
+</section>
+
+
+<section class="cv-section">
+
+<h2>Awards & Honors</h2>
+
+<div class="cv-item">
+  <div class="cv-item-main">
+    <div class="cv-item-title">
+      Grand Prize (1st Place)
+    </div>
+    <div class="cv-item-subtitle">
+      2026 Capstone Design Demo Day, Department of Applied Artificial Intelligence
+    </div>
+    <div class="cv-item-subtitle">
+      Seoul National University of Science and Technology
+    </div>
   </div>
-  <div class="cv-date">
+
+  <div class="cv-item-date">
     May 2026
   </div>
 </div>
 
-**Project:** *Motion-Chat: Bringing Human Motion into Conversational AI*  
-Awarded by the Dean of the College of Creativity and Convergence Studies.
+<div class="cv-award-project">
+  <span>Project</span>
+  <strong>Motion-Chat: Bringing Human Motion into Conversational AI</strong>
+</div>
 
----
+<div class="cv-note">
+  Awarded by the Dean of the College of Creativity and Convergence.
+</div>
 
-<!--
-## Publications
+</section>
 
-### Papers
-
-To be added.
-
----
-
-## Posters & Presentations
-
-To be added.
-
----
-
-## Projects
-
-To be added.
--->
+</div>
