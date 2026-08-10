@@ -82,7 +82,7 @@ Unity · Unreal Engine
 </div>
 
 **Project:** *Motion-Chat: Bringing Human Motion into Conversational AI*  
-Awarded by the Dean of the College of Creativity and Convergence.
+Awarded by the Dean of the College of Creativity and Convergence Studies.
 
 ---
 
