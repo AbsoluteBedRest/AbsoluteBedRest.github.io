@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+  CV page based on academic-homepage:
+  https://github.com/luost26/academic-homepage
+
+  MIT License
+  Copyright (c) 2024 Shitong Luo
+-->
+
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  >
+
+  <title>{{ page.title }} - SangYeop Jeong</title>
+
+  <!-- Bootstrap 4.6 -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"
+  >
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  >
+
+  <!-- Academicons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css"
+  >
+
+  <!-- Lato -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- CV-only CSS -->
+  <link
+    rel="stylesheet"
+    href="{{ '/assets/css/cv-home.css' | relative_url }}"
+  >
+</head>
+
+
+<body class="bg-light">
+
+  <!-- CV 전용 상단 Navigation -->
+  <nav class="navbar navbar-expand-sm navbar-light fixed-top">
+    <div class="container-lg">
+
+      <a
+        class="navbar-brand"
+        href="{{ '/' | relative_url }}"
+      >
+        SangYeop Jeong
+      </a>
+
+      <div class="ml-auto">
+        <a
+          class="nav-link"
+          href="{{ '/' | relative_url }}"
+        >
+          Blog
+        </a>
+      </div>
+
+    </div>
+  </nav>
+
+
+  <!-- Academic CV -->
+  <main class="container-lg cv-main">
+    {{ content }}
+  </main>
+
+
+  <footer class="container-lg cv-footer">
+    <hr>
+
+    <div class="text-muted small">
+      © 2026 SangYeop Jeong
+    </div>
+
+    <div class="text-muted small">
+      Based on academic-homepage.
+    </div>
+  </footer>
+
+</body>
+
+</html>

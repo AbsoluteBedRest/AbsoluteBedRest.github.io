@@ -1,11 +1,7 @@
 ---
 title: "Curriculum Vitae"
-layout: single
+layout: cv-home
 permalink: /cv/
-author_profile: true
-sidebar:
-  nav: "sidebar_menu"
-classes: wide
 ---
 
 <div class="profile-home">
