@@ -5,6 +5,7 @@ permalink: /cv/
 author_profile: true
 sidebar:
   nav: "sidebar_menu"
+classes: wide
 ---
 
 <div class="cv-page">
