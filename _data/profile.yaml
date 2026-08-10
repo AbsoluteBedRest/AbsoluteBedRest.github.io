@@ -30,11 +30,16 @@ short_bio: >-
 
 portrait_url: /assets/images/cv-profile.jpg
 
-education:
+background:
   - name: "Seoul National University of Science and Technology"
     dept: "Department of Applied Artificial Intelligence"
     position: "B.S. Student"
     date: "Mar. 2021 – Feb. 2027"
+
+  - name: "Republic of Korea Army"
+    dept: "53rd Infantry Division, Maneuver Battalion"
+    position: "UAV Operator"
+    date: "Jan. 2022 – Jan. 2024"
 
 
 experience:
