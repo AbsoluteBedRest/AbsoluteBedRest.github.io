@@ -612,3 +612,171 @@ body.search-modal-open {
     margin-bottom: 0.05rem;
   }
 }
+
+/* =========================================================
+   CV Card Layout
+   ========================================================= */
+
+.cv-page {
+  margin-top: 0.5rem;
+}
+
+.cv-grid {
+  display: grid;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+
+.cv-grid-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.cv-card {
+  padding: 1.2rem 1.35rem;
+
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.cv-card-title {
+  margin: 0 0 0.95rem;
+  padding-bottom: 0.45rem;
+
+  border-bottom: 1px solid #ececec;
+
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.cv-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.cv-item-main {
+  min-width: 0;
+}
+
+.cv-item-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.cv-item-sub {
+  margin-top: 0.15rem;
+
+  color: #555;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.cv-item-role {
+  margin-top: 0.18rem;
+
+  color: #777;
+  font-size: 0.86rem;
+}
+
+.cv-item-note {
+  margin-top: 0.25rem;
+
+  color: #888;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.cv-item-date {
+  flex: 0 0 auto;
+
+  color: #777;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+.cv-paragraph {
+  margin: 0.8rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.cv-list {
+  margin: 0.8rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.cv-list li {
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.cv-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.8rem;
+}
+
+.cv-tags span {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+
+  border: 1px solid #e2e2e2;
+  border-radius: 999px;
+
+  background: #fafafa;
+  color: #444;
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+.cv-skill-row {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 0.45rem;
+
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.cv-skill-label {
+  flex: 0 0 8rem;
+  font-weight: 600;
+  color: #333;
+}
+
+@media (max-width: 900px) {
+  .cv-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .cv-card {
+    padding: 1rem;
+  }
+
+  .cv-item {
+    display: block;
+  }
+
+  .cv-item-date {
+    margin-top: 0.25rem;
+  }
+
+  .cv-skill-row {
+    display: block;
+  }
+
+  .cv-skill-label {
+    display: block;
+    margin-bottom: 0.08rem;
+  }
+}
