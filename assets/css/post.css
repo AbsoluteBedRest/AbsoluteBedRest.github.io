@@ -1,30 +1,4 @@
-/* Paper review post typography */
-
-.page__title {
-  font-size: 2.1rem;
-  line-height: 1.18;
-}
-
-.page__content {
-  font-size: 0.95rem;
-  line-height: 1.75;
-}
-
-.page__content h2 {
-  font-size: 1.55rem;
-  margin-top: 2.2em;
-}
-
-.page__content h3 {
-  font-size: 1.25rem;
-  margin-top: 1.8em;
-}
-
-.page__content h4 {
-  font-size: 1.05rem;
-}
-
-.page__content p,
-.page__content li {
-  line-height: 1.75;
+/* Match kimjy99 post typography */
+.page {
+  font-size: 16px;
 }
