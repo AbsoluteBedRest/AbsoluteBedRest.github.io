@@ -38,9 +38,10 @@ defaults:
       read_time: true
       share: true
       related: true
+      classes:
+        - wide
       sidebar:
         nav: "sidebar_menu"
-
   - scope:
       path: ""
       type: pages
