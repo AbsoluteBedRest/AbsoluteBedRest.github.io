@@ -15,6 +15,7 @@ tags:
 > **Venue:** ICCV 2025 (Highlight) \\
 > **Link:** [[Paper](https://arxiv.org/pdf/2505.18151)], [[Project](https://kyleleey.github.io/WonderPlay/)], [[GitHub](https://github.com/kyleleey/WonderPlay)]
 
+## Teaser Image
 
 ![alt text](/assets/images/posts/2026-08-11-wonderplay/1786437605563.png)
 
