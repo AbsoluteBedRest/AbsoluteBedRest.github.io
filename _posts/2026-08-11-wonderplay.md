@@ -16,6 +16,8 @@ tags:
 > **Link:** [[Paper](https://arxiv.org/pdf/2505.18151)], [[Project](https://kyleleey.github.io/WonderPlay/)], [[GitHub](https://github.com/kyleleey/WonderPlay)]
 
 
+![alt text](../assets/images/posts/2026-08-11-wonderplay/1786437605563.png)
+
 ## Introduction
 
 이 논문이 해결하려는 문제와 연구 배경을 정리한다.
@@ -23,16 +25,6 @@ tags:
 - 기존 방법은 어떤 문제를 가지고 있는가?
 - 왜 이 문제를 해결할 필요가 있는가?
 - 논문은 어떤 관점에서 문제에 접근하는가?
-
-### Key Idea
-
-논문이 제안하는 핵심 아이디어를 간단하게 정리한다.
-
-예:
-
-1. ...
-2. ...
-3. ...
 
 ### Contributions
 
