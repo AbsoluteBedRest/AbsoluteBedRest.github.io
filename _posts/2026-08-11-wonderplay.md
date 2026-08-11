@@ -1,32 +1,26 @@
 ---
-title: "Paper Title"
+title: "WonderPlay: Dynamic 3D Scene Generation from a Single Image and Actions"
 date: 2026-08-11
 categories:
   - 4D Vision
 tags:
-  - Gaussian Splatting
+  - animation
   - 4D Generation
+  - Interaction
 ---
-
-# Paper Title
 
 ## Paper Information
 
-- **Title:** Paper Title
-- **Authors:** Author A, Author B, Author C
-- **Venue:** CVPR 2026
-- **Paper:** [Paper](https://...)
-- **Project Page:** [Project](https://...)
-- **Code:** [GitHub](https://github.com/...)
-
-> **TL;DR**  
-> 논문의 핵심 아이디어를 1~2문장으로 간단하게 정리.
+- **Title:** WonderPlay: Dynamic 3D Scene Generation from a Single Image and Actions
+- **Authors:** Zizhang Li, Hong-Xing Yu, Wei Liu, Yin Yang, Charles Herrmann, Gordon Wetzstein, Jiajun Wu
+- **Venue:** ICCV 2025 (Highlight)
+- **Paper:** [Paper](https://arxiv.org/pdf/2505.18151)
+- **Project Page:** [Project](https://kyleleey.github.io/WonderPlay/)
+- **Code:** [GitHub](https://github.com/kyleleey/WonderPlay)
 
 ---
 
 ## Introduction
-
-### Motivation
 
 이 논문이 해결하려는 문제와 연구 배경을 정리한다.
 
