@@ -3,3 +3,7 @@
   rel="stylesheet"
   href="{{ '/assets/css/custom-search.css' | relative_url }}"
 >
+
+{% if page.collection == "posts" %}
+  <link rel="stylesheet" href="{{ '/assets/css/post.css' | relative_url }}">
+{% endif %}
