@@ -9,11 +9,11 @@ tags:
   - Interaction
 ---
 
-> Paper Information
-> - **Title:** WonderPlay: Dynamic 3D Scene Generation from a Single Image and Actions
-> - **Authors:** Zizhang Li, Hong-Xing Yu, Wei Liu, Yin Yang, Charles Herrmann, Gordon Wetzstein, Jiajun Wu
-> - **Venue:** ICCV 2025 (Highlight)
-> - [[Paper](https://arxiv.org/pdf/2505.18151)], [[Project](https://kyleleey.github.io/WonderPlay/)], [[GitHub](https://github.com/kyleleey/WonderPlay)]
+> <Paper Information>
+> **Title:** WonderPlay: Dynamic 3D Scene Generation from a Single Image and Actions
+> **Authors:** Zizhang Li, Hong-Xing Yu, Wei Liu, Yin Yang, Charles Herrmann, Gordon Wetzstein, Jiajun Wu
+> **Venue:** ICCV 2025 (Highlight)
+> [[Paper](https://arxiv.org/pdf/2505.18151)], [[Project](https://kyleleey.github.io/WonderPlay/)], [[GitHub](https://github.com/kyleleey/WonderPlay)]
 
 
 ## Introduction
