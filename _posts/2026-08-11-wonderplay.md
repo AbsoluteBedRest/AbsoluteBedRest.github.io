@@ -135,3 +135,17 @@ $$
 > $$
 > 
 > - 그래서 위의 수식처럼 미리 binary mask로 Background와 object를 분리하고, 일단 둘 다 있는 상태의 $$s_2$$ step에서 정제작업을 이어오다가 Background 부분은 과감히 버리고, 새로 forward process를 거쳐 Background 용 $$V_{s_2}$$를 만들어 Background와 Object 영역을 다시 합쳐 denoising을 진행한다.
+
+그럼 2nd stage를 하나의 수식으로 표현한다면:
+
+$$
+V = g(F, \tilde{V}, I)
+$$
+
+즉, 결과물인 Video는 optical flow, coarse scene에서 렌더링된 video, original input video가 입력으로 생성된다
+
+## Experiments
+
+
+
+## Contributions
