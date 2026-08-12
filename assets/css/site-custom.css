@@ -1,0 +1,5 @@
+/* Post titles in Recent Posts / Category archives */
+.archive__item-title {
+  font-size: 1.25rem !important;
+  line-height: 1.3;
+}
