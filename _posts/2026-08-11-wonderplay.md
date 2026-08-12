@@ -82,7 +82,7 @@ Background 파라미터 수식과 유일하게 달라진 부분은 Edge($E$)랑 
 
 앞에서 말했듯이, 큰 흐름은 Physic Solver를 지나 Video Diffusion을 통해 refine 하는 것이다.
 
-처음 stage에서는 **Physic Solver가 Coarse Dynamic Scene ($\{ \tilde{S}_t \}_{t=1}^T$)를 만들기 위해** 사용된다. \
+처음 stage에서는 **Physic Solver가 Coarse Dynamic Scene ($\{\tilde{S}_t\}_{t=1}^T$)를 만들기 위해** 사용된다. \
 그래서 $T$ 전체의 Dynamic Scene을 만드는 과정은 아래의 수식을 반복하여 진행한다.
 
 $$
