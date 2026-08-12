@@ -31,11 +31,11 @@ tags:
 > 3. 기존의 world model들은 단순히 **카메라 시점 제어(Camera Control)나 텍스트 입력 제어 수준에 머물러 있어** 물리적인 힘에 반응하는 행동 상호작용은 제공하지 못한다.
 > 4. Dynamic 3D Scene을 생성하는 기존 방법들은 **단순한 장면에만 집중하고, 특정 행동 입력 반응하여 물리적으로 역학을 시뮬레이션하는 능력이 없다**.
 
-이 논문은 이러한 한계점들을 파악하여 physic solver와 video diffusion를 함께 사용하여 **"Hybrid generative simulator"**를 만들어 해결하고자 한다.
+이 논문은 이러한 한계점들을 파악하여 physic solver와 video diffusion를 함께 사용하여 **"Hybrid generative simulator"**를 만들어 해결하고자 한다
 
 ## Method & Technical Details
 
-먼저, Input으로 제공하는 것은 single image와 actions이다. 그리고, 큰 흐름은 "Physic Solver -> Video diffusion" 으로 보면 된다.
+먼저, Input으로 제공하는 것은 single image와 actions이다. 그리고, 큰 흐름은 **"Physic Solver -> Video diffusion"** 으로 보면 된다.
 
 여기서, 3D Scene을 $\mathcal{S}_t$라고 표현하고, 이 3D scene의 구성요소인 Background($B_t$)과 Object($O_t$)가 존재한다. \
 일단 우리는 Input image 인 $I$와 action인 $f_g$(gravity), $f_w$(wind), $f_p$(3D point force)로부터 $\mathcal{S}_t$를 만들어야 한다. 
@@ -74,6 +74,28 @@ $$
 
 Background 파라미터 수식과 유일하게 달라진 부분은 Edge($E$)랑 Velocity($v_t$)라는 파라미터가 추가된 부분뿐이다.
 
-추가적으로, Object가 다양한 물질의 물리 법칙을 설명할 수 있도록 물질 고유의 속성 값인 material($m$)을 정의하고, 6가지 재질(강체, 탄성체, 옷감, 연기, 액체, 과립형 물질)로 분류하여 사용한다.
+추가적으로, Object가 다양한 물질의 물리 법칙을 설명할 수 있도록 물질 고유의 속성 값인 material($m$)을 정의하고, 6가지 재질(강체, 탄성체, 옷감, 연기, 액체, 과립형 물질)로 VLM이 분류(추정)하여 사용한다.
 
+**이제 우리는 다음 단계로 넘어갈 수 있는 $\mathcal{B}_0 \cup \mathcal{O_0} = S_0$와 추정된 $m$이 준비된다.**
 
+#### 1st stage: Physic Solver
+
+앞에서 말했듯이, 큰 흐름은 Physic Solver를 지나 Video Diffusion을 통해 refine 하는 것이다.
+
+처음 stage에서는 **Physic Solver가 Coarse Dynamic Scene ($\{ \tilde{S}_t \}_{t=1}^T$)를 만들기 위해** 사용된다. \
+그래서 $T$ 전체의 Dynamic Scene을 만드는 과정은 아래의 수식을 반복하여 진행한다.
+
+$$
+v_{t+1} , p_{t+1}^O, q_{t+1}^O = solver(\tilde{S}_t, f_g, f_w(t), f_p(t))
+$$
+
+해당 수식을 보면 2가지를 알 수 있다. Background Gaussian 들은 Physic solver에 의해 처리되지 않는 다는 것(즉, static 함)과 current Scene $\tilde{S}_t$를 넣어 다음 $t+1$ 시점에서의 Scene인 $\tilde{S}_{t+1}$을 얻기 위해 다음 시점의 velocity, position, quarternion 을 추정한다는 것이다. 그러면 다음 시점의 Scene 수식을 이해할 수 있다.
+
+$$
+\tilde{S}_{t+1} = \mathcal{B} \cup \{ E, v_{t+1}, p_{t+1}^O, q_{t+1}^O, s_{0}^O, o_{0}^O, c_{0}^O\}
+$$
+
+해당 수식처럼 Background 의 Gaussain 들과 다음 시점의 Scene에서 추정된 정보들을 기준으로 $t+1$ 시점에서의 Scene인 $\tilde{S}_{t+1}$을 얻는다. 근데, 여기서 scale, opacity, color 파라미터는 변하지 않고 기존 처음($t=0$)의 값을 사용하는 것을 볼 수 있는데, 이는 논문 저자들의 의도를 추론할 수 있다.
+
+1. Physic solver가 잘 추정을 못하거나 추정하지 못하는 부분이거나
+2. 어차피 이후에 video diffusion이 관여해 처리할 dynamic한 정보들이 아닌 visual quality 관련한 부분
