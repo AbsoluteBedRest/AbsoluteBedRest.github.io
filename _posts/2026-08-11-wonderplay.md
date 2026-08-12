@@ -37,8 +37,8 @@ tags:
 
 먼저, Input으로 제공하는 것은 single image와 actions이다. 그리고, 큰 흐름은 **"Physic Solver -> Video diffusion"** 으로 보면 된다.
 
-여기서, 3D Scene을 $\mathcal{S}_t$라고 표현하고, 이 3D scene의 구성요소인 Background($B_t$)과 Object($O_t$)가 존재한다. \
-일단 우리는 Input image 인 $I$와 action인 $f_g$(gravity), $f_w$(wind), $f_p$(3D point force)로부터 $\mathcal{S}_t$를 만들어야 한다. 
+여기서, 3D Scene을 $\mathcal{S}_t$라고 표현하고, 이 3D scene의 구성요소인 Background($$\mathcal{B}_t$$)과 Object($$\mathcal{O}_t$$)가 존재한다. \
+일단 우리는 Input image 인 $I$와 action인 $f_g$(gravity), $f_w$(wind), $f_p$(3D point force)로부터 $$S_t$$를 만들어야 한다. 
 
 #### Background Reconstruction
 
