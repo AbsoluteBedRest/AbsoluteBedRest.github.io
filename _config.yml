@@ -36,7 +36,7 @@ defaults:
       layout: single
       author_profile: true
       read_time: false
-      share: true
+      share: false
       related: true
       classes:
         - wide

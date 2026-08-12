@@ -103,6 +103,8 @@ $$
 
 #### 2nd stage: Video Generator
 
+![alt text](/assets/images/posts/2026-08-11-wonderplay/1786533392230.png)
+
 이제 2번째 단계에서는 두 가지 개념을 토대로 Refinement(정제) 작업을 진행한다: **Motion Control, RGB Control**
 
 > Motion Control의 경우, **Video diffusion에 사용될 Noise를 준비하는 step**이다.
@@ -143,6 +145,10 @@ V = g(F, \tilde{V}, I)
 $$
 
 즉, 결과물인 Video는 optical flow, coarse scene에서 렌더링된 video, original input video가 입력으로 생성된다
+
+이 논문 리뷰를 작성하는 본인은 대부분의 AI 논문에서 overview figure는 method를 이해하고 그 다음 overview figure를 보는 걸 추천한다. 해당 논문의 overview figure는 다음과 같다:
+
+![alt text](/assets/images/posts/2026-08-11-wonderplay/1786533444614.png)
 
 ## Experiments
 
