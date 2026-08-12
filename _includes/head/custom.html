@@ -7,3 +7,18 @@
 {% if page.collection == "posts" %}
   <link rel="stylesheet" href="{{ '/assets/css/post.css' | relative_url }}">
 {% endif %}
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    }
+  };
+</script>
+
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js">
+</script>
