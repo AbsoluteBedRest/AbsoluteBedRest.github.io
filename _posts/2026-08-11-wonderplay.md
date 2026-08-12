@@ -89,13 +89,13 @@ $$
 v_{t+1} , p_{t+1}^O, q_{t+1}^O = solver(\tilde{S}_t, f_g, f_w(t), f_p(t))
 $$
 
-해당 수식을 보면 2가지를 알 수 있다. Background Gaussian 들은 Physic solver에 의해 처리되지 않는 다는 것(즉, static 함)과 current Scene $$\tilde{S}_t$$를 넣어 다음 $$t+1$$ 시점에서의 Scene인 $$\tilde{S}_{t+1}$$ 을 얻기 위해 다음 시점의 velocity, position, quarternion 을 추정한다는 것이다. 그러면 다음 시점의 Scene 수식을 이해할 수 있다.
+해당 수식을 보면 2가지를 알 수 있다. Background Gaussian 들은 Physic solver에 의해 처리되지 않는 다는 것(즉, static 함)과 current Scene $$\tilde{S}_t$$를 넣어 다음 $$t+1$$시점에서의 Scene인 $$\tilde{S}_{t+1}$$을 얻기 위해 다음 시점의 velocity, position, quarternion 을 추정한다는 것이다. 그러면 다음 시점의 Scene 수식을 이해할 수 있다.
 
 $$
 \tilde{S}_{t+1} = \mathcal{B}_0 \cup \{ E, v_{t+1}, p_{t+1}^O, q_{t+1}^O, s_{0}^O, o_{0}^O, c_{0}^O\}
 $$
 
-해당 수식처럼 Background 의 Gaussain 들과 다음 시점의 Scene에서 추정된 정보들을 기준으로 $t+1$ 시점에서의 Scene인 $\tilde{S}_{t+1}$을 얻는다. 근데, 여기서 scale, opacity, color 파라미터는 변하지 않고 기존 처음($t=0$)의 값을 사용하는 것을 볼 수 있는데, 이는 논문 저자들의 의도를 추론할 수 있다.
+해당 수식처럼 Background 의 Gaussain 들과 다음 시점의 Scene에서 추정된 정보들을 기준으로 $t+1$ 시점에서의 Scene인 $$\tilde{S}_{t+1}$$을 얻는다. 근데, 여기서 scale, opacity, color 파라미터는 변하지 않고 기존 처음($$t=0$$)의 값을 사용하는 것을 볼 수 있는데, 이는 논문 저자들의 의도를 추론할 수 있다.
 
 1. Physic solver가 잘 추정을 못하거나 추정하지 못하는 부분이거나
 2. 어차피 이후에 video diffusion이 관여해 처리할 dynamic한 정보들이 아닌 visual quality 관련한 부분이거나
@@ -106,8 +106,8 @@ $$
 이제 2번째 단계에서는 두 가지 개념을 토대로 Refinement(정제) 작업을 진행한다: **Motion Control, RGB Control**
 
 > Motion Control의 경우, **Video diffusion에 사용될 Noise를 준비하는 step**이다.
-> - 먼저, 앞서 1st stage에서 physic solver가 추출한 가우시안 입자들의 3D 속도 정보 $\{ v_t \}_{t=1}^T$ 를 가상 카메라 view에 projection하여, 2D optical Flow($F$)를 렌더링한다.
-> - **첫 노이즈 상태 $N_0$인 랜덤 가우시안을 샘플링한 후, 앞서 구한 FLOW $F$ 벡터를 따라 픽셀들을 매 프레임 순차적으로 비틀어 정렬한 Warped Noise $N(F)$를 생성한다.** 수식은 아래와 같다.
+> - 먼저, 앞서 1st stage에서 physic solver가 추출한 가우시안 입자들의 3D 속도 정보 $$\{ v_t \}_{t=1}^T$$를 가상 카메라 view에 projection하여, 2D optical Flow($$F$$)를 렌더링한다.
+> - **첫 노이즈 상태 $N_0$인 랜덤 가우시안을 샘플링한 후, 앞서 구한 FLOW $$F$$ 벡터를 따라 픽셀들을 매 프레임 순차적으로 비틀어 정렬한 Warped Noise $$N(F)$$를 생성한다.** 수식은 아래와 같다.
 > 
 > $$
 > N_{t+1} = warp(N_t, F_{t+1})
@@ -116,22 +116,22 @@ $$
 > - 이를 통해 physic solver가 의도한 모션 궤적을 따라 생성하도록 가이드한다.
 
 > RGB Control
-> - 먼저, physic solver를 통해 임시 3D 장면 $\{ \tilde{S}_t \}_{t=1}^T$ 를 카메라 뷰에서 렌더링해서 RGB 영상 $\tilde{V}$를 만든다.
+> - 먼저, physic solver를 통해 임시 3D 장면 $$\{ \tilde{S}_t \}_{t=1}^T$$를 카메라 뷰에서 렌더링해서 RGB 영상 $$\tilde{V}$$를 만든다.
 > 
 > $$
 > V_{s_1} = \alpha_{s_1} \tilde{V} + \sqrt{1- \alpha_{s_1}^2} N(F)
 > $$
 > 
 > - 해당 수식을 통해 video diffusion의 forward process를 진행한다. 여기서 SDEdit 기법을 기반으로 denoising의 시작 타이밍을 Tricking 한다.
-> - 따라서, 해당 수식을 사용해서 diffusion model의 맨 처음 단계($S$, 즉 최대 단계)에서 시작하지않고 중간 단계인 $s_1$ 단계에서 시작하여 복원을 시작한다.
+> - 따라서, 해당 수식을 사용해서 diffusion model의 맨 처음 단계($$S$$, 즉 최대 단계)에서 시작하지않고 중간 단계인 $$s_1$$ 단계에서 시작하여 복원을 시작한다.
 
 > Spatially Varying
 > - 중요한 부분이 있다. video diffusion의 hallucination은 피할 수 없는 문제다. 이를 해결하기 위해서 해당 논문은 Background과 Object를 분리해서 denoising을 진행한다.
 > - 중요한 concept는 **Background의 경우에는 정제작업이 필요하지만, 결과물에서 최대한 static하게 변하지 않는 부분이어야 한다. 그리고 object의 경우에는 실제 물리 작용이 활발히 일어나야 하는 부분**이다. 따라서, Background에는 적은 step의 denoising이 필요하고, Object에는 Background보다 많은 step의 denoising이 필요하다고 판단한다.
-> - 앞서 RGB Control에서 $s_1$ step을 Object가 필요한 step 수라고 한다면, Background는 그보다 작은 $s_2(<s_1)$ step 수만 있어도 충분하다.
+> - 앞서 RGB Control에서 $$s_1$$ step을 Object가 필요한 step 수라고 한다면, Background는 그보다 작은 $$s_2(<s_1)$$ step 수만 있어도 충분하다.
 > 
 > $$
 > \hat{V}_s{s_2} = M \odot V_{s_2} + (1-M) \odot (\alpha_{s_2}\tilde{V}+\sqrt{1-\alpha_{s_2}^2}N(F))
 > $$
 > 
-> - 그래서 위의 수식처럼 미리 binary mask로 Background와 object를 분리하고, 일단 둘 다 있는 상태의 $s_2$ step에서 정제작업을 이어오다가 Background 부분은 과감히 버리고, 새로 forward process를 거쳐 Background 용 $V_{s_2}$를 만들어 Background와 Object 영역을 다시 합쳐 denoising을 진행한다.
+> - 그래서 위의 수식처럼 미리 binary mask로 Background와 object를 분리하고, 일단 둘 다 있는 상태의 $$s_2$$ step에서 정제작업을 이어오다가 Background 부분은 과감히 버리고, 새로 forward process를 거쳐 Background 용 $$V_{s_2}$$를 만들어 Background와 Object 영역을 다시 합쳐 denoising을 진행한다.
