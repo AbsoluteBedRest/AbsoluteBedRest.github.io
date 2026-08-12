@@ -16,6 +16,9 @@ sidebar_menu:
         category: "XR"
         url: /categories/xr/
 
+  - title: "Preliminaries"
+    url: /categories/preliminaries/
+
   - title: "📚 PUBLICATIONS"
     children:
       - title: "📑 Papers"

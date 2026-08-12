@@ -33,27 +33,7 @@ tags:
 
 이 논문은 이러한 한계점들을 파악하여 physic solver와 video diffusion를 함께 사용하여 **"Hybrid generative simulator"**를 만들어 해결하고자 한다.
 
-### Contributions
-
-논문에서 주장하는 주요 contribution을 정리한다.
-
-- ...
-- ...
-- ...
-
 ## Method & Technical Details
 
-### Overall Pipeline
+먼저, Input으로 제공하는 것은 single image와 actions이다. 그리고, 큰 흐름은 "Physic Solver -> Video diffusion" 으로 보면 된다.
 
-전체 파이프라인을 먼저 설명한다.
-
-```text
-Input
-  ↓
-Module A
-  ↓
-Module B
-  ↓
-Optimization / Generation
-  ↓
-Output
