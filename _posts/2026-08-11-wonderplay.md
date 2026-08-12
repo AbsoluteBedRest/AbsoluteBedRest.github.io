@@ -108,13 +108,14 @@ $$
 > Motion Control의 경우, **Video diffusion에 사용될 Noise를 준비하는 step**이다.
 > - 먼저, 앞서 1st stage에서 physic solver가 추출한 가우시안 입자들의 3D 속도 정보 $\{ v_t \}_{t=1}^T$를 가상 카메라 view에 projection하여, 2D optical Flow($F$)를 렌더링한다.
 > - **첫 노이즈 상태 $N_0$인 랜덤 가우시안을 샘플링한 후, 앞서 구한 FLOW $F$ 벡터를 따라 픽셀들을 매 프레임 순차적으로 비틀어 정렬한 Warped Noise $N(F)$를 생성한다.** 수식은 아래와 같다.
+> 
 > $$
 > N_{t+1} = warp(N_t, F_{t+1})
 > $$
 > - 이를 통해 physic solver가 의도한 모션 궤적을 따라 생성하도록 가이드한다.
 
 > RGB Control
-> - 먼저, physic solver를 통해 임시 3D 장면 $\{ \tilde{S}_t \}_{t=1}^T$를 카메라 뷰에서 렌더링해서 RGB 영상 $\tilde{V}$를 만든다.
+> - 먼저, physic solver를 통해 임시 3D 장면 $\{ \tilde{S}_t \}_{t=1}^T$ 를 카메라 뷰에서 렌더링해서 RGB 영상 $\tilde{V}$를 만든다.
 > $$
 > V_{s_1} = \alpha_{s_1} \tilde{V} + \sqrt{1- \alpha_{s_1}^2} N(F)
 > $$
