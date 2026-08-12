@@ -103,7 +103,9 @@ $$
 
 #### 2nd stage: Video Generator
 
-![alt text](/assets/images/posts/2026-08-11-wonderplay/1786533392230.png)
+<p align="center">
+  <img src="/assets/images/posts/2026-08-11-wonderplay/1786533392230.png" width="80%">
+</p>
 
 이제 2번째 단계에서는 두 가지 개념을 토대로 Refinement(정제) 작업을 진행한다: **Motion Control, RGB Control**
 
