@@ -37,6 +37,18 @@
           {% endfor %}
         {% endif %}
 
+        {% assign nav_count = parent_count %}
+
+        {% if nav.category %}
+          {% assign nav_posts = site.categories[nav.category] %}
+
+          {% if nav_posts %}
+            {% assign nav_count = nav_posts.size %}
+          {% else %}
+            {% assign nav_count = 0 %}
+          {% endif %}
+        {% endif %}
+
         <li>
 
           {% if nav.url %}
@@ -45,9 +57,9 @@
 
                 {{ nav.title }}
 
-                {% if nav.children %}
+                {% if nav.children or nav.category %}
                   <span class="sidebar-count">
-                    ({{ parent_count }})
+                    ({{ nav_count }})
                   </span>
                 {% endif %}
 
@@ -60,9 +72,9 @@
 
               {{ nav.title }}
 
-              {% if nav.children %}
+              {% if nav.children or nav.category %}
                 <span class="sidebar-count">
-                  ({{ parent_count }})
+                  ({{ nav_count }})
                 </span>
               {% endif %}
 
