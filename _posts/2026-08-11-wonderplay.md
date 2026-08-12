@@ -82,14 +82,14 @@ Background 파라미터 수식과 유일하게 달라진 부분은 Edge($E$)랑 
 
 앞에서 말했듯이, 큰 흐름은 Physic Solver를 지나 Video Diffusion을 통해 refine 하는 것이다.
 
-처음 stage에서는 **Physic Solver가 Coarse Dynamic Scene ($\{\tilde{S}_t\}_{t=1}^T$)를 만들기 위해** 사용된다. \
+처음 stage에서는 **Physic Solver가 Coarse Dynamic Scene ($$\{\tilde{S}_t\}_{t=1}^T$$)를 만들기 위해** 사용된다. \
 그래서 $T$ 전체의 Dynamic Scene을 만드는 과정은 아래의 수식을 반복하여 진행한다.
 
 $$
 v_{t+1} , p_{t+1}^O, q_{t+1}^O = solver(\tilde{S}_t, f_g, f_w(t), f_p(t))
 $$
 
-해당 수식을 보면 2가지를 알 수 있다. Background Gaussian 들은 Physic solver에 의해 처리되지 않는 다는 것(즉, static 함)과 current Scene $\tilde{S}_t$를 넣어 다음 $t+1$ 시점에서의 Scene인 $\tilde{S}_{t+1}$ 을 얻기 위해 다음 시점의 velocity, position, quarternion 을 추정한다는 것이다. 그러면 다음 시점의 Scene 수식을 이해할 수 있다.
+해당 수식을 보면 2가지를 알 수 있다. Background Gaussian 들은 Physic solver에 의해 처리되지 않는 다는 것(즉, static 함)과 current Scene $$\tilde{S}_t$$를 넣어 다음 $$t+1$$ 시점에서의 Scene인 $$\tilde{S}_{t+1}$$ 을 얻기 위해 다음 시점의 velocity, position, quarternion 을 추정한다는 것이다. 그러면 다음 시점의 Scene 수식을 이해할 수 있다.
 
 $$
 \tilde{S}_{t+1} = \mathcal{B}_0 \cup \{ E, v_{t+1}, p_{t+1}^O, q_{t+1}^O, s_{0}^O, o_{0}^O, c_{0}^O\}
