@@ -153,10 +153,10 @@ $$
 이제 2nd stage에서 완성된 $$V$$를 사용해서 coarse dynamic scene $$\{\tilde{S}_t\}_{t=0}^T$$ 을 update 한다. 이는 photometric L1 Loss인 
 
 $$
-\min\limits_{\{c_t^B,\mathcal{O}_t\}}_{t=0}^T||v-\tilde{V}||_1
+\min\limits_{\{c_t^B,\mathcal{O}_t\}_{t=0}^T} ||V-\tilde{V}||_1
 $$
 
-을 통해 update 된다. 즉, 2D diffusion이 정제한 고화질 비디오 $$V$$와 1nd stage에서 physic solver의 결과물인 $$\tilde{V}$$의 픽셀차이를 계산한다. 이 오차(Loss)를 역전파하여, 3D 공간 상에 뿌려진 가우시안들의 움직임 궤적과 속도 정도($$O_t$$), 그리고 상호작용할 때 발생하는 실시간 음영 변활르 반영하기 위해 배경 가우시안의 색상 파라미터($$c_t^B$$)를 업데이트한다.
+을 통해 update 된다. 즉, 2D diffusion이 정제한 고화질 비디오 $$V$$와 1nd stage에서 physic solver의 결과물인 $$\tilde{V}$$의 픽셀차이를 계산한다. 이 오차(Loss)를 역전파하여, 3D 공간 상에 뿌려진 가우시안들의 움직임 궤적과 속도 정도($$O_t$$), 그리고 상호작용할 때 발생하는 실시간 음영 변화(shading effect)를 반영하기 위해 배경 가우시안의 색상 파라미터($$c_t^B$$)를 업데이트한다.
 
 
 
@@ -168,4 +168,4 @@ $$
 
 
 
-## Contributions
+## Contribution
