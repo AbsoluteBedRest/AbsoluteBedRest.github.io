@@ -21,7 +21,7 @@ tags:
 
 ## Introduction
 
-읽기 전에 하나를 전체로 깔고 들어가는게 좋을 듯 싶다. \
+읽기 전에 하나를 전제로 깔고 들어가는게 좋을 듯 싶다. \
 **"WonderPlay의 경우에는 Physic Solver(유사 물리엔진)와 Video Diffusion로 구성되어 있다."** 라는 문장을 기억하자. \
 (*참고로, 해당 논문 리뷰는 Physic Solver의 작동 방식이나 Detail을 다루지 않는다.*)
 
@@ -38,7 +38,7 @@ tags:
 먼저, Input으로 제공하는 것은 single image와 actions이다. 그리고, 큰 흐름은 **"Physic Solver -> Video diffusion"** 으로 보면 된다.
 
 여기서, 3D Scene을 $\mathcal{S}_t$라고 표현하고, 이 3D scene의 구성요소인 Background($$\mathcal{B}_t$$)과 Object($$\mathcal{O}_t$$)가 존재한다. \
-일단 우리는 Input image 인 $I$와 action인 $f_g$(gravity), $f_w$(wind), $f_p$(3D point force)로부터 $$S_t$$를 만들어야 한다. 
+일단 우리는 Input image 인 $I$와 action인 $f_g$(gravity), $f_w$(wind), $f_p$(3D point force)로부터 Dynamic Scene $${\S_t\}_{t=1}^T$$를 만들어야 한다. 
 
 #### Background Reconstruction
 
@@ -146,7 +146,19 @@ $$
 V = g(F, \tilde{V}, I)
 $$
 
-즉, 결과물인 Video는 optical flow, coarse scene에서 렌더링된 video, original input video가 입력으로 생성된다
+즉, 결과물인 Video는 optical flow, coarse scene에서 렌더링된 video, original input video가 입력으로 생성된다.
+
+#### 3nd stage: Updating scene dynamics
+
+이제 2nd stage에서 완성된 $$V$$를 사용해서 coarse dynamic scene $$\{\tilde{S}_t\}_{t=0}^T$$ 을 update 한다. 이는 photometric L1 Loss인 
+
+$$
+\min\limits_{\{c_t^B,\mathcal{O}_t\}}_{t=0}^T||v-\tilde{V}||_1
+$$
+
+을 통해 update 된다. 즉, 2D diffusion이 정제한 고화질 비디오 $$V$$와 1nd stage에서 physic solver의 결과물인 $$\tilde{V}$$의 픽셀차이를 계산한다. 이 오차(Loss)를 역전파하여, 3D 공간 상에 뿌려진 가우시안들의 움직임 궤적과 속도 정도($$O_t$$), 그리고 상호작용할 때 발생하는 실시간 음영 변활르 반영하기 위해 배경 가우시안의 색상 파라미터($$c_t^B$$)를 업데이트한다.
+
+
 
 이 논문 리뷰를 작성하는 본인은 대부분의 AI 논문에서 overview figure는 method를 이해하고 그 다음 overview figure를 보는 걸 추천한다. 해당 논문의 overview figure는 다음과 같다:
 
