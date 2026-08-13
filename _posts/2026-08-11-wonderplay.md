@@ -166,6 +166,24 @@ $$
 
 ## Experiments
 
+<p align="center">
+  <img src="/assets/images/posts/2026-08-11-wonderplay/1786588129963.png" width="50%">
+</p>
+
+물리 기반 모델인 PhysGen, PhysGaussian, 조건부 비디오 생성 모델인 CogVideoX-I2V, Tora 이렇게 4개의 Baselines를 토대로 비디오 품질 검증 툴인 **VBench**를 적용하여 5개의 Metric에 대해 정량 평가를 진행했다. 옷감, 강체, 모래와 같은 연속체, 가스, 액체 등 여러 재질이 포함된 15개의 고난도 가상 씬(실제 사진 7장, 정밀 합성 이미지 8장)으로 구성된 테스트 세트를 구축하여 평가를 진행했다. 5개의 metrics 중 PhysReal 의 경우 GPT-4o 멀티모달 비전을 활용하여 평가 프로토콜로써 탑재되었다. 추가로 VBench에 관한 평가 프로토콜 전반 설명은 이후에 Preminaries 페이지에 업로드될 것이다.
+
+WonderPlay는 Baselines model들과 비교했을 때 Aesthetic, Imaging, PhysReal 등 평가 분야 전반에 걸쳐 최상위 혹은 차상위의 정량 스코어를 기록했다. 
+
+<p align="center">
+  <img src="/assets/images/posts/2026-08-11-wonderplay/1786590524616.png" width="50%">
+</p>
+
+또한 200명 사용자단을 모집하여 2AFC 평가를 수행했다. 평가 항목은 Physics Plausibility, Motion Fidelity, Visual Quality 총 3가지 지표를 평가한 결과 약 70~80%에 달하는 대다수의 평가자들이 다른 모델 대비 WonderPlay의 출력 품질을 선호하였다.
+
+<p align="center">
+  <img src="/assets/images/posts/2026-08-11-wonderplay/1786594546722.png" width="50%">
+</p>
+
 
 
 ## Contribution
