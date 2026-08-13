@@ -1,5 +1,5 @@
 ---
-title: "WonderPlay: Dynamic 3D Scene Generation from a Single Image and Actions"
+title: "[Paper review] WonderPlay: Dynamic 3D Scene Generation from a Single Image and Actions"
 date: 2026-08-11
 categories:
   - 4D Vision
