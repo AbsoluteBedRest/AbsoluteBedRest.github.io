@@ -1,7 +1,17 @@
 /* Post titles in Recent Posts / Category archives */
 .archive__item-title {
-  font-size: 0.6rem !important;
-  line-height: 1.3;
+  font-size: 1rem !important;
+  line-height: 1.25;
+  margin-top: 0;
+  margin-bottom: 0.4rem;
+}
+
+/* Keep long post titles on one line and truncate with ... */
+.archive__item-title a {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Hide post excerpts from archive/home/category lists */
@@ -9,23 +19,10 @@
   display: none !important;
 }
 
-/* Space around each post item */
+/* Separate each post with a horizontal line */
 .list__item {
   padding: 1.2rem 0;
   border-bottom: 1px solid #e5e5e5;
-}
-
-/* Top border for the first post */
-.list__item:first-of-type {
-  border-top: 1px solid #e5e5e5;
-}
-
-/* Archive post title */
-.archive__item-title {
-  font-size: 1.1rem !important;
-  line-height: 1.3;
-  margin-top: 0;
-  margin-bottom: 0.4rem;
 }
 
 /* Date under post title */
@@ -35,6 +32,7 @@
   margin-bottom: 0;
 }
 
+/* Remove the default line under Recent posts / category title */
 .archive__subtitle {
   border-bottom: none !important;
 }
