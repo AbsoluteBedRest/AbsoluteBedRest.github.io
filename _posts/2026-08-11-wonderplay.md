@@ -189,12 +189,14 @@ WonderPlay는 Baselines model들과 비교했을 때 Aesthetic, Imaging, PhysRea
 
 이번에는 Shading effect가 어떻게 처리되었는 지 보자. 배 두 척이 충돌하여 서로 떨어지는 Scene에서 PhysGaussian은 단일 시점으로 복원한 불완전한 3D 가우시안 구조 때문에 실시간 Shading을 계산하지 못해 물 위에 비친 배의 형상은 정지 상태로 Dynamic Object인 배를 따라 자연스러운 현상을 일으키지 못했으나, WonderPlay의 경우 diffusion model이 실시간 shading effect와 그림자의 사실성(Reflection)을 업데이트하여 자연스러운 현상을 표현했다.
 
-![alt text](/assets/images/posts/2026-08-11-wonderplay/1786595558852.png)
+<p align="center">
+  <img src="/assets/images/posts/2026-08-11-wonderplay/1786595558852.png" width="70%">
+</p>
 
 이외에도 여러 action 들을 적용해 실험해보면 WonderPlay가 괜찮은 성능들을 보이는 걸 볼 수 있다.
 
 <p align="center">
-  <img src="/assets/images/posts/2026-08-11-wonderplay/1786595615005.png" width="70%">
+  <img src="/assets/images/posts/2026-08-11-wonderplay/1786595615005.png" width="50%">
 </p>
 
 정량적 평가 뿐만 아니라 Ablation Study를 통해 WonderPlay의 각 모듈이 결과물에 영향을 어떻게 끼치는지 보고자 한다. \
