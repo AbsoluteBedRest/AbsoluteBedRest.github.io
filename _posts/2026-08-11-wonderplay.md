@@ -104,7 +104,7 @@ $$
 #### 2nd stage: Video Generator
 
 <p align="center">
-  <img src="/assets/images/posts/2026-08-11-wonderplay/1786533392230.png" width="80%">
+  <img src="/assets/images/posts/2026-08-11-wonderplay/1786533392230.png" width="70%">
 </p>
 
 이제 2번째 단계에서는 두 가지 개념을 토대로 Refinement(정제) 작업을 진행한다: **Motion Control, RGB Control**
@@ -178,12 +178,52 @@ WonderPlay는 Baselines model들과 비교했을 때 Aesthetic, Imaging, PhysRea
   <img src="/assets/images/posts/2026-08-11-wonderplay/1786590524616.png" width="50%">
 </p>
 
-또한 200명 사용자단을 모집하여 2AFC 평가를 수행했다. 평가 항목은 Physics Plausibility, Motion Fidelity, Visual Quality 총 3가지 지표를 평가한 결과 약 70~80%에 달하는 대다수의 평가자들이 다른 모델 대비 WonderPlay의 출력 품질을 선호하였다.
+또한 200명 사용자단을 모집하여 **2AFC 평가**를 수행했다. 평가 항목은 Physics Plausibility, Motion Fidelity, Visual Quality 총 3가지 지표를 평가한 결과 약 70~80%에 달하는 대다수의 평가자들이 다른 모델 대비 WonderPlay의 출력 품질을 선호하였다.
 
 <p align="center">
-  <img src="/assets/images/posts/2026-08-11-wonderplay/1786594546722.png" width="50%">
+  <img src="/assets/images/posts/2026-08-11-wonderplay/1786594546722.png" width="75%">
 </p>
 
+앞서 말한 4개의 Baselines model 들로 정성적 평가를 진행하였다. \
+물에 떨어지는 오리 Scene에서 Tora는 오리의 형태를 무작위로 변형시켰고, CogVideoX는 오리가 낙하하는 힘의 방향을 무시한 채 뜬금없이 오리를 왼쪽으로 슬라이딩하는 모순을 일으켰다. 반면 WonderPlay는 물리 엔진 가이드 덕분에 오리가 수면 아래로 하강하는 형태와 기하학적 형상을 원형 그대로 보존하고, 비디오 생성 지식을 동시에 주입해서 오리 주변에 튀는 실제 물방울 파동과 물거품 디테일까지 렌더링해냈다.
 
+이번에는 Shading effect가 어떻게 처리되었는 지 보자. 배 두 척이 충돌하여 서로 떨어지는 Scene에서 PhysGaussian은 단일 시점으로 복원한 불완전한 3D 가우시안 구조 때문에 실시간 Shading을 계산하지 못해 물 위에 비친 배의 형상은 정지 상태로 Dynamic Object인 배를 따라 자연스러운 현상을 일으키지 못했으나, WonderPlay의 경우 diffusion model이 실시간 shading effect와 그림자의 사실성(Reflection)을 업데이트하여 자연스러운 현상을 표현했다.
+
+![alt text](/assets/images/posts/2026-08-11-wonderplay/1786595558852.png)
+
+이외에도 여러 action 들을 적용해 실험해보면 WonderPlay가 괜찮은 성능들을 보이는 걸 볼 수 있다.
+
+<p align="center">
+  <img src="/assets/images/posts/2026-08-11-wonderplay/1786595615005.png" width="70%">
+</p>
+
+정량적 평가 뿐만 아니라 Ablation Study를 통해 WonderPlay의 각 모듈이 결과물에 영향을 어떻게 끼치는지 보고자 한다. \
+Figure 7은 2D diffusion을 거치지 않고 가우시안 physic solver만 작동시킨 Coarse Version과 이 논문이 주장하고자 하는 Full model의 결과물을 보여준다. 연기(smoke) 분출 Scene에서, Coarse 버전의 경우, 모든 이산 입자 physic solver가 선천적으로 가지고 있는 Numerical Visocosity 문제 때문에 연기가 부드럽게 풀리지 못하고 sticky motion 처럼 끈적하게 뭉치고 Grainy artifacts 처럼 입자가 매우 거칠게 우글거리는 현상을 보였다. 그러나 full model의 경우, Numerical visocity noise가 해결되고 실제 연기가 공기 중에서 소용돌이치며 분산되는 기하 역학이 동기화되어 복원되었다.
+
+이외에도 physic solver가 계산한 픽셀의 이동 경로인 optical flow 정보를 생성 모델의 조건에서 완전히 제외한 즉, Warp noise $$N(F)$$를 생성하지 않았을 때(w/o flow), 그리고, physic simulator가 대략적으로 렌더링한 $$\tilde{V}$$를 생성 모델 조건으로 주입하지 않는 경우(w/o RGB)로 나누어 실험해 보았다.
+
+w/o flow의 경우, 대략적인 겉모습 형태($$\tilde{V}$$)는 보존되지만, 프레임 간 픽셀의 흐름 방향을 가이드해 줄 노이즈 뼈대가 없기 때문에 모래 알갱이의 세밀한 롤링이나 연기의 디테일한 동역학적 모션을 묘사하는 데 실패하고 시간 축 방향으로 뭉개지는 현상이 발생한다. w/o RGB의 경우, 생성 모델의 자유도가 한계를 넘어 Hallucination 현상이 심하게 일어나 배경 뒤편에 뜬금없는 모래성 무더기가 스스로 새로 생겨나 솟구치거나, 가만히 유지되어야 할 정적 배경의 타일 텍스처가 시시각각 바뀌어 버리는 문제가 발생한다. 또한 추가로 VBench를 통한 ablation study도 아래처럼 수행하였다.
+
+<p align="center">
+  <img src="/assets/images/posts/2026-08-11-wonderplay/1786596643219.png" width="50%">
+</p>
 
 ## Contribution
+
+이제 해당 논문의 contributions를 보자. 보통 Introduction 최하단에 적혀있는 경우가 많지만, 마지막에 해당 논문의 기여 항목들을 보면서 정리하는 것이 좋다. 해당 논문이 보여주는 contributions 는 다음과 같다:
+
+1. 다양한 물리적 재질을 지우너하는 새로운 문제 해결: single image와 사용자의 actions 입력만을 조건으로, 다양한 물리적 재질을 가진 동적 3D 장면을 생성하는 까다로운 문제를 해결하고자 하였다.
+2. 하이브리드 pipeline 제안: physic solver와 video generator 모델을 통합하여, 입력된 행동에 적절히 반응하고 높은 시각적 완성도를 동시에 달성하는 하이브리드 프레임워크를 제안하였다.
+3. 다양한 상호작용 시나리오 하에서 정성적 정량적 평가를 통해, 시각적 품질과 physical palusibility 측면에서 기존의 순수 물리 기반 방법론이나 비디오 생성모들을 능가함을 보여주었다.
+
+## Limitations & Future work
+
+그렇다면 어떤 점이 더 연구해볼만하고, 아직 부족한 점이 무엇이 있을까?
+
+일단 후속연구로 'PerpetualWonder' 라는 모델이 이미 논문으로 공개되어있다. 해당 논문을 본다면, WonderPlay가 가진 한계점을 볼 수 있을 것이다. 해당 논문 리뷰도 이 블로그에 공개될 것이다.
+
+밑의 한계점과 future work 내용은 이 논문 리뷰를 하는 게시글 작성자와 논문에 공개된 내용을 바탕으로 작성되었다:
+
+일단, WonderPlay는 얼핏보면 다양한 재질을 처리할 수 있도록 구성된 프레임 워크이지만, **모든 물질 종류를 처리할 수 있는 것은 아니다**. Rigid body solver, mpm solver, pbd solver가 이전 방법론들보다 여러 재질의 물질들을 처리할 수 있도록 가이드를 제공하지만, 애초에 video diffusion이 VLM을 통해 물질의 종류를 파악할 수 있다면, 많은 정보를 토대로 pretrained된 video diffusion이 처리하는게 결국 이로울 것이다(왜냐하면 solver를 그냥 계속 늘리지 않는 한 세상에 존재하는 모든 물질들을 표현할 수 없기 때문). 
+
+또한, 실시간 처리가 중점이 아닌 클릭하여 나타나는 animator에 지나지 않는 프레임워크다. 어떻게 보면 **장기적인 user interaction은 아직 힘들 수 있다**. 그리고 사용자가 할 수 있는 **interaction의 종류가 적다.** 따라서 **실시간 user interaction까지 확장하는게 어떻게 보면 후속연구**가 될 것 같다.
