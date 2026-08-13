@@ -202,7 +202,7 @@ WonderPlay는 Baselines model들과 비교했을 때 Aesthetic, Imaging, PhysRea
 정량적 평가 뿐만 아니라 Ablation Study를 통해 WonderPlay의 각 모듈이 결과물에 영향을 어떻게 끼치는지 보고자 한다. \
 Figure 7은 2D diffusion을 거치지 않고 가우시안 physic solver만 작동시킨 Coarse Version과 이 논문이 주장하고자 하는 Full model의 결과물을 보여준다. 연기(smoke) 분출 Scene에서, Coarse 버전의 경우, 모든 이산 입자 physic solver가 선천적으로 가지고 있는 Numerical Visocosity 문제 때문에 연기가 부드럽게 풀리지 못하고 sticky motion 처럼 끈적하게 뭉치고 Grainy artifacts 처럼 입자가 매우 거칠게 우글거리는 현상을 보였다. 그러나 full model의 경우, Numerical visocity noise가 해결되고 실제 연기가 공기 중에서 소용돌이치며 분산되는 기하 역학이 동기화되어 복원되었다.
 
-이외에도 physic solver가 계산한 픽셀의 이동 경로인 optical flow 정보를 생성 모델의 조건에서 완전히 제외한 즉, Warp noise $$N(F)$$를 생성하지 않았을 때(w/o flow), 그리고, physic simulator가 대략적으로 렌더링한 $$\tilde{V}$$를 생성 모델 조건으로 주입하지 않는 경우(w/o RGB)로 나누어 실험해 보았다.
+이외에도 **physic solver가 계산한 픽셀의 이동 경로인 optical flow 정보를 생성 모델의 조건에서 완전히 제외한 즉, Warp noise $$N(F)$$를 생성하지 않았을 때(w/o flow)**, 그리고, **physic simulator가 대략적으로 렌더링한 $$\tilde{V}$$를 생성 모델 조건으로 주입하지 않는 경우(w/o RGB)**로 나누어 실험해 보았다.
 
 w/o flow의 경우, 대략적인 겉모습 형태($$\tilde{V}$$)는 보존되지만, 프레임 간 픽셀의 흐름 방향을 가이드해 줄 노이즈 뼈대가 없기 때문에 모래 알갱이의 세밀한 롤링이나 연기의 디테일한 동역학적 모션을 묘사하는 데 실패하고 시간 축 방향으로 뭉개지는 현상이 발생한다. w/o RGB의 경우, 생성 모델의 자유도가 한계를 넘어 Hallucination 현상이 심하게 일어나 배경 뒤편에 뜬금없는 모래성 무더기가 스스로 새로 생겨나 솟구치거나, 가만히 유지되어야 할 정적 배경의 타일 텍스처가 시시각각 바뀌어 버리는 문제가 발생한다. 또한 추가로 VBench를 통한 ablation study도 아래처럼 수행하였다.
 
