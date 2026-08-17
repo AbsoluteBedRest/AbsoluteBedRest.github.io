@@ -239,6 +239,20 @@ $$
 
 </details>
 
+#### Task Goal
+
+$$
+\mathcal{G}: I \rightarrow \{V(p), A(p,t)\}
+$$
+
+해당 수식을 보다시피, 특정 observer의 pose p가 주어졌을 때, visual representation인 $$V(p)$$와 $$A(p,t)$$를 추정해 framework인 $$\mathcal{G}$$를 만들어내는 것이다. 
+
+이 $$V(p)$$ 같은 경우는 3D guassian splats 를 이용해 표현하고, $$A(p,t)$$의 경우에는 point-cloud를 기반으로 하는 ambisonics rendering을 통해서 표현한다:
+
+$$
+a_L(t) = A(p,t) \in \mathbb{R}^{(L+1)^2}
+$$
+
 
 ## Method & Technical Details
 
