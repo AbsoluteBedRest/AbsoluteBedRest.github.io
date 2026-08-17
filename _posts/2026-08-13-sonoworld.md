@@ -41,7 +41,7 @@ tags:
 
 ## The Image2AVScene Task
 
-<details>
+<details markdown="block">
 <summary>Ambisonics Concept</summary>
 
 1.  Spatial Sound representation
@@ -65,7 +65,7 @@ $$
 a(\theta, \phi, t)
 $$
 
-로 표현하여 $$\theta=azimuth, 좌우방향$$, $$\phi=상하 방향$$를 파라미터로 사용한다. 즉, 구 모양을 생각하면 편하게 이해할 수 있다:
+로 표현하여 $$\theta=azimuth, 좌우방향$$, $$\phi=elevation, 상하 방향$$를 파라미터로 사용한다. 즉, 구 모양을 생각하면 편하게 이해할 수 있다:
 
 ![alt text](/assets/images/posts/2026-08-13-sonoworld/1786949404525.png)
 
