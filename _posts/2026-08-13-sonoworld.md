@@ -80,6 +80,8 @@ $$
 Y_l^m(\theta, \phi)
 $$
 
+이 식은 우리가 특정 방향에 대한 $$\theta, \phi$$ 를 넣어줬을 때, 해당 방향에 대한 가중치를 주는 함수다. 즉, 해당 한수는 360도 각 방향에 대해 서로 다른 가중치를 주는 패턴인 것이다.
+
 물론, 이를 설명하기 위해서는 Fourier Transform이라는 걸 설명하는게 좋겠지만, 그렇게 되면 너무 길어지기 때문에 이를 그냥 **"특정한 3D 방향 패턴을 나타내는 basis"** 라고 생각해주면 좋다. basis는 단순히 기본 선형대수학에서 나오는 표현이니 넘어가도록 하겠다.
 
 간단하게,
@@ -90,17 +92,17 @@ $$
 논문의 Equation (1)은 
 
 $$
-a(\theta, \phi, t) \approx \sum_{l=0}^L \sum_{m=-l}^l Y_l^m (\theta, \phi)a_{l,m}(t)
+a(\theta, \phi, t) \approx \sum_{l=0}^L \sum_{m=-l}^l Y_l^m (\theta, \phi)a_{l,m}(t) = y_L(\theta, \phi)^T \mathcal{a}_L(t)
 $$
 
 이다. 
 
-여기서 $$Y_l^m (\theta, \phi)$$ 는 공간 방향 패턴이고, $$a_{l,m}(t)$$는 그 패턴에 대응하는 실제 audio waveform이다.
+여기서 $$Y_l^m (\theta, \phi)$$ 는 공간 방향 패턴이고, $$a_{l,m}(t)$$는 그 패턴에 대응하는(Ambisonics로 인코딩된) audio waveform이다.
 
 즉, Ambisonics 에서는 360도 sound field 전체를 직접 저장하지 않고,
 
 $$
-a_{0,0}(t), a{1,-1}(t), a_{1,0}(t), a_{1,1}(t) ...
+a_{0,0}(t), a_{1,-1}(t), a_{1,0}(t), a_{1,1}(t) ...
 $$
 
 같은 여러 개의 audio channel로 저장한다.
@@ -109,7 +111,7 @@ $$
 
 단순하게, Equation (1)의 의미는
 
-> Directional Sound = Spatial Basis X Ambisonics Channels
+> Directional Sound = Spatial Basis (Weights) 값 X Ambisonics Channels에 담긴 waveform
 
 라고 이해하자.
 
@@ -119,7 +121,7 @@ Ambisonics order 인 $$L$$은 공간 표현 정밀도를 결정한다.
 
 논문에서 주로 사용하는 것은 $$L=1$$인 **First-Order Ambisonics, FOA**다.
 
-Ambisoncis channel 수는 $$(L+1)^2$$ 개 이므로 FOA 에서는 4개의 audio channel을 사용한다.
+Ambisoncis channel 수는 $$(L+1)^2$$ 개 이므로 FOA 에서는 4개의 audio channel을 사용한다(Eq(1)을 보면 알겠지만, L=1이면 $$\sum$$ 에 의해 나오는 결과값은 총 4개다).
 
 즉 이 논문에서는 $$a_1(t) \in \mathbb{R}^4$$ 라고 생각하면 된다.
 
@@ -128,7 +130,7 @@ Ambisoncis channel 수는 $$(L+1)^2$$ 개 이므로 FOA 에서는 4개의 audio 
 이 논문에서 가장 중요한 수식은 Equation (1)이 아닌 Equation (2)다.
 
 $$
-a_L^{\text{single}} (t) = \sigma(d)a_{\text{src}}(t)y_L(u)
+\mathcal{a}_L^{\text{single}} (t) = \sigma(d)a_{\text{src}}(t)y_L(u)
 $$
 
 * $a_{\text{src}}(t)$는 원래 sound waveform.
@@ -157,7 +159,82 @@ Sonoworld는 3D 위치를 알고 있기 때문에, listener가 이동하면 새�
 
 인 6-DoF exploration이 가능해진다.
 
+#### 7. 헷갈릴 수 있는 부분
 
+Equation (2)는 실제 원본 source waveform인 mono audio에 source의 방향과 거리 정보를 반영하여 여러 개의 Ambisonics channel waveform으로 인코딩하는 식이다.
+
+Equation (1)은 그렇게 만들어진 여러 Ambisonics channel waveform을 특정 방향 (θ,ϕ)의 Spherical Harmonics 값으로 가중합하여, 그 방향을 바라보는 virtual microphone의 directional waveform을 얻는 식이다.
+
+방향 $\mathbf{u}_{\mathrm{query}}$를 바라보는 virtual microphone의
+waveform은
+
+$$
+a_{\mathbf{u}_{\mathrm{query}}}(t)
+=
+\mathbf{y}_L(\mathbf{u}_{\mathrm{query}})^T
+\mathbf{a}_L(t)
+$$
+
+이다.
+
+
+Equation (2)를 Equation (1)에 대입하면 조금 더 쉽게 이해할 수 있는데,
+
+$$
+\mathbf{a}_L(t)
+=
+\sigma(d)\,
+a_{\mathrm{src}}(t)\,
+\mathbf{y}_L(\mathbf{u}_{\mathrm{src}})
+$$
+
+를 Equation (1)에 대입하면,
+
+$$
+a_{\mathbf{u}_{\mathrm{query}}}(t)
+=
+\mathbf{y}_L(\mathbf{u}_{\mathrm{query}})^T
+\left[
+\sigma(d)\,
+a_{\mathrm{src}}(t)\,
+\mathbf{y}_L(\mathbf{u}_{\mathrm{src}})
+\right]
+$$
+
+$\sigma(d)$와 $a_{\mathrm{src}}(t)$는 scalar이므로 밖으로 빼면,
+
+$$
+a_{\mathbf{u}_{\mathrm{query}}}(t)
+=
+\sigma(d)\,
+a_{\mathrm{src}}(t)\,
+\mathbf{y}_L(\mathbf{u}_{\mathrm{query}})^T
+\mathbf{y}_L(\mathbf{u}_{\mathrm{src}})
+$$
+
+따라서
+
+$$
+\boxed{
+a_{\mathbf{u}_{\mathrm{query}}}(t)
+=
+\sigma(d)\,
+a_{\mathrm{src}}(t)\,
+\underbrace{
+\mathbf{y}_L(\mathbf{u}_{\mathrm{query}})^T
+\mathbf{y}_L(\mathbf{u}_{\mathrm{src}})
+}_{\text{directional matching term}}
+}
+$$
+
+여기서,
+
+$$
+\mathbf{y}_L(\mathbf{u}_{\mathrm{query}})^T
+\mathbf{y}_L(\mathbf{u}_{\mathrm{src}})
+$$
+
+가 크면, virtual microphone이 바라보는 방향과 실제 source 방향이 Ambisonics basis 상 잘 맞아 소리가 크게 들리는 등의 영향이 일어난다.
 
 
 </details>
