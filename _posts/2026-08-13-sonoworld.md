@@ -44,7 +44,7 @@ tags:
 <details markdown="block">
 <summary>Ambisonics Concept</summary>
 
-1.  Spatial Sound representation
+#### 1. Spatial Sound representation
 
 **Ambisonics**는 "내 주변 360도 공간에서 어느 방향으로 어떤 소리가 들리는가"를 몇 개의 오디오 채널로 압축해서 표현하는 방법"이다. 
 
@@ -69,7 +69,7 @@ $$
 
 ![alt text](/assets/images/posts/2026-08-13-sonoworld/1786949404525.png)
 
-2. Spherical Harmonics
+#### 2. Spherical Harmonics
 
 문제는 360도 모든 방향의 소리를 그대로 저장하게 되면, 실시간 소리 렌더링도 힘들 뿐더러 저장용량도 커지는 문제가 있다.
 대신, Ambisonics는 몇 개의 기본적인 공간 패턴을 이용해서 전체 sound field를 표현한다.
@@ -85,7 +85,7 @@ $$
 간단하게,
 > Foureier Transform에서 sin/cos 이 basis 역할을 하듯, 구면 공간에서는 spherical harmonics가 basis 역할을 수행한다.
 
-3. Ambisonics coefficient
+#### 3. Ambisonics coefficient
 
 논문의 Equation (1)은 
 
@@ -113,7 +113,7 @@ $$
 
 라고 이해하자.
 
-4. Ambisonics order과 FOA
+#### 4. Ambisonics order과 FOA
 
 Ambisonics order 인 $$L$$은 공간 표현 정밀도를 결정한다.
 
@@ -123,7 +123,7 @@ Ambisoncis channel 수는 $$(L+1)^2$$ 개 이므로 FOA 에서는 4개의 audio 
 
 즉 이 논문에서는 $$a_1(t) \in \mathbb{R}^4$$ 라고 생각하면 된다.
 
-5. Point source를 Ambisonics로 만들기
+#### 5. Point source를 Ambisonics로 만들기
 
 이 논문에서 가장 중요한 수식은 Equation (1)이 아닌 Equation (2)다.
 
@@ -138,7 +138,7 @@ $$
 간단하게, 아래와 같이 이해하면 된다.
 > **Ambisonics = 원래 소리 $\times$ 방향정보 $\times$ 거리 효과**
 
-6. 3-DOF 와 6-DOF
+#### 6. 3-DOF 와 6-DOF
 
 일반적인 Ambisoncis recording은 한 위치에서 측정한 sound field 이기 때문에
 
