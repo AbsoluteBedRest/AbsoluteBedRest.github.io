@@ -285,7 +285,9 @@ $$
 
 여기서 사용하는 모델은 Marble model 이나 HunyuanWrold1.0을 사용하여 사실적인 3D 환경을 구성한다.
 
-#### 360$$\degree$$ Aduio-Visual Semantic Grounding
+#### 360 $$\degree$$ Aduio-Visual Semantic Grounding
+
+이제, 3D 공간에 소리를 생성하고 위치시키는 방법이다.
 
 
 
