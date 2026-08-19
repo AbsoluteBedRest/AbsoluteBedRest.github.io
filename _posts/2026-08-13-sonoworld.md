@@ -256,7 +256,9 @@ $$
 
 ## Method & Technical Details
 
-![alt text](/assets/images/posts/2026-08-13-sonoworld/1787120630529.png)
+<p align="center">
+  <img src="/assets/images/posts/2026-08-13-sonoworld/1787120630529.png" width="70%">
+</p>
 
 SonoWorld의 Key Tehcnique은 총 4개로 나뉜다.
 
