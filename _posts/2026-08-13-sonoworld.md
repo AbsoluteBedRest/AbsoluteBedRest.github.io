@@ -283,7 +283,7 @@ $$
 V = \mathcal{G}_v(I_{pano})
 $$
 
-여기서 사용하는 모델은 Marble model 이나 HunyuanWrold1.0을 사용하여 사실적인 3D ㅗ한경을 구성한다.
+여기서 사용하는 모델은 Marble model 이나 HunyuanWrold1.0을 사용하여 사실적인 3D 환경을 구성한다.
 
 #### 360$$\degree$$ Aduio-Visual Semantic Grounding
 
