@@ -256,12 +256,14 @@ $$
 
 ## Method & Technical Details
 
-SonoWorld의 Key Tehcnique은 총 3개로 나뉜다.
+![alt text](/assets/images/posts/2026-08-13-sonoworld/1787120630529.png)
 
-- 첫 번째로, single image를 입력으로 받아 360도 파노라마를 생성하고 이를 3D Scene에 Lift하는 것
-- 두 번째로, reconstructed된 3D 공간에서 소리가 있을 법한 실체를 식별하고 위치를 결정하는 것
-- 세 번째로, spatial sound field를 생성하는 ambisonics encoder를 설계하는 것
-- 네 번째로, 청취자 입장에서 어느 위치(pose)에서도 입체적인 binaural audio를 렌더링하는 것
+SonoWorld의 Key Tehcnique은 총 4개로 나뉜다.
+
+> - **첫 번째로, single image를 입력으로 받아 360도 파노라마를 생성하고 이를 3D Scene에 Lift하는 것**
+> - **두 번째로, reconstructed된 3D 공간에서 소리가 있을 법한 실체를 식별하고 위치를 결정하는 것**
+> - **세 번째로, spatial sound field를 생성하는 ambisonics encoder를 설계하는 것**
+> - **네 번째로, 청취자 입장에서 어느 위치(pose)에서도 입체적인 binaural audio를 렌더링하는 것**
 
 #### Panorama-Based Visual Scene Generation
 
@@ -303,6 +305,9 @@ P_i = Lift(M_i, D)
 $$
 
 장면 내에서 소리나는 객체의 모든 3D 물리적 위치를 지시하는 세트 $$P$$가 만들어진다.
+
+####
+
 
 ## Experiments
 
