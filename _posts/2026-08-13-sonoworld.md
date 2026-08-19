@@ -256,6 +256,36 @@ $$
 
 ## Method & Technical Details
 
+SonoWorld의 Key Tehcnique은 총 3개로 나뉜다.
+
+- 첫 번째로, single image를 입력으로 받아 360도 파노라마를 생성하고 이를 3D Scene에 Lift하는 것
+- 두 번째로, reconstructed된 3D 공간에서 소리가 있을 법한 실체를 식별하고 위치를 결정하는 것
+- 세 번째로, spatial sound field를 생성하는 ambisonics encoder를 설계하는 것
+- 네 번째로, 청취자 입장에서 어느 위치(pose)에서도 입체적인 binaural audio를 렌더링하는 것
+
+#### Panorama-Based Visual Scene Generation
+
+먼저 single image를 받게 되면, 보통 기존의 기법들은 해당 이미지가 정면을 바라보고 수평 상태에 있다고 가정한다. 그러나, 이 가정은 single image가 기울어져 있거나 elevation이 다를 경우 misalignment 문제를 야기할 수 있다. 그래서, SonoWorld는 먼저 single image를 받아 이를 calibration하는 것부터 시작한다.
+
+$$
+(\phi,f) = Calib(I) ,
+$$
+
+입력 이미지 $$I$$로 GeoClib라는 모델을 사용해서 gravity direction과 camera FOV를 추정하여 $$(\phi, f)$$인 camera elevation과 FoV를 추정한다. 다음으로 perspective image $$I$$를 equirectangular panorama에 reprojection하기위해 $$\mathcal{W}_G$$ Gaussian Pyramid를 기반으로 하는 warping operator를 사용한다. 해당 operator는 다중 스케일 안티앨리어싱 샘플링을 수행하고, 이후에 warped image는 WorldGen이라고 하는 outpainting model $$g_{outpaint}$$을 사용해서 360도 파노라마를 생성한다: 
+
+$$
+I_{pano} = g_{outpaint}(\mathcal{W}_G(I, \phi, f))
+$$
+
+그리고 기존의 panorama-to-3D reconstruction method를 사용하여 완성된 파노라마를 3D Scene으로 lift한다:
+
+$$
+V = \mathcal{G}_v(I_{pano})
+$$
+
+여기서 사용하는 모델은 Marble model 이나 HunyuanWrold1.0을 사용하여 사실적인 3D ㅗ한경을 구성한다.
+
+#### 360$$\degree$$ Aduio-Visual Semantic Grounding
 
 
 
