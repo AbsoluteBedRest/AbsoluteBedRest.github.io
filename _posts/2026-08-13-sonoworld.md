@@ -294,7 +294,7 @@ $$
 기존 open-vocabulary segmentation (OVS) model들은 panorama image가 아닌 일반적인 perspective FoV image를 통해 학습되었다. 그래서 카테고리 $$c\in C$$를 조건으로하여 $$I_{pano}$$를 서로 겹치는 tile로 쪼개서 X=Decoder를 실행한다.
 각 카테고리 $$c$$에 대응하여 얻어지는 instance mask들은 다시 panorama coordinate에 역투영되어 카테고리 별로 그룹화하고 tile 단위 취합 마스크 prediction $$M_{OVS, c}$$ 를 얻는다.
 
-파노라마 이미지와 perspective image 모두에서 좋은 성능을 보이는 SAM2를 사용하여 이미지 내의 모든 영역들을 segmenatation 하여 파노라마 전역 제안 mask $$M_{pano}$$를 생성한다. 그리고 앞의 OVS 예측값과 겹치는 SAM2 영역에 신뢰도 가중 투표(confidence weighted votes)를 행사하여 $$M_{OVS, c}$$로부터 강력한 의미론적 지지를 얻은 $$M_{pano}$$ 내의 후보 영역들은 유지되고 적절한 경우 $$M_{OVS, c}$$가 인정한 인근 픽셀들을 포함하도록 미세조정 된다. 이 과정이 끝나면 $$M_c$$ 파노라마 인스턴스 세트로 취합한다. 이 과정들이 모두 끝나면 모든 카테고리별 마스크의 합집합인 $$M=\cup_{c\in C}M_c$$로 구성된다.
+파노라마 이미지와 perspective image 모두에서 좋은 성능을 보이는 SAM2를 사용하여 이미지 내의 모든 영역들을 segmenatation 하여 파노라마 전역 제안 mask $$M_{pano}$$를 생성한다. 그리고 앞의 OVS 예측값과 겹치는 SAM2 영역에 신뢰도 가중 투표(confidence weighted votes)를 행사하여 $$M_{OVS, c}$$로부터 강력한 의미론적 지지를 얻은 $$M_{pano}$$ 내의 후보 영역들은 유지되고 적절한 경우 $$M_{OVS, c}$$가 인정한 인근 픽셀들을 포함하도록 미세조정 된다. 이 과정이 끝나면 $$M_c$$ 파노라마 인스턴스 세트로 취합한다. 이 과정들이 모두 끝나면 모든 카테고리별 마스크의 합집합인 $M=\cup_{c\in C}M_c$로 구성된다.
 
 ## Experiments
 
