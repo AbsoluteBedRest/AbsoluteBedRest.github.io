@@ -289,7 +289,12 @@ $$
 
 이제, 3D 공간을 위한 소리를 생성하고 위치시키는 방법이다.
 
+먼저, 입력 이미지 $$I$$를 GPT-5나 LLaVA-Next-3B model에 넣어서 소리가 날 가능성이 있는 후보 카테고리 세트인 $$\mathcal{C}$$와 이에 대한 속성들을 뽑는다. 속성들은 point, clustered, ambient와 같은 음원 타입 라벨, 오디오 합성을 위한 text prompt, 그리고 amplitude-equalization parameter들로 이루어져 있다.
 
+기존 open-vocabulary segmentation (OVS) model들은 panorama image가 아닌 일반적인 perspective FoV image를 통해 학습되었다. 그래서 카테고리 $$c\inC$$를 조건으로하여 $$I_{pano}$$를 서로 겹치는 tile로 쪼개서 X=Decoder를 실행하였다.
+각 카테고리 $$c$$에 대응하여 얻어지는 instance mask들은 다시 panorama coordinate에 역투영되어서 카테고리 별로 그룹화하여 tile 단위 취합 마스크 prediction $$M_{OVS, c}$$ 를 얻는다.
+
+파노라마 이미지와 perspective image 모두에서 좋은 성능을 보이는 SAM2를 사용하여 이미지 내의 모든 영역들을 segmenatation 하여 파노라마 전역 제안 mask $$M_{pano}$$를 생성한다. 그리고 앞의 OVS 예측값과 겹치는 SAM2 영역에 신뢰도 가중 투표(confidence weighted votes)를 행사하여 $$M_{OVS, c}$$로부터 강력한 의미론적 지지를 얻은 $$M_{pano}$$ 내의 후보 영역들은 유지되고 적절한 경우 $$M_{OVS, c}$$가 인정한 인근 픽셀들을 포함하도록 미세조정 된다. 이 과정이 끝나면 $$M_c$$ 파노라마 인스턴스 세트로 취합한다. 이 과정들이 모두 끝나면 모든 카테고리별 마스크의 합집합인 $$M=\in_{c\in C}M_c$$로 구성된다.
 
 ## Experiments
 
