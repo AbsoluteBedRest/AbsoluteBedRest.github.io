@@ -291,22 +291,61 @@ $$
 
 #### 360° Aduio-Visual Semantic Grounding
 
-이제, 소리를 3D 공간에 위치시키는 방법이다.
+이번에는 3D Scene 안에서 어떤 물체가 소리를 낼 수 있고, 그 물체가 정확히 3D 공간의 어디에 있는지를 찾아내는 단계다.
 
-먼저, 입력 이미지 $$I$$를 GPT-5나 LLaVA-Next-3B model에 넣어서 소리가 날 가능성이 있는 후보 카테고리 세트인 $$C$$와 이에 대한 속성들을 뽑는다. 속성들은 point, clustered, ambient와 같은 음원 타입 라벨, 오디오 합성을 위한 text prompt, 그리고 amplitude-equalization parameter들로 이루어져 있다.
+먼저, VLM한테 입력 이미지 $$I$$를 주고, 4가지의 정보를 얻어낸다.
 
-기존 open-vocabulary segmentation (OVS) model들은 panorama image가 아닌 일반적인 perspective FoV image를 통해 학습되었다. 그래서 카테고리 $$c\in C$$를 조건으로하여 $$I_{pano}$$를 서로 겹치는 tile로 쪼개서 X=Decoder를 실행한다.
-각 카테고리 $$c$$에 대응하여 얻어지는 instance mask들은 다시 panorama coordinate에 역투영되어 카테고리 별로 그룹화하고 tile 단위 취합 마스크 prediction $$M_{OVS, c}$$ 를 얻는다.
+> - sound source 후보 category들의 집합 $$C$$
+> - point/clustered/ambient sound type 분류
+> - MMAudio가 waveform을 생성할 때 사용할 text prompt
+> - 각 sound source가 얼마나 크게 들려야 하는지를 결정하는 Amplitude equalization parameter
 
-파노라마 이미지와 perspective image 모두에서 좋은 성능을 보이는 SAM2를 사용하여 이미지 내의 모든 영역들을 segmenatation 하여 파노라마 전역 제안 mask $$M_{pano}$$를 생성한다. 그리고 앞의 OVS 예측값과 겹치는 SAM2 영역에 신뢰도 가중 투표(confidence weighted votes)를 행사하여 $$M_{OVS, c}$$로부터 강력한 의미론적 지지를 얻은 $$M_{pano}$$ 내의 후보 영역들은 유지되고 적절한 경우 $$M_{OVS, c}$$가 인정한 인근 픽셀들을 포함하도록 미세조정 된다. 이 과정이 끝나면 $$M_c$$ 파노라마 인스턴스 세트로 취합한다. 이 과정들이 모두 끝나면 모든 카테고리별 마스크의 합집합인 $$M=\cup_{c\in C}M_c$$로 구성된다.
+그럼 이제 우리는 category 집합 $$C$$를 가지고, 해당 sound category들이 panorama의 어느 위치에 있는 지 알아야 한다. 이를 위해서 open-vocabulary segamentation model인 X-Decoder를 사용한다.
 
-이전에 우리가 3D Scene을 만들었던 것을 기억할 것이다. 여기서 렌더링된 Depth map $$D$$를 사용해서 최종 파노라마 인스턴스 마스크 $$M_i \in M$$ 각각을 3D 공간으로 역투영하여 실제 공간좌표를 산출한다:
+그런데, X-Decoder 는 일반 perspective image를 사용하도록 학습되어 있기 때문에 파노라마 이미지인 $$I_{pano}$$를 여러 개의 겹치는 perspective FoV image로 잘라서 사용한다. 이렇게 tile image들을 category를 조건으로 각 tile image에 해당되는 category segmentation mask를 뽑는다:
+
+$$
+M_{OVS, c}
+$$
+
+그러나, X-Decoder가 여러 tile로 잘라서 처리하기 때문에 tile 경계에서 mask가 끊기거나, sky/ground처럼 큰 영역에 불안할 수 있기 때문에 파노라마 이미지에서도 물체의 영역 자체를 깔끔하게 찾아네는 SAM2를 이용해서 mask를 한 번 더 뽑는다. 물론, X-Decoder는 segmentation mask에 대해 영역이 어떤 물체인지 semantic label을 얻을 수 있고, SAM2는 그럴 수 없다는 서로의 장단점을 보완해주기도 한다.
+
+즉, SAM2 는 class-agnostic sementation mask 인
+
+$$
+M_{pano}
+$$
+
+를 뽑아낸다.
+
+그리고 X-Decoder의 결과를 SAM2 region에 confidence-weighted vote를 진행한다.
+
+overlapping과 semantic confidence가 충분히 크다면 해당 SAM2 mask를 특정 카테고리의 mask로 채택한다. 그러면 최종적으로 category $$c$$마다 $$M_c$$를 얻어 최종적으로:
+
+$$
+M=\cup_{c\in C}M_c
+$$
+
+가 된다.
+
+그러나, 아직 2D 위치일 뿐이라서 이를 3D 공간에 올려놓아야 한다. 그래서 우리가 이전에 만들어 놓은 3D Scene $$V$$가 있어 해당 scene으로 부터 depth map $$D$$를 렌더링하고, 각 sound source mask $$M_i$$와 depth $$D$$를 이용해서 
 
 $$
 P_i = Lift(M_i, D)
 $$
 
-장면 내에서 소리나는 객체의 모든 3D 물리적 위치를 지시하는 세트 $$P$$가 만들어진다.
+를 수행한다. 그러면 하나의 source가 
+
+$$
+P_i = {p_1, p_2, ... , p_N}
+$$
+
+같은 3D point 집합으로 표현된다.
+
+논문은 모든 source의 $$P_i$$를 모은 결과를 $$P$$라고 하고, 이것이 scene 내 sounding object들의 3D 위치를 나타낸다고 설명한다.
+
+> 그런데 여기에서 SonoWorld github 코드를 보면,
+>> X-Decoder와 SAM2를 사용하는게 아닌 SAM3를 사용하는 걸 볼 수 있다. 아마도 이전에 X-Decoder와 SAM2를 사용했을 때는 IOU 방식으로 처리해서 보완된 mask를 얻었겠지만, SAM3는 semantic label과 정교한 영역 mask를 모두 뽑을 수 있기 때문에 이제 두 모델을 돌리고 추가 알고리즘을 사용해서 mask를 걸러내는 작업을 할 필요가 없어진 것 같다. 즉, SAM3 자체가 text concept으로 instance를 찾고 segmentation할 수 있는 모델이기 때문에 기존 방식인 SAM2 와 X-Decoder를 같이 사용할 필요가 없어진 것이다.
 
 #### Ambisonics Encoding
 
