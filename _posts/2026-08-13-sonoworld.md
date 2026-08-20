@@ -1,5 +1,5 @@
 ---
-title: "[Paper Review] SonoWorld: From One Image to a 3D Audio-Visual Scene"
+title: "[Paper Review, KR] SonoWorld: From One Image to a 3D Audio-Visual Scene"
 date: 2026-08-13
 categories:
   - 3D Vision
