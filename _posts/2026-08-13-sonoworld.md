@@ -499,6 +499,7 @@ $$
 
 FOA라면 L=1이므로 4개의 waveform이 만들어졌다고 생각하면 된다:
 
+
 $$
 a_1(t) = 
 \begin{bmatrix}
