@@ -447,9 +447,9 @@ $$
 \sigma(\lVert d \rVert)y_L(\text{direction})
 $$
 
-전부 더한 다음, $$\frac{1}{\left \vert P_i \right \vert}로 나누어 평균을 낸다.
+전부 더한 다음, $$\frac{1}{\left \vert P_i \right \vert}$$로 나누어 평균을 낸다.
 
-쉽게 말하면, $$\text{Clustered source} = \text{많은 point sources의 평균}$$이 된다.
+쉽게 말하면, $$\text{Clustered source} = \text{Average of point sources}$$이 된다.
 
 그런데, 논문의 저자는 하나의 insight를 더 제공한다.
 
