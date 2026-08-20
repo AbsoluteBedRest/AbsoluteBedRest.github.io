@@ -291,7 +291,7 @@ $$
 
 #### 360° Aduio-Visual Semantic Grounding
 
-이제, 3D 공간을 위한 소리를 생성하고 위치시키는 방법이다.
+이제, 소리를 3D 공간에 위치시키는 방법이다.
 
 먼저, 입력 이미지 $$I$$를 GPT-5나 LLaVA-Next-3B model에 넣어서 소리가 날 가능성이 있는 후보 카테고리 세트인 $$C$$와 이에 대한 속성들을 뽑는다. 속성들은 point, clustered, ambient와 같은 음원 타입 라벨, 오디오 합성을 위한 text prompt, 그리고 amplitude-equalization parameter들로 이루어져 있다.
 
@@ -308,8 +308,93 @@ $$
 
 장면 내에서 소리나는 객체의 모든 3D 물리적 위치를 지시하는 세트 $$P$$가 만들어진다.
 
-####
+#### Ambisonics Encoding
 
+이번 stage에서는 장면에 들어갈 소리를 생성하고 최종적으로 들릴 3D 입체 오디오 신호를 수학적으로 조립하는 것이다.
+
+먼저 전에 VLM이 이미지 분석을 통해 제안한 텍스트 프롬포트를 오디오 생성 AI인 MM Audio에 주입하여, 각 object에 어울리는 소리($$a_{i,raw}$$)와 전체 배경 소리($$a_{global}$$)를 생성한다. 생성된 waveform의 volumne을 그대로 사용하지 않고, VLM이 예측한 sound energy ($$v_i$$)를 밑의 수식을 통해 이 파라미터 수치만큼 데시벨을 실제 물리 신호 스케일로 환산하여 곱해준다:
+
+$$
+a_i(t) = 10^{v_i/20}a_{i,raw}(t)
+$$
+
+이렇게 곱해주면 각 소리의 균형감 있는 볼륨 조절을 마친다.
+
+그리고 이제 앞에서 우리가 global인 전체 배경 소리와 각 object의 소리를 분리했었는데, 여기서 global은 그대로 두고 grounding 된 source들을 $$\mathcal{O}$$라고 하고, 이를 $$\mathcal{O}_{point}$$와 $$\mathcal{O}_{cluster}$$ 로 나눈다.
+
+개념적으로, point source는 공갅거으로 작은 source로 하나의 위치로 대표해도 괜찮은 경우고, clustered surce는 공간적으로 넓게 퍼져있어 한 점에서 소리가 난다고 하기보다, 전체의 여러 위치에서 소리가 나는 경우로 보면된다.
+
+sound field를 제공하기 위해서는 listener pose 도 중요하다. 결국 **user tracking이 가능**해야 사용자에게 입체감 있는 사운드를 제공할 수 있다. 그러기 위해서 listener가 어디에 있고 어느 방향을 바라보는 지(pose)를 이렇게 표현한다:
+
+$$
+p = [R, t] \in SE(3)
+$$
+
+여기서 t는 listener의 3D position, R은 listener의 roatation이다. 이로써 청자의 고개를 돌렸을 때, 그리고 이동했을 때 사운드가 어떻게 변할 지 표현할 수 있다. 여기에 더해 source와 listener 사이의 거리($$d$$)를 기반으로 감쇠효과를 만들어야 한다. 그 수식은 이와 같이 표현할 수 있다:
+
+$$
+\sigma(d) = \frac{e^{-\alpha d}}{d}
+$$
+
+여기서 d를 분모에 둠으로써 source가 멀어질수록 소리가 작아지는 distance attenuation 효과를 내고, 분자에 있는 $$e^{-\alpha d}$$를 통해 거리가 멀어질수록 공기를 지나며 소리가 추가로 감쇠되는 air absorption을 모델링할 수 있다.
+
+즉, 멀리 있을수록 소시를 줄이는 함수를 구현했다고 보면 된다.
+
+그럼 이제 우리는 Ambisonics를 세 종류의 soruce 공간 음향으로 구성된다는 것을 알 수 있다:
+
+$$
+A = A_{point} + A_{cluster} + A_{global}
+$$
+
+여기서 point source는 source $$i$$의 3D point cluster $$P_i$$를 하나의 centroid $$o_i$$로 표현한다.
+
+그러면 상대 위치 백터는 
+
+$$
+d_i = t - o_i
+$$
+
+앞에서 우리는 ambisonics 로 만드는 수식이 이와 같았다:
+
+$$
+a_L(t) = \sigma(d) a_{src}(t)y_L()u
+$$
+
+이 수식의 구조를 그대로 point souce를 ambisonics로 만들면,
+
+$$
+A_{point} = \sum_{i \in \mathcal{O}_{point}} a_{i,L} \sigma(||d_i||)y_L(R^T \frac{d_i}{||d_i||})
+$$
+
+이렇게 된다.
+
+그런데, 여기서 $$ u \rightarrow R^T \frac{d_i}{||d_i||} $$ 로 되어 있는데, 왜 $$ R^T $$ 가 왜 들어있냐면, 그냥 $$ \frac{d_i}{||d_i||} $$ 는 3d world coordinate에서의 source 방향이지만, 우리는 listener가 현재 바라보고 있는 방향을 기준으로 wource가 어디에 있느냐를 원하기 때문에 listener rotation $$R$$을 이용해 방향을 listener 기준으로 바꿔주어야 한다.
+
+$$
+y_L(R^T \frac{d_i}{||d_i||})
+$$
+
+그럼 이 식은 현재 listener 기준으로 source $$i$$가 있는 방향의 Spherical Harmonics 값이다.
+
+자 그러면 간략하게 정리해보자.
+
+이 복잡한 표기들을 그냥 직관적으로 적으면,
+
+$$
+\boxed{
+    Point \; Ambisonics \; = \sum_i souce \; waveform \; \times distance \; attenuation \; \times source \; direction \; SH 
+}
+$$
+
+이라고 볼 수 있다.
+
+그러면, 
+
+$$
+a_L(t) = \sigma(d) a_{src}(t)y_L()u
+$$
+
+해당 수식을 souce 마다 계산한 다음 모두 더한게 Point source Ambisonics다.
 
 ## Experiments
 
