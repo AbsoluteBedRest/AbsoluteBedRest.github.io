@@ -23,7 +23,7 @@ tags:
 
 ## Introduction
 
-기존의 몰입적인 3D Scene을 만드는 방법론들 그리고 기법들은 사실적인 3D world를 singel image로부터 만들 수 있지만, **이는 청각적인 경험은 결여되어 있어 인지적으로 불완전하다**고 논문의 저자들은 주장한다.
+기존의 몰입적인 3D Scene을 만드는 방법론들 그리고 기법들은 사실적인 3D world를 single image로부터 만들 수 있지만, **이는 청각적인 경험은 결여되어 있어 인지적으로 불완전하다**고 논문의 저자들은 주장한다.
 
 그래서 논문의 저자들은 single image로부터 training free 방식으로 <mark><span style="color: red;">일관적인 3D Scene을 만드는 동시에 공간적인 sound field를 만들어 user interaction까지 제공</span></mark>하는 것을 목표로 한다.
 
@@ -85,7 +85,7 @@ $$
 물론, 이를 설명하기 위해서는 Fourier Transform이라는 걸 설명하는게 좋겠지만, 그렇게 되면 너무 길어지기 때문에 이를 그냥 **"특정한 3D 방향 패턴을 나타내는 basis"** 라고 생각해주면 좋다. basis는 단순히 기본 선형대수학에서 나오는 표현이니 넘어가도록 하겠다.
 
 간단하게,
-> Foureier Transform에서 sin/cos 이 basis 역할을 하듯, 구면 공간에서는 spherical harmonics가 basis 역할을 수행한다.
+> Fourier Transform에서 sin/cos 이 basis 역할을 하듯, 구면 공간에서는 spherical harmonics가 basis 역할을 수행한다.
 
 #### 3. Ambisonics coefficient
 
@@ -275,7 +275,7 @@ $$
 (\phi,f) = Calib(I) ,
 $$
 
-입력 이미지 $$I$$로 GeoClib라는 모델을 사용해서 gravity direction과 camera FOV를 추정하여 $$(\phi, f)$$인 camera elevation과 FoV를 추정한다. 다음으로 perspective image $$I$$를 equirectangular panorama에 reprojection하기위해 $$\mathcal{W}_G$$ Gaussian Pyramid를 기반으로 하는 warping operator를 사용한다. 해당 operator는 다중 스케일 안티앨리어싱 샘플링을 수행하고, 이후에 warped image는 WorldGen이라고 하는 outpainting model $$g_{outpaint}$$을 사용해서 360도 파노라마를 생성한다: 
+입력 이미지 $$I$$로 GeoCalib라는 모델을 사용해서 gravity direction과 camera FOV를 추정하여 $$(\phi, f)$$인 camera elevation과 FoV를 추정한다. 다음으로 perspective image $$I$$를 equirectangular panorama에 reprojection하기위해 $$\mathcal{W}_G$$ Gaussian Pyramid를 기반으로 하는 warping operator를 사용한다. 해당 operator는 다중 스케일 안티앨리어싱 샘플링을 수행하고, 이후에 warped image는 WorldGen이라고 하는 outpainting model $$g_{outpaint}$$을 사용해서 360도 파노라마를 생성한다: 
 
 $$
 I_{pano} = g_{outpaint}(\mathcal{W}_G(I, \phi, f))
@@ -287,7 +287,7 @@ $$
 V = \mathcal{G}_v(I_{pano})
 $$
 
-여기서 사용하는 모델은 Marble model 이나 HunyuanWrold1.0을 사용하여 사실적인 3D 환경을 구성한다.
+여기서 사용하는 모델은 Marble model 이나 HunyuanWorld 1.0을 사용하여 사실적인 3D 환경을 구성한다.
 
 #### 360° Audio-Visual Semantic Grounding
 
@@ -350,7 +350,7 @@ $$
 
 이번 stage에서는 장면에 들어갈 소리를 생성하고 최종적으로 들릴 3D 입체 오디오 신호를 수학적으로 조립하는 것이다.
 
-먼저 전에 VLM이 이미지 분석을 통해 제안한 텍스트 프롬포트를 오디오 생성 AI인 MM Audio에 주입하여, 각 object에 어울리는 소리($$a_{i,raw}$$)와 전체 배경 소리($$a_{global}$$)를 생성한다. 생성된 waveform의 volumne을 그대로 사용하지 않고, VLM이 예측한 sound energy ($$v_i$$)를 밑의 수식을 통해 이 파라미터 수치만큼 데시벨을 실제 물리 신호 스케일로 환산하여 곱해준다:
+먼저 전에 VLM이 이미지 분석을 통해 제안한 텍스트 프롬포트를 오디오 생성 AI인 MMAudio에 주입하여, 각 object에 어울리는 소리($$a_{i,raw}$$)와 전체 배경 소리($$a_{global}$$)를 생성한다. 생성된 waveform의 volumne을 그대로 사용하지 않고, VLM이 예측한 sound energy ($$v_i$$)를 밑의 수식을 통해 이 파라미터 수치만큼 데시벨을 실제 물리 신호 스케일로 환산하여 곱해준다:
 
 $$
 a_i(t) = 10^{v_i/20}a_{i,raw}(t)

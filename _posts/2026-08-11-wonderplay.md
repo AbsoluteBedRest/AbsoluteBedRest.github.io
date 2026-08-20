@@ -62,7 +62,7 @@ $$
 Physic Solver은 Gaussian 그 자체를 인식하지 못하고, 대부분 Mesh 단위로 처리하게 된다. 따라서, Object Reconstruction을 단순 Gaussian으로 처리하지 않고, 특정 모델을 사용하여 Object를 Mesh를 변환하고 사용한다. 생성 방식은 아래와 같다.
 
 1. 입력 이미지에서 Object 영역을 먼저 Segmentation을 진행한다. 
-2. Instant Mesh라는 모델로 Object를 3D Mesh로 표현한다.
+2. InstantMesh라는 모델로 Object를 3D Mesh로 표현한다.
 3. Mesh의 각 Vertex에 Gaussian Surfel을 binding하고 edge와 velocity 정보를 추가하여 physic solver 계산 준비를 마무리한다.
 
 이 과정을 거쳐 시뮬레이션이 가능한 상태를 만들었을 때, 이 논문은 이를 **"topological Gaussian Surfel"**이라고 표현한다.
@@ -89,7 +89,7 @@ $$
 v_{t+1} , p_{t+1}^O, q_{t+1}^O = solver(\tilde{S}_t, f_g, f_w(t), f_p(t))
 $$
 
-해당 수식을 보면 2가지를 알 수 있다. Background Gaussian 들은 Physic solver에 의해 처리되지 않는 다는 것(즉, static 함)과 current Scene $$\tilde{S}_t$$를 넣어 다음 $$t+1$$시점에서의 Scene인 $$\tilde{S}_{t+1}$$을 얻기 위해 다음 시점의 velocity, position, quarternion 을 추정한다는 것이다. 그러면 다음 시점의 Scene 수식을 이해할 수 있다.
+해당 수식을 보면 2가지를 알 수 있다. Background Gaussian 들은 Physic solver에 의해 처리되지 않는 다는 것(즉, static 함)과 current Scene $$\tilde{S}_t$$를 넣어 다음 $$t+1$$시점에서의 Scene인 $$\tilde{S}_{t+1}$$을 얻기 위해 다음 시점의 velocity, position, quaternion 을 추정한다는 것이다. 그러면 다음 시점의 Scene 수식을 이해할 수 있다.
 
 $$
 \tilde{S}_{t+1} = \mathcal{B}_0 \cup \{ E, v_{t+1}, p_{t+1}^O, q_{t+1}^O, s_{0}^O, o_{0}^O, c_{0}^O\}
@@ -148,7 +148,7 @@ $$
 
 즉, 결과물인 Video는 optical flow, coarse scene에서 렌더링된 video, original input video가 입력으로 생성된다.
 
-#### 3nd stage: Updating scene dynamics
+#### 3rd stage: Updating scene dynamics
 
 이제 2nd stage에서 완성된 $$V$$를 사용해서 coarse dynamic scene $$\{\tilde{S}_t\}_{t=0}^T$$ 을 update 한다. 이는 photometric L1 Loss인 
 
@@ -156,7 +156,7 @@ $$
 \min\limits_{\{c_t^B,\mathcal{O}_t\}_{t=0}^T} ||V-\tilde{V}||_1
 $$
 
-을 통해 update 된다. 즉, 2D diffusion이 정제한 고화질 비디오 $$V$$와 1nd stage에서 physic solver의 결과물인 $$\tilde{V}$$의 픽셀차이를 계산한다. 이 오차(Loss)를 역전파하여, 3D 공간 상에 뿌려진 가우시안들의 움직임 궤적과 속도 정도($$O_t$$), 그리고 상호작용할 때 발생하는 실시간 음영 변화(shading effect)를 반영하기 위해 배경 가우시안의 색상 파라미터($$c_t^B$$)를 업데이트한다.
+을 통해 update 된다. 즉, 2D diffusion이 정제한 고화질 비디오 $$V$$와 1st stage에서 physic solver의 결과물인 $$\tilde{V}$$의 픽셀차이를 계산한다. 이 오차(Loss)를 역전파하여, 3D 공간 상에 뿌려진 가우시안들의 움직임 궤적과 속도 정보($$O_t$$), 그리고 상호작용할 때 발생하는 실시간 음영 변화(shading effect)를 반영하기 위해 배경 가우시안의 색상 파라미터($$c_t^B$$)를 업데이트한다.
 
 
 
@@ -170,7 +170,7 @@ $$
   <img src="/assets/images/posts/2026-08-11-wonderplay/1786588129963.png" width="50%">
 </p>
 
-물리 기반 모델인 PhysGen, PhysGaussian, 조건부 비디오 생성 모델인 CogVideoX-I2V, Tora 이렇게 4개의 Baselines를 토대로 비디오 품질 검증 툴인 **VBench**를 적용하여 5개의 Metric에 대해 정량 평가를 진행했다. 옷감, 강체, 모래와 같은 연속체, 가스, 액체 등 여러 재질이 포함된 15개의 고난도 가상 씬(실제 사진 7장, 정밀 합성 이미지 8장)으로 구성된 테스트 세트를 구축하여 평가를 진행했다. 5개의 metrics 중 PhysReal 의 경우 GPT-4o 멀티모달 비전을 활용하여 평가 프로토콜로써 탑재되었다. 추가로 VBench에 관한 평가 프로토콜 전반 설명은 이후에 Preminaries 페이지에 업로드될 것이다.
+물리 기반 모델인 PhysGen, PhysGaussian, 조건부 비디오 생성 모델인 CogVideoX-I2V, Tora 이렇게 4개의 Baselines를 토대로 비디오 품질 검증 툴인 **VBench**를 적용하여 5개의 Metric에 대해 정량 평가를 진행했다. 옷감, 강체, 모래와 같은 연속체, 가스, 액체 등 여러 재질이 포함된 15개의 고난도 가상 씬(실제 사진 7장, 정밀 합성 이미지 8장)으로 구성된 테스트 세트를 구축하여 평가를 진행했다. 5개의 metrics 중 PhysReal 의 경우 GPT-4o 멀티모달 비전을 활용하여 평가 프로토콜로써 탑재되었다. 추가로 VBench에 관한 평가 프로토콜 전반 설명은 이후에 Preliminaries 페이지에 업로드될 것이다.
 
 WonderPlay는 Baselines model들과 비교했을 때 Aesthetic, Imaging, PhysReal 등 평가 분야 전반에 걸쳐 최상위 혹은 차상위의 정량 스코어를 기록했다. 
 
@@ -200,7 +200,7 @@ WonderPlay는 Baselines model들과 비교했을 때 Aesthetic, Imaging, PhysRea
 </p>
 
 정량적 평가 뿐만 아니라 Ablation Study를 통해 WonderPlay의 각 모듈이 결과물에 영향을 어떻게 끼치는지 보고자 한다. \
-Figure 7은 2D diffusion을 거치지 않고 가우시안 physic solver만 작동시킨 Coarse Version과 이 논문이 주장하고자 하는 Full model의 결과물을 보여준다. 연기(smoke) 분출 Scene에서, Coarse 버전의 경우, 모든 이산 입자 physic solver가 선천적으로 가지고 있는 Numerical Visocosity 문제 때문에 연기가 부드럽게 풀리지 못하고 sticky motion 처럼 끈적하게 뭉치고 Grainy artifacts 처럼 입자가 매우 거칠게 우글거리는 현상을 보였다. 그러나 full model의 경우, Numerical visocity noise가 해결되고 실제 연기가 공기 중에서 소용돌이치며 분산되는 기하 역학이 동기화되어 복원되었다.
+Figure 7은 2D diffusion을 거치지 않고 가우시안 physic solver만 작동시킨 Coarse Version과 이 논문이 주장하고자 하는 Full model의 결과물을 보여준다. 연기(smoke) 분출 Scene에서, Coarse 버전의 경우, 모든 이산 입자 physic solver가 선천적으로 가지고 있는 Numerical Viscosity 문제 때문에 연기가 부드럽게 풀리지 못하고 sticky motion 처럼 끈적하게 뭉치고 Grainy artifacts 처럼 입자가 매우 거칠게 우글거리는 현상을 보였다. 그러나 full model의 경우, Numerical visocity noise가 해결되고 실제 연기가 공기 중에서 소용돌이치며 분산되는 기하 역학이 동기화되어 복원되었다.
 
 이외에도 **physic solver가 계산한 픽셀의 이동 경로인 optical flow 정보를 생성 모델의 조건에서 완전히 제외한 즉, Warp noise $$N(F)$$를 생성하지 않았을 때(w/o flow)**, 그리고, **physic simulator가 대략적으로 렌더링한 $$\tilde{V}$$를 생성 모델 조건으로 주입하지 않는 경우(w/o RGB)**로 나누어 실험해 보았다.
 
@@ -214,9 +214,9 @@ w/o flow의 경우, 대략적인 겉모습 형태($$\tilde{V}$$)는 보존되지
 
 이제 해당 논문의 contributions를 보자. 보통 Introduction 최하단에 적혀있는 경우가 많지만, 마지막에 해당 논문의 기여 항목들을 보면서 정리하는 것이 좋다. 해당 논문이 보여주는 contributions 는 다음과 같다:
 
-1. 다양한 물리적 재질을 지우너하는 새로운 문제 해결: single image와 사용자의 actions 입력만을 조건으로, 다양한 물리적 재질을 가진 동적 3D 장면을 생성하는 까다로운 문제를 해결하고자 하였다.
+1. 다양한 물리적 재질을 지원하는 새로운 문제 해결: single image와 사용자의 actions 입력만을 조건으로, 다양한 물리적 재질을 가진 동적 3D 장면을 생성하는 까다로운 문제를 해결하고자 하였다.
 2. 하이브리드 pipeline 제안: physic solver와 video generator 모델을 통합하여, 입력된 행동에 적절히 반응하고 높은 시각적 완성도를 동시에 달성하는 하이브리드 프레임워크를 제안하였다.
-3. 다양한 상호작용 시나리오 하에서 정성적 정량적 평가를 통해, 시각적 품질과 physical palusibility 측면에서 기존의 순수 물리 기반 방법론이나 비디오 생성모들을 능가함을 보여주었다.
+3. 다양한 상호작용 시나리오 하에서 정성적 정량적 평가를 통해, 시각적 품질과 physical plausibility 측면에서 기존의 순수 물리 기반 방법론이나 비디오 생성모들을 능가함을 보여주었다.
 
 ## Limitations & Future work
 
