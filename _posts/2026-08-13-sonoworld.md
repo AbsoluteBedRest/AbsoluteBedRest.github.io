@@ -289,7 +289,7 @@ $$
 
 여기서 사용하는 모델은 Marble model 이나 HunyuanWrold1.0을 사용하여 사실적인 3D 환경을 구성한다.
 
-#### 360° Aduio-Visual Semantic Grounding
+#### 360° Audio-Visual Semantic Grounding
 
 이번에는 3D Scene 안에서 어떤 물체가 소리를 낼 수 있고, 그 물체가 정확히 3D 공간의 어디에 있는지를 찾아내는 단계다.
 
@@ -344,8 +344,7 @@ $$
 
 논문은 모든 source의 $$P_i$$를 모은 결과를 $$P$$라고 하고, 이것이 scene 내 sounding object들의 3D 위치를 나타낸다고 설명한다.
 
-> 그런데 여기에서 SonoWorld github 코드를 보면,
->> X-Decoder와 SAM2를 사용하는게 아닌 SAM3를 사용하는 걸 볼 수 있다. 아마도 이전에 X-Decoder와 SAM2를 사용했을 때는 IOU 방식으로 처리해서 보완된 mask를 얻었겠지만, SAM3는 semantic label과 정교한 영역 mask를 모두 뽑을 수 있기 때문에 이제 두 모델을 돌리고 추가 알고리즘을 사용해서 mask를 걸러내는 작업을 할 필요가 없어진 것 같다. 즉, SAM3 자체가 text concept으로 instance를 찾고 segmentation할 수 있는 모델이기 때문에 기존 방식인 SAM2 와 X-Decoder를 같이 사용할 필요가 없어진 것이다.
+> 그런데 여기에서 SonoWorld github 코드를 보면, X-Decoder와 SAM2를 사용하는게 아닌 SAM3를 사용하는 걸 볼 수 있다. 아마도 이전에 X-Decoder와 SAM2를 사용했을 때는 IOU 방식으로 처리해서 보완된 mask를 얻었겠지만, SAM3는 semantic label과 정교한 영역 mask를 모두 뽑을 수 있기 때문에 이제 두 모델을 돌리고 추가 알고리즘을 사용해서 mask를 걸러내는 작업을 할 필요가 없어진 것 같다. 즉, **SAM3 자체가 text concept으로 instance를 찾고 segmentation할 수 있는 모델이기 때문에 기존 방식인 SAM2 와 X-Decoder를 같이 사용할 필요가 없어진 것이다.**
 
 #### Ambisonics Encoding
 
