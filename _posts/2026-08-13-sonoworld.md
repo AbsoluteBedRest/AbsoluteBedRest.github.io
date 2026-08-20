@@ -499,15 +499,16 @@ $$
 
 FOA라면 L=1이므로 4개의 waveform이 만들어졌다고 생각하면 된다:
 
-
 $$
-a_1(t) = 
-\begin{bmatrix}
+\mathbf{a}_1(t) =
+\left[
+\begin{array}{c}
 a_{0,0}(t) \\
 a_{1,-1}(t) \\
 a_{1,0}(t) \\
-a_{1,1}(t) 
-\end{bmatrix}
+a_{1,1}(t)
+\end{array}
+\right]
 $$
 
 이외에 visual scene 그냥 3DGS renderer로 pose $$p$$ 에 대해 $$V(p)$$로 그 위치에서의 카메라 이미지를 제공하면 된다.
