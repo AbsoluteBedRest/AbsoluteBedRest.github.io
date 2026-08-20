@@ -371,7 +371,7 @@ $$
 
 이렇게 된다.
 
-그런데, 여기서 $u \rightarrow R^T \frac{d_i}{||d_i||}$ 로 되어 있는데, 왜 $R^T$ 가 왜 들어있냐면, 그냥 $\frac{d_i}{||d_i||}$ 는 3d world coordinate에서의 source 방향이지만, 우리는 listener가 현재 바라보고 있는 방향을 기준으로 wource가 어디에 있느냐를 원하기 때문에 listener rotation $R$을 이용해 방향을 listener 기준으로 바꿔주어야 한다.
+그런데, 여기서\(u \rightarrow R^T \frac{d_i}{||d_i||}\) 로 되어 있는데, 왜 $R^T$ 가 왜 들어있냐면, 그냥 \(\frac{d_i}{||d_i||}\) 는 3d world coordinate에서의 source 방향이지만, 우리는 listener가 현재 바라보고 있는 방향을 기준으로 wource가 어디에 있느냐를 원하기 때문에 listener rotation \(R\)을 이용해 방향을 listener 기준으로 바꿔주어야 한다.
 
 $$
 y_L(R^T \frac{d_i}{||d_i||})
