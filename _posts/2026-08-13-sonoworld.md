@@ -449,10 +449,104 @@ $$
 
 쉽게 말하면, $$\text{Clustered source} = \text{많은 point sources의 평균}$$이 된다.
 
+그런데, 논문의 저자는 하나의 insight를 더 제공한다.
+
+위의 수식처럼 clustered source를 여러 point source처럼 처리하게 되면, 각 point마다 방향이 다르기 때문에 다른 $$y_L$$ 값이 나오게 되는데, 그렇게 되면 Spherical Harmonics의 $$l>0$$ 성분은 방향에 따라 양수/음수 값을 가질 수 있기 때문에, 여러 방향의 값을 합치면 일부가 서로 없어질 수 있다. 
+
+따라서, area sound가 listener를 둘러싸는 경우 $$l>0$$ 방향 성분들이 서로 상쇄되는 경향이 있어, head rotation에 덜 민감해질 수 있다.
 
 </details>
 
+<details markdown="block">
+<summary>Global ambience</summary>
 
+이제 마지막 바람, 아주 먼 traffic 등은 특정 3D object에 붙어 있는 소리로 처리하지 않는다. 
+
+즉, global ambience에는 방향정보를 넣지 않겠다는 의미다.
+
+$$
+A_{global} = a_{global} 
+\begin{bmatrix}
+1 \\
+0 \\
+0 \\
+\vdots \\
+0
+\end{bmatrix}
+$$
+
+라는 수식으로 표현된다.
+
+첫 channel만 사용하는 이유는 첫 번째가 $$l=0$$인 omnidirectional component 이기 때문이다.
+
+</details>
+
+#### Free-Viewpoint Rendering
+
+앞의과정들이 모두 끝났으면, 이제 우리는 만들어진 visual scene과 ambisonics를 기반으로 **visual과 binaural audio**를 렌더링해주어야 사용자가 보고 들을 수 있다.
+
+binural audio라는 것은 left ear와 right ear 형태로 헤드폰용 오디오를 말한다.
+
+앞의 과정들이 모두 끝나면 우리는 listenter pose $$p$$ 에서 
+
+$$
+a_L(t) = A(p,t)
+$$
+
+라는 Ambisonics가 만들어졌다.
+
+FOA라면 L=1이므로 4개의 waveform이 만들어졌다고 생각하면 된다:
+
+$$
+a_1(t) = 
+\begin{bmatrix}
+a_{0,0}(t) \\
+a_{1,-1}(t) \\
+a_{1,0}(t) \\
+a_{1,1}(t) 
+\end{bmatrix}
+$$
+
+이외에 visual scene 그냥 3DGS renderer로 pose $$p$$ 에 대해 $$V(p)$$로 그 위치에서의 카메라 이미지를 제공하면 된다.
+
+Ambisonics를 어떻게 left/right ear audio로 제공할까? 그건 HRTF라는 기법이 답이 될 수 있다.
+
+> HRTF는 특정 방향에서 온 소리가 사람의 머리와 귀를 거쳐 왼쪽 귀와 오른쪽 귀에 각각 어떻게 도달하는지를 나타내는 필터다.
+
+그럼 이 HRTF 기반 binaural rendering을 통해서 논문에서는 time-domain filter를 
+
+$$
+h_{l,m}^{left}, h_{l,m}^{right}
+$$
+라고 표현한다. 정확히는 이를 HRIR이라고 부른다. 수식을 보면 알겠지만, Ambisonics의 각 channel에 대해 해당 filter를 convolution 해준다. 그럼 해당 Ambisonics channel이 left/right ear에 어떻게 실제로 들릴지 계산된다.
+
+수식으로 예시를 보면,
+
+$$
+h_{l,m}^{left} * a_{l,m} ,\; h_{l,m}^{right} * a_{l,m}
+$$
+
+가 계산된다고 보면 된다.
+
+그러면 최종식은 아래와 같다:
+
+$$
+\begin{bmatrix}
+b_{\mathrm{left}} \\
+b_{\mathrm{right}}
+\end{bmatrix}
+(t)
+=
+\sum_{\ell=0}^{L}
+\sum_{m=-\ell}^{\ell}
+\begin{bmatrix}
+h_{\ell,m}^{\mathrm{left}} * a_{\ell,m} \\
+h_{\ell,m}^{\mathrm{right}} * a_{\ell,m}
+\end{bmatrix}
+(t)
+$$
+
+즉, 왼쪽 귀에 대한 모든 ambisonics channel들과 filter의 convolution 값들을 더하고, 오른쪽 귀도 똑같이 해준 다음 사용자에게 제공하는 것이다.
 
 ## Experiments
 
