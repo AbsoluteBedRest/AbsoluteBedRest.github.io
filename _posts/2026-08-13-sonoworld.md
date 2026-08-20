@@ -346,6 +346,9 @@ $$
 A = A_{point} + A_{cluster} + A_{global}
 $$
 
+<details markdown="block">
+<summary>Point source</summary>
+
 여기서 point source는 source $$i$$의 3D point cluster $$P_i$$를 하나의 centroid $$o_i$$로 표현한다.
 
 그러면 상대 위치 백터는 
@@ -368,7 +371,7 @@ $$
 
 이렇게 된다.
 
-그런데, 여기서 $$ u \rightarrow R^T \frac{d_i}{||d_i||} $$ 로 되어 있는데, 왜 $$ R^T $$ 가 왜 들어있냐면, 그냥 $$ \frac{d_i}{||d_i||} $$ 는 3d world coordinate에서의 source 방향이지만, 우리는 listener가 현재 바라보고 있는 방향을 기준으로 wource가 어디에 있느냐를 원하기 때문에 listener rotation $$R$$을 이용해 방향을 listener 기준으로 바꿔주어야 한다.
+그런데, 여기서 $$u \rightarrow R^T \frac{d_i}{||d_i||}$$ 로 되어 있는데, 왜 $$R^T$$ 가 왜 들어있냐면, 그냥 $$\frac{d_i}{||d_i||}$$ 는 3d world coordinate에서의 source 방향이지만, 우리는 listener가 현재 바라보고 있는 방향을 기준으로 wource가 어디에 있느냐를 원하기 때문에 listener rotation $$R$$을 이용해 방향을 listener 기준으로 바꿔주어야 한다.
 
 $$
 y_L(R^T \frac{d_i}{||d_i||})
@@ -395,6 +398,8 @@ a_L(t) = \sigma(d) a_{src}(t)y_L()u
 $$
 
 해당 수식을 souce 마다 계산한 다음 모두 더한게 Point source Ambisonics다.
+
+</details>
 
 ## Experiments
 
