@@ -351,53 +351,74 @@ $$
 
 여기서 point source는 source $$i$$의 3D point cluster $$P_i$$를 하나의 centroid $$o_i$$로 표현한다.
 
-그러면 상대 위치 백터는 
+그러면 상대 위치 벡터는
 
 $$
 d_i = t - o_i
 $$
 
-앞에서 우리는 ambisonics 로 만드는 수식이 이와 같았다:
+앞에서 우리는 Ambisonics로 만드는 수식을 다음과 같이 정의했다.
 
 $$
-a_L(t) = \sigma(d) a_{src}(t)y_L(u)
+a_L(t) = \sigma(d)a_{\mathrm{src}}(t)y_L(u)
 $$
 
-이 수식의 구조를 그대로 point souce를 ambisonics로 만들면,
+이 수식의 구조를 그대로 사용하여 point source를 Ambisonics로 만들면,
 
 $$
-A_{point} = \sum_{i \in \mathcal{O}_{point}} a_{i,L} \sigma(||d_i||)y_L(R^T \frac{d_i}{||d_i||})
+A_{\mathrm{point}}
+=
+\sum_{i \in \mathcal{O}_{\mathrm{point}}}
+a_{i,L}
+\sigma(\lVert d_i \rVert)
+y_L\left(
+R^T \frac{d_i}{\lVert d_i \rVert}
+\right)
 $$
 
 이렇게 된다.
 
-그런데, 여기서\(u \rightarrow R^T \frac{d_i}{||d_i||}\) 로 되어 있는데, 왜 $R^T$ 가 왜 들어있냐면, 그냥 \(\frac{d_i}{||d_i||}\) 는 3d world coordinate에서의 source 방향이지만, 우리는 listener가 현재 바라보고 있는 방향을 기준으로 wource가 어디에 있느냐를 원하기 때문에 listener rotation \(R\)을 이용해 방향을 listener 기준으로 바꿔주어야 한다.
+그런데 여기서 $$u \rightarrow R^T \frac{d_i}{\lVert d_i \rVert}$$로 되어 있는데,
+왜 $$R^T$$가 들어가는지 살펴보자.
+
+그냥 $$\frac{d_i}{\lVert d_i \rVert}$$는 3D world coordinate에서의 source 방향이다.
+하지만 우리는 listener가 현재 바라보고 있는 방향을 기준으로 source가 어디에 있는지를 원하기 때문에,
+listener rotation $$R$$을 이용해 방향을 listener 기준으로 바꿔주어야 한다.
 
 $$
-y_L(R^T \frac{d_i}{||d_i||})
+y_L\left(
+R^T \frac{d_i}{\lVert d_i \rVert}
+\right)
 $$
 
-그럼 이 식은 현재 listener 기준으로 source $$i$$가 있는 방향의 Spherical Harmonics 값이다.
+따라서 이 식은 현재 listener 기준으로 source $$i$$가 위치한 방향의 Spherical Harmonics 값이다.
 
-자 그러면 간략하게 정리해보자.
+자, 그러면 간략하게 정리해보자.
 
-이 복잡한 표기들을 그냥 직관적으로 적으면,
+이 복잡한 표기를 직관적으로 적으면,
 
 $$
 \boxed{
-    Point \; Ambisonics \; = \sum_i souce \; waveform \; \times distance \; attenuation \; \times source \; direction \; SH 
+\text{Point Ambisonics}
+=
+\sum_i
+\text{source waveform}
+\times
+\text{distance attenuation}
+\times
+\text{source direction SH}
 }
 $$
 
-이라고 볼 수 있다.
+라고 볼 수 있다.
 
-그러면, 
+즉,
 
 $$
-a_L(t) = \sigma(d) a_{src}(t)y_L()u
+a_L(t) = \sigma(d)a_{\mathrm{src}}(t)y_L(u)
 $$
 
-해당 수식을 souce 마다 계산한 다음 모두 더한게 Point source Ambisonics다.
+해당 수식을 source마다 계산한 다음 모두 더한 것이 Point Source Ambisonics다.
 
 </details>
 
