@@ -322,7 +322,7 @@ $$
 
 그리고 이제 앞에서 우리가 global인 전체 배경 소리와 각 object의 소리를 분리했었는데, 여기서 global은 그대로 두고 grounding 된 source들을 $$\mathcal{O}$$라고 하고, 이를 $$\mathcal{O}_{point}$$와 $$\mathcal{O}_{cluster}$$ 로 나눈다.
 
-개념적으로, point source는 공갅거으로 작은 source로 하나의 위치로 대표해도 괜찮은 경우고, clustered surce는 공간적으로 넓게 퍼져있어 한 점에서 소리가 난다고 하기보다, 전체의 여러 위치에서 소리가 나는 경우로 보면된다.
+개념적으로, point source는 공간적으로 작은 source로 하나의 위치로 대표해도 괜찮은 경우고, clustered surce는 공간적으로 넓게 퍼져있어 한 점에서 소리가 난다고 하기보다, 전체의 여러 위치에서 소리가 나는 경우로 보면된다.
 
 sound field를 제공하기 위해서는 listener pose 도 중요하다. 결국 **user tracking이 가능**해야 사용자에게 입체감 있는 사운드를 제공할 수 있다. 그러기 위해서 listener가 어디에 있고 어느 방향을 바라보는 지(pose)를 이렇게 표현한다:
 
@@ -421,6 +421,38 @@ $$
 해당 수식을 source마다 계산한 다음 모두 더한 것이 Point Source Ambisonics다.
 
 </details>
+
+<details markdown="block">
+<summary>Clustered sources</summary>
+
+강이나 폭포처럼 넓게 펼쳐진 source는 centroid 한 점으로 표현하기 어려워서 $$P_i$$ 안에 있는 모든 3D point를 사용한다:
+
+$$
+A_{\mathrm{cluster}}
+=
+\sum_{i \in \mathcal{O}_{\mathrm{cluster}}}
+\frac{a_i}{\lvert P_i \rvert}
+\sum_{o \in P_i}
+\sigma\left(\lVert d \rVert\right)
+y_L\left(
+R^T \frac{d}{\lVert d \rVert}
+\right)
+$$
+
+여기서 point souce와 다른 점은 그저 source 하나에 여러 3D point들이 있다는 것이다. 즉, 아래의 clustered source 내부에 있는 많은 각 point source에 대해 아래를 계산하고: 
+
+$$
+\sigma(\lVert d \rVert)y_L(\text{direction})
+$$
+
+전부 더한 다음, $$\frac{1}{\left \vert P_i \right \vert}로 나누어 평균을 낸다.
+
+쉽게 말하면, $$\text{Clustered source} = \text{많은 point sources의 평균}$$이 된다.
+
+
+</details>
+
+
 
 ## Experiments
 
