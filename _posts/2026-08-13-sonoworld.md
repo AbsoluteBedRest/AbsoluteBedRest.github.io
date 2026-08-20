@@ -346,6 +346,8 @@ $$
 A = A_{point} + A_{cluster} + A_{global}
 $$
 
+각 source 들의 Ambisonics를 구하는 방법은 아래를 열어서 확인해보길 바란다.
+
 <details markdown="block">
 <summary>Point source</summary>
 
@@ -518,6 +520,7 @@ Ambisonics를 어떻게 left/right ear audio로 제공할까? 그건 HRTF라는 
 $$
 h_{l,m}^{left}, h_{l,m}^{right}
 $$
+
 라고 표현한다. 정확히는 이를 HRIR이라고 부른다. 수식을 보면 알겠지만, Ambisonics의 각 channel에 대해 해당 filter를 convolution 해준다. 그럼 해당 Ambisonics channel이 left/right ear에 어떻게 실제로 들릴지 계산된다.
 
 수식으로 예시를 보면,
