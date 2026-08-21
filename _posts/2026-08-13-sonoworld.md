@@ -604,7 +604,7 @@ $$
 > - Proprietary version: 3D reconstruction model을 Marble과 sound-source propoasal 모델 (VLM)을 GPT-5로 사용하는 버전
 
 <p align="center">
-  <img src="/assets/images/posts/2026-08-13-sonoworld/1787294842684.png" width="50%">
+  <img src="/assets/images/posts/2026-08-13-sonoworld/1787294842684.png" width="70%">
 </p>
 
 해당 Table은 두 종류의 metric을 본다: Spatial Metrics, Semantic Metric
@@ -685,4 +685,4 @@ $$
 
 ## Limitations & Future work
 
-아쉽게도 이 논문은 static한 3D visual scene을 기준으로 진행되었다. 즉, object들이 움직이는 4D Scene에는 적용되지 않은 것이다. 간단하게, 해당 논문은 user tracking을 통한 공간 음향 처리에 집중했다고 볼 수 있다. 이후의 연구를 통해 4D Scene에 적용할 때는 user tracking 뿐만 아니라 object tracking을 동시에 수행하여 움직이는 음원이 공간 음향에 영향을 주는 것까지  렌더링될 수 있도록 할 수 있을 것이다.
+아쉽게도 이 논문은 static한 3D visual scene을 기준으로 진행되었다. 즉, object들이 움직이는 4D Scene에는 적용되지 않은 것이다. 간단하게, 해당 논문은 user tracking을 통한 공간 음향 처리에 집중했다고 볼 수 있다. 이후의 연구를 통해 4D Scene에 적용할 때는 user tracking 뿐만 아니라 **object tracking을 동시에 수행하여 움직이는 음원**이 공간 음향에 영향을 주는 것까지  렌더링될 수 있도록 할 수 있을 것이다.
