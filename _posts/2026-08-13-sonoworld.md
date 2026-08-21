@@ -677,7 +677,12 @@ $$
 
 해당 figure는 360° 공간에서 어느 방향에 sound energy가 강하게 존재하는 지 보여준다. 이를 통해 spatial audio의 방향 분포가 실제 FOA와도 시각적으로 비슷하다는 것을 볼 수 있다. 
 
-
 ## Contribution
 
+1. 공간 음향 필드와 상호작용이 가능한 3D 시각 장면을 공동 생성하는 새로운 도전 과제인 **"IMAGE2AVSCENE"**을 정의하고 최초의 효과적인 프레임워크인 SONOWORLD를 구축
+2. 평가 데이터셋인 SONOSCENE60을 직접 수집하고 기여하였다.
+3. 정량 평가 지표와 정성 평가 그리고 주관적 인지 평가를 통틀어 기존의 우수한 베이스라인 모델들을 큰 차이로 앞섰으며, 여러 applications에서 사용 가능성을 보여주었다.
+
 ## Limitations & Future work
+
+아쉽게도 이 논문은 static한 3D visual scene을 기준으로 진행되었다. 즉, object들이 움직이는 4D Scene에는 적용되지 않은 것이다. 간단하게, 해당 논문은 user tracking을 통한 공간 음향 처리에 집중했다고 볼 수 있다. 이후의 연구를 통해 4D Scene에 적용할 때는 user tracking 뿐만 아니라 object tracking을 동시에 수행하여 움직이는 음원이 공간 음향에 영향을 주는 것까지  렌더링될 수 있도록 할 수 있을 것이다.
