@@ -590,6 +590,94 @@ $$
 
 ## Experiments
 
+**3d 공간에서 listener가 특정 위치에 있을 때 어느 방향에서 어떤 소리가 들려야하는 지**를 평가하는 데이터셋이나 벤치마크가 없기 때문에 정량 평가를 위해 저자들이 만든 **SONOSCENE360**을 데이터셋으로 사용한다. 해당 데이터셋에는 360° 영상과 FOA audio가 함께 들어 있다. 정성 평가와 user study에서는 인터넷에서 가져온 사진과 diffusion으로 생성한 이미지 모두 추가로 사용한다.
+
+그런데, 기존에 baselines로 삼을 SonoWorld와 같이 IMAGE2AVSCENE task를 수행하는 방법이 없다는 것이 문제인데, 그래서 저자들은 비슷한 **visual-conditioned spatial audio generation methods**를 basline으로 가져와서 SonoWorld setting에 맞게 입력을 변형해준다. 그래서 비교하는 방법은 MMAudio, SEE-2-SOUND, ViSAGe, OmniAudio다. 이 중에서 MMAudio만 monaural audio generator고, 나머지는 spatial audio generation 방법들이다.
+
+당연히 중요하게도, Visual Scene은 SonoWorld 것을 제공한다. 물론 모델들이 입력으로 요구하는 것은 각기 다르나, 같은 visual scene에서 렌더링된 걸 토대로 spatial audio를 얼마나 잘 만드는 지 평가하는 것이다. 각 baselines의 input을 어떻게 처리해서 주었는 지는 논문을 확인해보길 바란다. 
+
+#### Quantative Results
+
+먼저 SonoWorld는 두 가지 타입의 파이프라인을 준비한다:
+
+> - Open-Source version: 3D reconstruction model을 HunyuanWorld-1.0과 sound-source proposal 모델 (VLM)을 LLaVA-Next-34B 로 사용하는 버전
+> - Proprietary version: 3D reconstruction model을 Marble과 sound-source propoasal 모델 (VLM)을 GPT-5로 사용하는 버전
+
+<p align="center">
+  <img src="/assets/images/posts/2026-08-13-sonoworld/1787294842684.png" width="50%">
+</p>
+
+해당 Table은 두 종류의 metric을 본다: Spatial Metrics, Semantic Metric
+
+즉, 소리가 올바른 3D 방향에서 들리는 지, 그리고 그 방향에서 실제로 적절한 종류의 소리가 들리는 지 평가하는 것이다.
+
+$\triangle_{abs \theta}$는 zimuth 오차를 말하고, $\triangle_{abs \phi}$는 elevation 오차를 말하고, $\triangle_{Angular}$는 전체적인 3D 각도 오차를 말한다. 그리고 CC와 AUC는 여러 source가 있을 때 구면 전체의 sound energy distribution이 GT와 얼마나 비슷한가를 보는 metric이다.
+
+표를 보면 알겠지만, 전반적으로 Open-source 모델로 해당 방법론으로 진행해도 기존 방법들보다 좋은 성능을 보이는 걸 볼 수 있다. 또한 Proprietary model들로 바꿨을 때는 더욱 좋은 성능을 보여준다.
+
+<p align="center">
+  <img src="/assets/images/posts/2026-08-13-sonoworld/1787295681016.png" width="50%">
+</p>
+
+그리고 저자들은 본인들이 정한 scene들이 sonoworld에만 유리하게 작용하지 않았음을 보여주기 위해서 SONOSCENE260의 각 scene에 대해 따로 metric 결과를 보여준다. 해당 figure를 보면 알겠지만, 모든 scene에서 baseline보다 일관되게 높은 성능을 보였다고 설명한다.
+
+<p align="center">
+  <img src="/assets/images/posts/2026-08-13-sonoworld/1787295826286.png" width="50%">
+</p>
+
+
+저자들은 User study도 진행했다. 참가자는 50명, scene은 총 12개다. 그리고 세 가지 pair-wise comparison을 수행한다:
+
+> - ours vs. MMAudio
+> - ours vs. OmniAudio
+> - OmniAudio vs. MMAudio
+
+각 scene에서 visual video는 모든 방법이 완전히 동일하고, audio만 다르게 생성한다.
+
+참가자는 spatial coherence, audio-visual semantic alignmnet를 기준으로 어느 audio가 더 좋은지 선택한다. 그리고 real scene과 synthetic scene 모두에서 SonoWorld의 human preference가 가장 높게 나타났다.
+
+#### Qualitative Results
+
+논문에서는 먼저 SonoWorld로 만든 3D audio-visual scene을 실제로 자유롭게 돌아다니면서 실시간으로 볼 수 있는 지 확인했다.
+
+논문에서는 이렇게 말한다: 
+> "Fountain scene에서 Apple M3 Pro 기준 audio callback이 1 ms 미만이고, 48 kHz에서 256-sample buffer 하나가 재생되는 시간이 약 5.3 ms이다."
+
+audio 설정은 48 kHz 라고 언급한다. 이 의미는 1초의 audio waveform을 48000개의 숫자로 표현한다는 뜻이며, sample 하나가 담당하는 시간은 $$\frac{1}{48000} sec$$이다. 약 0.0208ms 정도다. audio system은 sample 하나가 끝나면 매번 CPU를 호출해서 
+다음 sample을 처리하는 방식이 비효율적이어서 여러 sample을 buffer라는 묶음으로 처리하는데, SonoWorld의 경우 논문에서 언급하는 buffer size가 256 samples 인 것이다.
+
+여기서 audio callback은 현재 256 sample의 재생이 끝나고 listener의 위치가 변경되면, 다음 256 smples에 대해 아래의 계산 과정을 오디오 재생시간 5.3ms 이내에 끝내놔야 listener가 계속 실시간으로 들을 수 있다:
+
+$$
+\boxed{
+\begin{gathered}
+\text{Audio system:} \\
+\text{"다음 256 samples 필요."} \\
+\downarrow \\
+\text{SonoWorld audio callback} \\
+\downarrow \\
+\text{현재 listener pose 확인} \\
+\downarrow \\
+\text{sound source와 거리/방향 계산} \\
+\downarrow \\
+\text{Ambisonics 계산} \\
+\downarrow \\
+\text{HRTF decoding} \\
+\downarrow \\
+\text{Left/Right 256 samples 생성}
+\end{gathered}
+}
+$$
+
+이렇게 끊김없이 실시간으로 listener가 공간 음향을 듣는 것이 가능하다.
+
+<p align="center">
+  <img src="/assets/images/posts/2026-08-13-sonoworld/1787296301501.png" width="70%">
+</p>
+
+해당 figure는 360° 공간에서 어느 방향에 sound energy가 강하게 존재하는 지 보여준다. 이를 통해 spatial audio의 방향 분포가 실제 FOA와도 시각적으로 비슷하다는 것을 볼 수 있다. 
+
+
 ## Contribution
 
 ## Limitations & Future work
