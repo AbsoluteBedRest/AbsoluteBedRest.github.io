@@ -37,7 +37,7 @@ tags:
 
 > - 해당 논문은 일관성 있는 360도 파노라마를 outpainting하고, depth alignment와 가우시안 최적화를 통해 이를 3D 로 lifting하여 Scene을 완성하는 기존의 Panoramic method를 따라가지만, 시각 정보와 함께 **spatial audio**를 공동으로 모델링한다는 점에서 차별화된다.
 > - 기존 공간 음향 생성 분야에서 진행된 연구인 Sonic4D의 경우 공간 음향 생성을 4D Dynamic Scene과 결합하는 수준까지 나아갔으나, 단일 객체, 좁은 시야각, 그리고 오프라인 처리에만 국한되어 작동한다는 한계가 있는데, SonoWorld는 이를 넘어 **점(point), 영역(areal), 주변(ambient) 음원들과 실시간적인 exploration을 지원**한다. 
-> - Visual Scene에서 sound localization과 Audio-Visual Source Seperation 분야에서도 각각 단순히 시각적 장면 내에서 소리가 나는 위치를 추적하는게 아니라 VLM을 활용해서 생성된 3D 파노라마 장면 속의 잠재적인 음원들을 찾고 이를 공간 상에 위치시키거나 단순히 혼합 오디오를 개별 component 오디로로 분리하는데 그치지 않고, 생성된 3D 시각 장면 내에 위치된 모든 음원에 대한새로운 공간 음향 생성을 직접 구현하는 것으로 차별점을 명시한다.
+> - Visual Scene에서 sound localization과 Audio-Visual Source Separation 분야에서도 각각 단순히 시각적 장면 내에서 소리가 나는 위치를 추적하는게 아니라 VLM을 활용해서 생성된 3D 파노라마 장면 속의 잠재적인 음원들을 찾고 이를 공간 상에 위치시키거나 단순히 혼합 오디오를 개별 component 오디로로 분리하는데 그치지 않고, 생성된 3D 시각 장면 내에 위치된 모든 음원에 대한새로운 공간 음향 생성을 직접 구현하는 것으로 차별점을 명시한다.
 
 ## The Image2AVScene Task
 
@@ -260,7 +260,7 @@ $$
   <img src="/assets/images/posts/2026-08-13-sonoworld/1787120630529.png" width="70%">
 </p>
 
-SonoWorld의 Key Tehcnique은 총 4개로 나뉜다.
+SonoWorld의 Key Technique은 총 4개로 나뉜다.
 
 > - **첫 번째로, single image를 입력으로 받아 360도 파노라마를 생성하고 이를 3D Scene에 Lift하는 것**
 > - **두 번째로, reconstructed된 3D 공간에서 소리가 있을 법한 실체를 식별하고 위치를 결정하는 것**
@@ -300,7 +300,7 @@ $$
 > - MMAudio가 waveform을 생성할 때 사용할 text prompt
 > - 각 sound source가 얼마나 크게 들려야 하는지를 결정하는 Amplitude equalization parameter
 
-그럼 이제 우리는 category 집합 $$C$$를 가지고, 해당 sound category들이 panorama의 어느 위치에 있는 지 알아야 한다. 이를 위해서 open-vocabulary segamentation model인 X-Decoder를 사용한다.
+그럼 이제 우리는 category 집합 $$C$$를 가지고, 해당 sound category들이 panorama의 어느 위치에 있는 지 알아야 한다. 이를 위해서 open-vocabulary segmentation model인 X-Decoder를 사용한다.
 
 그런데, X-Decoder 는 일반 perspective image를 사용하도록 학습되어 있기 때문에 파노라마 이미지인 $$I_{pano}$$를 여러 개의 겹치는 perspective FoV image로 잘라서 사용한다. 이렇게 tile image들을 category를 조건으로 각 tile image에 해당되는 category segmentation mask를 뽑는다:
 
@@ -350,7 +350,7 @@ $$
 
 이번 stage에서는 장면에 들어갈 소리를 생성하고 최종적으로 들릴 3D 입체 오디오 신호를 수학적으로 조립하는 것이다.
 
-먼저 전에 VLM이 이미지 분석을 통해 제안한 텍스트 프롬포트를 오디오 생성 AI인 MMAudio에 주입하여, 각 object에 어울리는 소리($$a_{i,raw}$$)와 전체 배경 소리($$a_{global}$$)를 생성한다. 생성된 waveform의 volumne을 그대로 사용하지 않고, VLM이 예측한 sound energy ($$v_i$$)를 밑의 수식을 통해 이 파라미터 수치만큼 데시벨을 실제 물리 신호 스케일로 환산하여 곱해준다:
+먼저 전에 VLM이 이미지 분석을 통해 제안한 텍스트 프롬포트를 오디오 생성 AI인 MMAudio에 주입하여, 각 object에 어울리는 소리($$a_{i,raw}$$)와 전체 배경 소리($$a_{global}$$)를 생성한다. 생성된 waveform의 volume을 그대로 사용하지 않고, VLM이 예측한 sound energy ($$v_i$$)를 밑의 수식을 통해 이 파라미터 수치만큼 데시벨을 실제 물리 신호 스케일로 환산하여 곱해준다:
 
 $$
 a_i(t) = 10^{v_i/20}a_{i,raw}(t)
@@ -368,7 +368,7 @@ $$
 p = [R, t] \in SE(3)
 $$
 
-여기서 t는 listener의 3D position, R은 listener의 roatation이다. 이로써 청자의 고개를 돌렸을 때, 그리고 이동했을 때 사운드가 어떻게 변할 지 표현할 수 있다. 여기에 더해 source와 listener 사이의 거리($$d$$)를 기반으로 감쇠효과를 만들어야 한다. 그 수식은 이와 같이 표현할 수 있다:
+여기서 t는 listener의 3D position, R은 listener의 rotation이다. 이로써 청자의 고개를 돌렸을 때, 그리고 이동했을 때 사운드가 어떻게 변할 지 표현할 수 있다. 여기에 더해 source와 listener 사이의 거리($$d$$)를 기반으로 감쇠효과를 만들어야 한다. 그 수식은 이와 같이 표현할 수 있다:
 
 $$
 \sigma(d) = \frac{e^{-\alpha d}}{d}
@@ -592,11 +592,11 @@ $$
 
 **3d 공간에서 listener가 특정 위치에 있을 때 어느 방향에서 어떤 소리가 들려야하는 지**를 평가하는 데이터셋이나 벤치마크가 없기 때문에 정량 평가를 위해 저자들이 만든 **SONOSCENE360**을 데이터셋으로 사용한다. 해당 데이터셋에는 360° 영상과 FOA audio가 함께 들어 있다. 정성 평가와 user study에서는 인터넷에서 가져온 사진과 diffusion으로 생성한 이미지 모두 추가로 사용한다.
 
-그런데, 기존에 baselines로 삼을 SonoWorld와 같이 IMAGE2AVSCENE task를 수행하는 방법이 없다는 것이 문제인데, 그래서 저자들은 비슷한 **visual-conditioned spatial audio generation methods**를 basline으로 가져와서 SonoWorld setting에 맞게 입력을 변형해준다. 그래서 비교하는 방법은 MMAudio, SEE-2-SOUND, ViSAGe, OmniAudio다. 이 중에서 MMAudio만 monaural audio generator고, 나머지는 spatial audio generation 방법들이다.
+그런데, 기존에 baselines로 삼을 SonoWorld와 같이 IMAGE2AVSCENE task를 수행하는 방법이 없다는 것이 문제인데, 그래서 저자들은 비슷한 **visual-conditioned spatial audio generation methods**를 baseline으로 가져와서 SonoWorld setting에 맞게 입력을 변형해준다. 그래서 비교하는 방법은 MMAudio, SEE-2-SOUND, ViSAGe, OmniAudio다. 이 중에서 MMAudio만 monaural audio generator고, 나머지는 spatial audio generation 방법들이다.
 
 당연히 중요하게도, Visual Scene은 SonoWorld 것을 제공한다. 물론 모델들이 입력으로 요구하는 것은 각기 다르나, 같은 visual scene에서 렌더링된 걸 토대로 spatial audio를 얼마나 잘 만드는 지 평가하는 것이다. 각 baselines의 input을 어떻게 처리해서 주었는 지는 논문을 확인해보길 바란다. 
 
-#### Quantative Results
+#### Quantitative Results
 
 먼저 SonoWorld는 두 가지 타입의 파이프라인을 준비한다:
 
@@ -619,7 +619,7 @@ $\triangle_{abs \theta}$는 zimuth 오차를 말하고, $\triangle_{abs \phi}$�
   <img src="/assets/images/posts/2026-08-13-sonoworld/1787295681016.png" width="50%">
 </p>
 
-그리고 저자들은 본인들이 정한 scene들이 sonoworld에만 유리하게 작용하지 않았음을 보여주기 위해서 SONOSCENE260의 각 scene에 대해 따로 metric 결과를 보여준다. 해당 figure를 보면 알겠지만, 모든 scene에서 baseline보다 일관되게 높은 성능을 보였다고 설명한다.
+그리고 저자들은 본인들이 정한 scene들이 sonoworld에만 유리하게 작용하지 않았음을 보여주기 위해서 SONOSCENE360의 각 scene에 대해 따로 metric 결과를 보여준다. 해당 figure를 보면 알겠지만, 모든 scene에서 baseline보다 일관되게 높은 성능을 보였다고 설명한다.
 
 <p align="center">
   <img src="/assets/images/posts/2026-08-13-sonoworld/1787295826286.png" width="50%">
@@ -646,7 +646,7 @@ $\triangle_{abs \theta}$는 zimuth 오차를 말하고, $\triangle_{abs \phi}$�
 audio 설정은 48 kHz 라고 언급한다. 이 의미는 1초의 audio waveform을 48000개의 숫자로 표현한다는 뜻이며, sample 하나가 담당하는 시간은 $$\frac{1}{48000} sec$$이다. 약 0.0208ms 정도다. audio system은 sample 하나가 끝나면 매번 CPU를 호출해서 
 다음 sample을 처리하는 방식이 비효율적이어서 여러 sample을 buffer라는 묶음으로 처리하는데, SonoWorld의 경우 논문에서 언급하는 buffer size가 256 samples 인 것이다.
 
-여기서 audio callback은 현재 256 sample의 재생이 끝나고 listener의 위치가 변경되면, 다음 256 smples에 대해 아래의 계산 과정을 오디오 재생시간 5.3ms 이내에 끝내놔야 listener가 계속 실시간으로 들을 수 있다:
+여기서 audio callback은 현재 256 sample의 재생이 끝나고 listener의 위치가 변경되면, 다음 256 samples에 대해 아래의 계산 과정을 오디오 재생시간 5.3ms 이내에 끝내놔야 listener가 계속 실시간으로 들을 수 있다:
 
 $$
 \boxed{
@@ -680,7 +680,7 @@ $$
 ## Contribution
 
 1. 공간 음향 필드와 상호작용이 가능한 3D 시각 장면을 공동 생성하는 새로운 도전 과제인 **"IMAGE2AVSCENE"**을 정의하고 최초의 효과적인 프레임워크인 SONOWORLD를 구축
-2. 평가 데이터셋인 SONOSCENE60을 직접 수집하고 기여하였다.
+2. 평가 데이터셋인 SONOSCENE360을 직접 수집하고 기여하였다.
 3. 정량 평가 지표와 정성 평가 그리고 주관적 인지 평가를 통틀어 기존의 우수한 베이스라인 모델들을 큰 차이로 앞섰으며, 여러 applications에서 사용 가능성을 보여주었다.
 
 ## Limitations & Future work
