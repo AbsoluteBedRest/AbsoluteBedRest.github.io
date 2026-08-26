@@ -34,7 +34,7 @@ Many recent studies learn dynamics through a low-dimensional latent space, which
 
 As a result, because these models learn only 2D visual patterns without 3D or physical supervision, it is difficult for them to represent or understand 3D geometry and physical dynamics.
 
-Therefore, the authors of SeeU design the overall pipeline around the **2D $$\rightarrow$$ 4D $$\rightarrow$$** scheme to handle 4D dynamics and perform visual generation.
+Therefore, the authors of SeeU design the overall pipeline around the **2D $$\rightarrow$$ 4D $$\rightarrow$$ 2D** scheme to handle 4D dynamics and perform visual generation.
 
 ## Method & Technical Details
 
