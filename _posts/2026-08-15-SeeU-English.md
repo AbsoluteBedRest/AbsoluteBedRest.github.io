@@ -1,12 +1,12 @@
 ---
-title: "[Paper Review, KR] SeeU: Seeing the Unseen World via 4D Dynamics-aware Generation"
+title: "[Paper Review, EN] SeeU: Seeing the Unseen World via 4D Dynamics-aware Generation"
 date: 2026-08-15
 categories:
   - 4D Vision
 tags:
   - 4D Generation
   - Dynamics
-  - Learning
+  - Shape-of-Motion
 ---
 
 > **Paper Information** \\
