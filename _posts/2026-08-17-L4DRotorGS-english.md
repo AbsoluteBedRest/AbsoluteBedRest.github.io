@@ -1,5 +1,5 @@
 ---
-title: "[Paper Review, KR] Layered 4D-Rotor Gaussian Splatting: A Compressed Representation for Long Dynamic Scenes"
+title: "[Paper Review, EN] Layered 4D-Rotor Gaussian Splatting: A Compressed Representation for Long Dynamic Scenes"
 date: 2026-08-17
 categories:
   - 4D Vision
