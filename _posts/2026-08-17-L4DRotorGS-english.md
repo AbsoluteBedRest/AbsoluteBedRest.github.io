@@ -31,7 +31,7 @@ For long videos, a method called Temporal Gaussian Hierarchy (TGH) has studied 4
 
 Therefore, this paper introduces a new framework called Layered 4D-Rotor Gaussian Splatting (L4DRotorGS), which **enables high-fidelity reconstruction and real-time rendering while reducing storage costs**.
 
-## Method
+## Method & Technical Details
 
 #### Preliminary of 4D-Rotor Gaussian Splatting
 
