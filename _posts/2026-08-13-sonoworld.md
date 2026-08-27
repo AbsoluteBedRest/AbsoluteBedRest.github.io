@@ -43,6 +43,7 @@ tags:
 
 <details markdown="block">
 <summary>Ambisonics Concept</summary>
+<div markdown="1" style="border-left: 4px solid #0969da; padding-left: 12px; margin-top: 10px;">
 
 #### 1. Spatial Sound representation
 
@@ -236,7 +237,7 @@ $$
 
 가 크면, virtual microphone이 바라보는 방향과 실제 source 방향이 Ambisonics basis 상 잘 맞아 소리가 크게 들리는 등의 영향이 일어난다.
 
-
+</div>
 </details>
 
 #### Task Goal
@@ -388,6 +389,7 @@ $$
 
 <details markdown="block">
 <summary>Point source</summary>
+<div markdown="1" style="border-left: 4px solid #0969da; padding-left: 12px; margin-top: 10px;">
 
 여기서 point source는 source $$i$$의 3D point cluster $$P_i$$를 하나의 centroid $$o_i$$로 표현한다.
 
@@ -460,10 +462,12 @@ $$
 
 해당 수식을 source마다 계산한 다음 모두 더한 것이 Point Source Ambisonics다.
 
+</div>
 </details>
 
 <details markdown="block">
 <summary>Clustered sources</summary>
+<div markdown="1" style="border-left: 4px solid #0969da; padding-left: 12px; margin-top: 10px;">
 
 강이나 폭포처럼 넓게 펼쳐진 source는 centroid 한 점으로 표현하기 어려워서 $$P_i$$ 안에 있는 모든 3D point를 사용한다:
 
@@ -495,10 +499,12 @@ $$
 
 따라서, area sound가 listener를 둘러싸는 경우 $$l>0$$ 방향 성분들이 서로 상쇄되는 경향이 있어, head rotation에 덜 민감해질 수 있다.
 
+</div>
 </details>
 
 <details markdown="block">
 <summary>Global ambience</summary>
+<div markdown="1" style="border-left: 4px solid #0969da; padding-left: 12px; margin-top: 10px;">
 
 이제 마지막 바람, 아주 먼 traffic 등은 특정 3D object에 붙어 있는 소리로 처리하지 않는다. 
 
@@ -519,6 +525,7 @@ $$
 
 첫 channel만 사용하는 이유는 첫 번째가 $$l=0$$인 omnidirectional component 이기 때문이다.
 
+</div>
 </details>
 
 #### Free-Viewpoint Rendering

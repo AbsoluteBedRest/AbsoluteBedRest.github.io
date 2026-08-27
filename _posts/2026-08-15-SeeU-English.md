@@ -56,6 +56,7 @@ This means that the method uses a monocular frame sequence of a dynamic scene.
 
 <details markdown="block">
 <summary>Shape-of-Motion(Essential Concept)</summary>
+<div markdown="1" style="border-left: 4px solid #0969da; padding-left: 12px; margin-top: 10px;">
 
 The authors of this paper adopt and use an existing method from the ICCV 2025 paper "Shape of Motion: 4D Reconstruction from a Single Video." They give the following reasons:
 
@@ -173,6 +174,7 @@ Overall, SeeU can therefore be summarized as follows:
 
 > The motion bases are initialized from discrete 3D point trajectories using Procrustes analysis and refined with photometric reconstruction error (SoM); SeeU then converts them into continuous functions using B-splines.
 
+</div>
 </details>
 
 The authors also represent the scene using a canonical 3D Gaussian set $$\{g_i^0\}_{i=1}^N$$ that persists over time, parameterized as follows:

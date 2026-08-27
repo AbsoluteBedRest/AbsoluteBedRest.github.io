@@ -43,6 +43,7 @@ Related research areas have the following limitations (**you can skip this part 
 
 <details markdown="block">
 <summary>Ambisonics Concept</summary>
+<div markdown="1" style="border-left: 4px solid #0969da; padding-left: 12px; margin-top: 10px;">
 
 #### 1. Spatial Sound representation
 
@@ -236,7 +237,7 @@ $$
 
 if this term is large, the direction faced by the virtual microphone and the actual source direction are well aligned in the Ambisonics basis, which can make the sound stronger in that queried direction.
 
-
+</div>
 </details>
 
 #### Task Goal
@@ -388,6 +389,7 @@ Open the sections below to see how the Ambisonics contribution of each source ty
 
 <details markdown="block">
 <summary>Point source</summary>
+<div markdown="1" style="border-left: 4px solid #0969da; padding-left: 12px; margin-top: 10px;">
 
 Here, a point source represents the 3D point cluster $$P_i$$ of source $$i$$ using a single centroid $$o_i$$.
 
@@ -460,10 +462,12 @@ $$
 
 Point Source Ambisonics is obtained by evaluating this equation for each source and summing all of the results.
 
+</div>
 </details>
 
 <details markdown="block">
 <summary>Clustered sources</summary>
+<div markdown="1" style="border-left: 4px solid #0969da; padding-left: 12px; margin-top: 10px;">
 
 A spatially extended source such as a river or waterfall is difficult to represent with a single centroid, so all 3D points in $$P_i$$ are used:
 
@@ -495,10 +499,12 @@ When a clustered source is treated as multiple point sources as in the equation 
 
 Therefore, when an areal sound surrounds the listener, the $$l>0$$ directional components tend to cancel one another, making the perceived directivity less sensitive to head rotation.
 
+</div>
 </details>
 
 <details markdown="block">
 <summary>Global ambience</summary>
+<div markdown="1" style="border-left: 4px solid #0969da; padding-left: 12px; margin-top: 10px;">
 
 Finally, sounds such as wind or very distant traffic are not treated as being attached to a specific 3D object. 
 
@@ -519,6 +525,7 @@ This is represented by the equation above.
 
 Only the first channel is used because it corresponds to the $$l=0$$ omnidirectional component.
 
+</div>
 </details>
 
 #### Free-Viewpoint Rendering
