@@ -2,9 +2,9 @@
 title: "[Paper Review, KR] FlashWorld: High-Quality 3D Scene Generation within Seconds"
 date: 2026-08-17
 categories:
-  - 4D Vision
+  - 3D Vision
 tags:
-  - 4D Generation
+  - 3D Generation
   - Distillation
 ---
 
@@ -15,9 +15,9 @@ tags:
 > **Link:** [[Paper](https://arxiv.org/pdf/2510.13678)], [[Project](https://imlixinyang.github.io/FlashWorld-Project-Page/)], [[Github](https://github.com/imlixinyang/FlashWorld)]
 
 
-## Teaser Image
+## Teaser Image (Poster)
 
 <p align="center">
-  <img src="/assets/images/posts/2026-08-20-flashworld/1787817427574.png" width="80%">
+  <img src="/assets/images/posts/2026-08-20-flashworld/1787817427574.png" width="100%">
 </p>
 
