@@ -36,3 +36,17 @@
 .archive__subtitle {
   border-bottom: none !important;
 }
+
+.theme__toggle {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+  font-size: 1rem;
+}
+
+.theme__toggle:hover {
+  opacity: 0.7;
+}
