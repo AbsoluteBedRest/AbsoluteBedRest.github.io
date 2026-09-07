@@ -417,7 +417,7 @@ $$
 먼저, MV-oriented mode의 경우, DiT가 $Z_t, C, y$를 받아 $\hat{Z}_{MV}$를 예측한다. 그리고 ground-truth claen latent $Z$와 비교한다:
 
 $$
-\mathcal{L}_{MV} = \mathbb{E})_{X, t, \epsilon, y, C} [\lVert Z - \hat{Z}_{MV} \rVert ^ 2]
+\mathcal{L}_{MV} = \mathbb{E}_{X, t, \epsilon, y, C} [\lVert Z - \hat{Z}_{MV} \rVert ^ 2]
 $$
 
 즉, noisy multi-view latent 를 clean multi-view latent로 변환하는 것을 배우는 diffsuion objective다. 중요한 건, MV-oriented mode가 실제로 만드는 건 3D representation이 아니다. **각 camera view에 해당하는 이미지를 직접 생성**하는 것이다. 그러므로, 각 view가 diffusion에 의해 이미지 공간에서 생성되므로, view 1과 view 2가 동일한 3D geometry에서 나온다고 보장되지 않는다.
@@ -588,7 +588,42 @@ $$
 
 여기서 Camera trajectory는 REalEstate10K, WorldScore 같은 이미 있는 multi-view dataset의 trajectory를 사용한다. 그리고, 해당 학습은 pre-training 단계가 아닌 post-training 단계에서 multi-view data와 ood data를 2:1의 비율로 섞어서 사용한다.
 
+## Experiments
+
+<p align="center">
+  <img src="/assets/images/posts/2026-08-20-flashworld/1788759324796.png" width="70%">
+</p>
+
+figure 4 에서는 basline들을 MV-oriented 방식들로 구성하고, 3D oriented 파이프라인인 flashworld의 강점을 보여준다. 해당 베이스라인들은 코드가 오픈되어 있지 않지만, 각 프로젝트 페이지에 제공된 비디오 결과물을 활용하고, ViPE라는 모델을 사용해서 카메라 포즈와 내재 파라미터를 추정하여 최대한 비슷한 각도에서 생성하도록 하였다.
 
 
+<p align="center">
+  <img src="/assets/images/posts/2026-08-20-flashworld/1788759604343.png" width="50%">
+</p>
 
+<p align="center">
+  <img src="/assets/images/posts/2026-08-20-flashworld/1788759681694.png" width="70%">
+</p>
+
+텍스트 기반 생성 비교에 대해서는 정성평가와 정량평가를 모두 진행하였다. 정성평가에서 Prometheus는 MV-oriented 파이프라인의 본질적인 불일치로 인해 생성된 장면이 자주 흐릿해지고 기하 구조가 잘못 표현되기도 한다. 그리고, SplatFlow와 VideoRFSplat 역시 흐릿한 왜곡으로 어려움을 겪으며 바닥이나 잔디 등에서 발견되는 세부적인 디테일을 재현하는데 한계를 보인다.
+
+정량평가의 경우에는 T3Bench, DL3DV, WorldScore에서 600개의 텍스트 프롬포트를 샘플링하였다. 해당 table에서 비교 대상이 되는 방법들이 3D Gaussian representation을 기반으로 하기 때문에, 카메라 제어 및 3d consistency과 관련된 지표들은 본 실험 설정에서 적요하기 적합하지 않아서 CLIP IQA+, CLIP Aesthetic, CLIP Score, Q-Align을 포함하여 평가 지표에 집중했다. 특히, CLIP-Aesthetic 지표의 경우, 때때로 smooth 출력물으 ㄹ선호하는 경향이 있어 본 연구 방법이 만들어내는 정교하고 사실적인 결과와 항상 부합하지 않을 수 있음을 알 수 있다.
+
+<p align="center">
+  <img src="/assets/images/posts/2026-08-20-flashworld/1788760166113.png" width="70%">
+</p>
+
+논문의 저자들은 worldscore benchmark에 대해서도 평가를 진행한다. Flashworld는 WonderJouney, LucidDreamer, WonderWorld 3D 생성 방법론들과 비교한다. 여기서 해당 연구에서 3D 생성 방법론에만 집중하고 있어, **Camera Control** 이라는 지표는 주로 각 방법론의 평가 프로토콜에 대한 강건성만을 반영할 뿐이어서 본 실험 세팅에서는 informative가 떨어져 해당 지표는 포함하지 않았다. **또한, 기존 WorldScore 벤치마크는 대부분의 지표를 anchor frames에서만 평가하는데, 이는 novel view synthesis가 요구되는 3D 월드 생성 과업에 suboptimal 일 수 있다.**
+
+그래서 더욱 공정한 비교를 위해 특정 interval 안에 있는 프레임들 중에 무작위로 프레임들을 뽑아내어서 재평가했다고 한다. 모든 접근 방식 중에서 가장 높은 평균 점수와 가장 빠른 추론 속도를 달성하였다. 
+
+<p align="center">
+  <img src="/assets/images/posts/2026-08-20-flashworld/1788760907417.png" width="70%">
+</p>
+
+그리고 논문의 저자들은 다양한 ablation study를 진행하였다. w/ MV-Diff의 경우 MV-oriented diffusion model을 의미하고, w/ 3D-Diff의 경우 3D oriented diffusion model을 의미하고, w/ MV-Dist의 경우 MV-oriented model을 few-step으로 distill한 경우를 의미하고, w/o CMC의 경우에는 3D-oriented model을 few-step으로 distill하지만 CMC loss가 제거된 경우, 마지막으로 w/o OOD의 경우에는 Full cross-mode model에서 OOD co-training을 제거한 경우를 보여준다.
+
+정말 신기하게도, full model에 비해서 w/o CMC의 경우에서 많은 metric이 더 우수한 경우들을 보여준다. 이는 단순히 CWC가 아까 말했듯이 3D student model이 3D consistency에 대한 distribution을 잊는 것을 넘어서 증명도 힘듬을 보여주는 것 같다.
+
+####
 
