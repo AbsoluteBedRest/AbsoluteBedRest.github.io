@@ -470,9 +470,123 @@ $$
 
 이렇게 하는 이유는 입력한 view에서만 reconstruction loss를 걸게 되면, 입력 view 에서만 맞게 보이고, 다른 view에서는 3D 구조가 이상할 수 있다. 그러나 입력 view 이외의 view에서도 맞게 보이게 novel-view reconstuction loss를 걸게 되면, 여러 관점에서 일관되게 배치되어야 하므로, **3D consistency constraint**가 생기게 된다. 여기서, 우리는 이전에 정해놓은(training dataset이 정해놓은, 동일한 Camera parameter $C$) 각 view에서 3D consistent한 rendering multi-view를 얻게 된다.
 
-MV-oriented branch에서는 결과적으로 clean multi-view latent $\hat{Z}_{MV}$를 만들어냈다. **해당 3D-oriented branch 에서는 비슷하게, $\hat{Z}_{3D}$를 만들어낸다.** 이는 rendering multi-view에 단순히 VAE Encoder $E$를 거쳐 나온 latent다.
+MV-oriented branch에서는 결과적으로 clean multi-view latent $\hat{Z}_{MV}$를 만들어냈다. **해당 3D-oriented branch 에서는 비슷하게, $\hat{Z}_{3D}$를 만들어낸다.** 이는 rendering multi-view에 단순히 VAE Encoder $E$를 거쳐 나온 latent다:
 
+$$
+\hat{Z}_{3D} = E(R(G, C))
+$$
 
+#### cross-mode post-training
+
+이제 다음으로 논문은 distillation 방식을 통해 few-step 3D Scene을 생성할 수 있도록 학습을 하려고 한다.
+
+우리는 앞서 preliminary 섹션에서 DMD에 대해 배웠고, 그에 대해 
+
+$$
+\mu_{real}, \mu_{fake}, G_{\theta}
+$$
+
+가 존재한다는 것을 알 수 있었다. 이 파이프라인에서는 각각 MV-oriented mode(teacher), 3D student distribution의 fake score를 추정하는 model, 3D-oriented few-step generator(student)라고 이해하면 된다.
+
+여기서 $\mu_{real}$는 frozen 된 상태로 사용된다. 우리는 앞서 3D-oriented mode에서 많은 step으로 돌렸는데, 이를 그대로 여기서 많은 step으로 돌리는 것이 아니라, 앞의 3D-oriented mode를 지금 few-step student의 initialization으로 사용한다. **즉, 전의 dual-mode pretraining 섹션에서의 architecture에 다른 architecture가 새로 추가되는게 아니다.**
+
+논문은 이전 섹션의 3D-oriented mode의 파이프라인을 거의 그대로 물려 받는다:
+
+$$
+(\{Z_{t_i}, t_i, y, C\} \rightarrow DiT \rightarrow F_i \rightarrow D_G \rightarrow G_i) \rightarrow R(G_i,C) \rightarrow E(R(G_i,C)) \rightarrow \text{noise injection} \rightarrow Z_{t_{i+1}}
+$$
+
+여기서, **괄호 안에 있는 파이프라인이 3D-oriented generation process의 denoising $G_{\theta, 3D}$이라고 보면 되고**, 이걸 4번의 step 만에 처리하는 걸 목표로 한다. 여기서 헷갈리면 안되는 것이 DiT의 timestep이 4라는게 아니라, 해당 프로세스가 4번의 횟수로 진행되는 것을 말한다. 해당 논문에서는 timestep이 $t_i=\{1000, 900, 759, 500\}$ 으로 이루어져 있다고 한다. 해당 프로세스의 step 한 번의 끝에는 매번 noise injection이 수행되고, 이를 다음 step $t_{i+1}$에 넘겨준다. 
+
+이렇게 파이프라인의 흐름을 정해놓고, DMD2 기법을 사용한다. 원래 3D-oriented branch 에서는 many step을 사용했는데, 바로 4-step branch로 바꿔버리게 되면, quality가 보장되지 않는다. 그래서 이 few-step student를 다시 학습해서 few-step으로도 좋은 output distribution에 도달할 수 있도록 학습해야한다.
+
+여기서 이제 frozen된 high-quality MV distribution의 score인 $s_{real}$을 추정하는 $\mu_{real}$을 사용하여 teacher model로 사용한다. 그리고, $\mu_{fake}$는 student인 $G_{\theta, 3D}$를 계속 추적하면서 student가 생성하는 distribution인 $p_{fake}$의 score인 $s_{fake}$를 추정한다. 당연히 student가 바뀔 때마다 $p_{fake}$도 바뀌므로 $\mu_{fake}$도 계속 update 된다.
+
+즉,
+
+$$
+s_{MV} - s_{\text{current 3D student}} = s_{real} - s_{fake}
+$$
+
+이 gradient를 사용해서 $G_{\theta, 3D}$를 update한다. 이렇게 되면, 
+
+$$
+p_{\text{3D student}} \rightarrow p_{MV}
+$$
+
+가 되도록 한다. 추가적으로 DMD2 loss는 DMD loss에 GAN loss를 합한 버전이다:
+
+$$
+L_{DMD2} \approx L_{DMD}+\lambda_{GAN}L_{GAN}
+$$
+
+여기서, $\lambda$는 R1 regularization이다. 개념적으로 discriminator는 
+
+$$
+D(X_{real}) \rightarrow 1
+D(X_{fake}) \rightarrow 0
+$$
+
+가 되도록 학습되고, generaotr $G_{\theta, 3D}$는
+
+$$
+D(X_{fake}) \rightarrow 1
+$$
+
+이 되도록 학습된다.
+
+그런데, 문제는 이렇게 되면 결국에 3D student가 3d consistency에 대한 강점을 잃어버리고 MV-oriented 쪽으로 끌려갈 위험성이 있다는 것이다. 물론, 3d-oriented branch는 하나의 share된 3D Scene에서 렌더링되어 이 gradient가 update의 주체가 되어 3d consistency를 유지할 것처럼 보인다. 
+
+논문의 저자들을 아래의 3개의 이유로 3d consistency가 유지된다고 말하지만, 해당 리뷰를 적는 본인은 **해당 이유만으로 증명되기는 힘들다고 본다**:
+
+> 1. 3D supervision (이전 섹션에서 novel-view에 대한 rendering supervision을 수행하는 것)
+> 2. pretrained 3D-oriented weights로 시작하는 것
+> 3. 매 step 마다 계속 $G_i \rightarrow \text{Render}$ 하는 것
+
+**여기서 이 논문의 리뷰를 적는 작성자가 생각하기에 2번이 중요해 보이는데, 이 weights가 결국에는 MV-oriented weights로 계속 변화할텐데, 그러면 3d consistency의 강점을 어떻게 안 잃어버리고 유지할 지 의문이다.** MV쪽은 고정되어 있는 상태에서 3D쪽만 update하여 진행하는 방식이기 때문이다.
+
+추가적으로 저자들은 **Cross-Mode Consistency Loss**를 추가한다. 여기서, 3D Student가 사용하는 DiT backbone을 공유하는 MV_oriented student branch를 사용한다.
+
+$$
+\begin{aligned}
+\hat{Z}_{3D} &= E(R(G_{\theta, 3D}(Z_t, t_i, y, C), C)) \\
+\hat{Z}_{MV} &= G_{\theta, MV}(Z_t, t_i, y, C)
+\end{aligned}
+$$
+
+를 얻어서
+
+$$
+\mathcal{L}_{CMC} = \lVert \hat{Z}_{3D} - \hat{Z}_{MV} \rVert ^2
+$$
+
+로 맞춘다. 이는 DMD2를 진행했을 때 생기는 floating artifact와 불안정한 3D prediction을 줄이기 위한 보조 loss로 MV-oriented student도 낮은 frequency로 어데이트하고, 두 mode의 prediction을 맞춘다.
+
+결론적으로, 3D student는 해당 signal을 받게 된다:
+
+$$
+\underbrace{\mathcal{L}_{\mathrm{DMD}}}_{\text{MV teacher distribution으로 이동}}
++
+\underbrace{\mathcal{L}_{\mathrm{GAN}}}_{\text{rendering을 real/high-quality하게}}
++
+\underbrace{\lambda \mathcal{L}_{\mathrm{CMC}}}_{\text{3D branch 안정화}}
+$$
+
+#### Out-of-Distribution Data Co-Training
+
+이렇게 학습을 진행하게 되면, 하나의 사소한 문제가 또 발생하게 된다. Flashworld의 경우, MVImgNet, RealEstate10K, DL3DV10K를 기반으로 학습되었다. 그런데, DiT의 경우에는 이 이외에도 대규모 image와 video data로 학습되었기 때문에 앞의 3개의 multi-view datasets을 제외한 다른 데이터가 들어와도 robust하게 대처할 수 있는 반면, 3D branch에 있는 3DGS Decoder는 3개의 multi-view datasets을 제외한 다른 데이터에 대해 robust 하지않다.
+
+> 즉, 3DGS Decoder $D_G$는 multi-view distribution만 경험했다.
+
+그렇다면 3DGS Decoder가 받은 input의 distribution을 넓혀주면 해결된다. 그러기 위해서, 먼저 해당 파이프라인에서 처음에 입력하는 데이터를 multi-view dataset이 아니라 single image나 text만 넘겨주게 된다.
+
+text 혹은 single image $y$만 넘겨주는 경우에는 이에 camera trajectory $C$를 같이 넘겨주고, DMD 방식으로만 학습을 진행하게 된다. 당연히 실제 Ground truth가 없으므로 GAN Loss는 사용하지 않고 DMD와 CMC loss 만으로 학습을 진행한다:
+
+$$
+(y, C_{random}) \rightarrow DiT \rightarrow F \rightarrow D_G \rightarrow G
+$$
+
+여기서 Camera trajectory는 REalEstate10K, WorldScore 같은 이미 있는 multi-view dataset의 trajectory를 사용한다. 그리고, 해당 학습은 pre-training 단계가 아닌 post-training 단계에서 multi-view data와 ood data를 2:1의 비율로 섞어서 사용한다.
 
 
 
