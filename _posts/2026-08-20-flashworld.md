@@ -359,5 +359,118 @@ $$
 
 ## Method & Technical Details
 
+해당 논문의 기법은 잘 train 되고 high-quality multi-view 를 생성할 수 있는 **"MV-oriented multi-view diffusion model"**과 few-step 만에 3D consistency를 부여하는 **"3D-oriented generator"**를 앞서 말한 DMD 기법을 통해 distillation하는 것이 목표다. 
+
+그러기 위해서는 저자들은 두 가지 challenge를 해결해야 한다고 한다:
+> 1. 3D-oriented few step generator는 충분히 robust한 prior와 강한 generative 능력이 필요하다.
+> 2. high-quality multi-view dataset은 충분치 않기 때문에 기존의 style, object, camera 궤적과 같은 변수들을 handling 하는 전략을 develop 해야한다.
+
+#### Dual-mode Pre-training
+
+이 challenge들을 해결하기 위한 기반을 다지기 위해 framework를 먼저 제안한다.
+
+여기서 dual-mode란 아래의 두 가지 모드를 의미한다:
+
+> 1. MV-oriented mode: multi-view image를 예측하는 것
+> 2. 3D-oriented mode: 중간 feature에서 3DGS를 직접 만들고 렌더링하는 것
+
+먼저, training dataset에서 $X = \{X_1, X_2, ... , X_V\}$ multi-view image들을 가져온다. 그리고, $C=\{C_1, C_2, ... , C_V\}$ 각 view에 해당하는 camera parameter도 가져온다. 추가로, $y$라는 condition(text prompt, single-view image 등)이 들어간다.
+
+이렇게 입력이 준비가 되면,
+
+$$
+Z = E(X)
+$$
+
+입력 multi-view images $X$를 VAE eoncoder $E$에 넣어서 latent로 변환한다. 그러면 아래 처럼 multi-view data 한 배치에 대한 latent 집합이 완성된다:
+
+$$
+Z = \{Z_1, Z_2, Z_2, ...\}
+$$
+
+그리고 나서, 일반적인 diffusion training처럼 random timestep $t$를 선택하고 noise를 넣는다.
+
+$$
+Z_t = \alpha Z + \sigma_t \epsilon
+$$
+
+예상할 수 있겠지만, 그러면 학습으로 사용되는 입력 multi-view image가 아닌 noisy multi-view latent인 $Z_t$를 사용하게 된다. 그러면, denoising network에 최종적으로 들어가는 입력은:
+
+$$
+(Z_t, C, y) \rightarrow \text{Denoising Network}
+$$
+
+순서대로, noisy latent, camera parameter, condition 이 3개가 들어가게 된다. 여기서 camera parameter를 표현하는 방식에는 **Plücker Coordinates raymap**를 사용하며, 이는 3D generation 분야에서 multi-view를 생성할 때 camera paramter를 많이 사용되는 방식이다.
+
+Denoising Network는 **Diffusion Transformer (DiT)**를 기반으로 하며, **3D attention block**이 추가적으로 들어간다. 이 network는 두 가지 결과를 출력하려고 한다:
+
+$$
+\hat{Z}_{MV}, F
+$$
+
+순서대로, clean multi-view latent(MV-oriented mode), multi-view scene infromation 을 담고 있는 auxiliary feature 이다. 이 중에서 후자의 경우에는 이후에 3DGS decoder로 보내 3D Gaussian을 만든다(3D-oriented mode). **즉, 여기서부터 두 개의 branch로 나뉘어서 진행된다.**
+
+먼저, MV-oriented mode의 경우, DiT가 $Z_t, C, y$를 받아 $\hat{Z}_{MV}$를 예측한다. 그리고 ground-truth claen latent $Z$와 비교한다:
+
+$$
+\mathcal{L}_{MV} = \mathbb{E})_{X, t, \epsilon, y, C} [\lVert Z - \hat{Z}_{MV} \rVert ^ 2]
+$$
+
+즉, noisy multi-view latent 를 clean multi-view latent로 변환하는 것을 배우는 diffsuion objective다. 중요한 건, MV-oriented mode가 실제로 만드는 건 3D representation이 아니다. **각 camera view에 해당하는 이미지를 직접 생성**하는 것이다. 그러므로, 각 view가 diffusion에 의해 이미지 공간에서 생성되므로, view 1과 view 2가 동일한 3D geometry에서 나온다고 보장되지 않는다.
+
+> 즉, 순수 diffusion의 생성 능력에 따라 high quality를 출력할 수 있지만, multi-view inconsistency라는 문제가 생길 수 있다.
+
+이를 해결하기 위해 또다른 branch인 3D-oriented mode가 등장한다. DiT의 intermediate/output feature인 $F$를 별도의 3DGS decoder $D_G$에 넣는다:
+
+$$
+D_G(F) = \{\tau, q, s, \alpha, c\}
+$$
+
+decoder가 내놓는 결과는 순서대로, depth, rotation quaternion, scale, opacity, spherical harmonics coefficietns다. 좀 더 간단하게, 깊이, 회전, 크기, 불투명도, 색상에 관련한 parameter를 내놓는다고 생각하면된다. 이는 3D Gaussian parameter를 제공한다고 생각하면 된다.
+
+우리는 3DGS에 익히 알고 있다면, 원래 보통 3DGS primitives 라고 한다면, gaussian의 position인 $\mu$가 있어야 한다는 것을 눈치챌 수 있다. 그런데 위의 parameter 중에는 position에 관련한 parameter가 없고, 대신 그 자리에 depth $\tau$가 있다. 저자들은 이 position의 parameter를 바로 정하는 방식이 아니라 이 depth라는 parameter를 사용해 position parameter를 예측한다:
+
+$$
+\mu = o + \tau d
+$$
+
+여기서, $o$는 camera origin(카메라 위치, 보통 3D 공간 상에서 원점), $d$는 ray direction(카메라가 바라보는 방향, 즉 우리가 바라보는 방향), $\tau$는 예측된 depth를 의미한다. 개념적으로, 해당 수식이 각 pixel 단위에서 일어나며, 각 픽셀에 대응하는 3D gaussian들을 lifting한다.
+
+그러면, 최종적으로 우리가 하는 Gaussian parameter를 완성할 수 있다:
+
+$$
+G = \{\mu, q, s, \alpha, c\}
+$$
+
+그러면, 우리는 3DGS renderer $R$를 이용해서 해당 novel camera view에 해당하는 장면을 rendering 할 수 있다:
+
+$$
+R(G, C_{novel})
+$$
+
+그러면 objective가 무엇인지를 생각해야한다. 정확하게는 3D Gaussian에 관련한 ground-truth가 존재하기 힘들다. depth를 추정하는 모델도 각각은 각 픽셀단위로 depth를 다르게 추정한다. 사용하는 depth model이 달라 depth 추정이 다르다면, 그에 따라 가우시안의 position은 달라질 것이다. 그런데, 결국에는 사용자가 장면을 듣고 3D처럼 보인다라는 느낌이 들면 그게 정답이다라고 볼 수 있는 것이다. 즉, 해당 관련한 파라미터들의 ground-truth가 없다:
+
+$$
+\mu_{GT}, q_{GT}, s_{GT}
+$$
+
+그래서 대부분의 3D Generation 논문들은 이 rendering(특정 view에 관한 장면을 캡처하는 것)을 사용해서 **rendering supervision**을 사용한다:
+
+$$
+\mathcal{L}_{3D} = \mathbb{E} [\lVert X_{novel} - R(G, C_{novel}) \rVert ^2]
+$$
+
+여기서, 더 특이한 점은 보통의 논문들을 camera view들(pose 1 ~ pose n)을 파이프라인 실행 전에 정해놓고, 해당 view들에 관해서만 supervision을 진행하는데 해당 논문의 경우에는 다른 방식으로 접근한다.
+
+> novel-view에서 rendering하고 novel-view를 대상으로 supervision을 진행한다.
+
+이렇게 하는 이유는 입력한 view에서만 reconstruction loss를 걸게 되면, 입력 view 에서만 맞게 보이고, 다른 view에서는 3D 구조가 이상할 수 있다. 그러나 입력 view 이외의 view에서도 맞게 보이게 novel-view reconstuction loss를 걸게 되면, 여러 관점에서 일관되게 배치되어야 하므로, **3D consistency constraint**가 생기게 된다. 여기서, 우리는 이전에 정해놓은(training dataset이 정해놓은, 동일한 Camera parameter $C$) 각 view에서 3D consistent한 rendering multi-view를 얻게 된다.
+
+MV-oriented branch에서는 결과적으로 clean multi-view latent $\hat{Z}_{MV}$를 만들어냈다. **해당 3D-oriented branch 에서는 비슷하게, $\hat{Z}_{3D}$를 만들어낸다.** 이는 rendering multi-view에 단순히 VAE Encoder $E$를 거쳐 나온 latent다.
+
+
+
+
+
 
 
