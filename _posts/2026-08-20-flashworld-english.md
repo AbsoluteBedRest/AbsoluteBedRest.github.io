@@ -1,5 +1,5 @@
 ---
-title: "[Paper Review, KR] FlashWorld: High-Quality 3D Scene Generation within Seconds"
+title: "[Paper Review, EN] FlashWorld: High-Quality 3D Scene Generation within Seconds"
 date: 2026-08-17
 categories:
   - 3D Vision
