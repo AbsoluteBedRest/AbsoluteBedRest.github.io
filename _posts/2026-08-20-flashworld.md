@@ -359,6 +359,10 @@ $$
 
 ## Method & Technical Details
 
+<p align="center">
+  <img src="/assets/images/posts/2026-08-20-flashworld/1788745987016.png" width="70%">
+</p>
+
 해당 논문의 기법은 잘 train 되고 high-quality multi-view 를 생성할 수 있는 **"MV-oriented multi-view diffusion model"**과 few-step 만에 3D consistency를 부여하는 **"3D-oriented generator"**를 앞서 말한 DMD 기법을 통해 distillation하는 것이 목표다. 
 
 그러기 위해서는 저자들은 두 가지 challenge를 해결해야 한다고 한다:
