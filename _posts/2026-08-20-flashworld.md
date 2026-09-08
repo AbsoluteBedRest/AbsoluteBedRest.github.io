@@ -37,7 +37,7 @@ diffusion model의 효율성을 높이기 위해, post-training distillation 기
 
 FlashWorld의 핵심인 cross-mode post-training을 이해하기 위해서는 먼저 **Diffusion Model**과 **Distribution Matching Distillation (DMD)**에 대한 이해가 필요하다.
 
-### Diffusion Model
+#### Diffusion Model
 
 Diffusion model은 일반적으로 Gaussian noise에서 시작하여 점진적으로 noise를 제거하면서 target data distribution의 sample을 생성한다.
 
@@ -101,7 +101,7 @@ $$
 즉, diffusion model은 단순히 denoising 결과를 예측하는 것뿐만 아니라, 현재 sample을 data distribution에 더 가까운 방향으로 이동시키기 위한 **score field**를 제공할 수 있다.
 
 
-### Distribution Matching Distillation (DMD)
+#### Distribution Matching Distillation (DMD)
 
 **Distribution Matching Distillation (DMD)**은 많은 denoising step이 필요한 diffusion model을 적은 step만으로 generation을 수행하는 generator로 distillation하기 위한 방법이다.
 
@@ -240,7 +240,7 @@ $$
 이 되도록 student generator를 학습한다.
 
 
-### Real Score Model and Fake Score Model
+#### Real Score Model and Fake Score Model
 
 DMD에서는 $$s_{\text{real}}$$과 $$s_{\text{fake}}$$를 직접 알 수 없기 때문에 각각 diffusion model을 이용하여 score를 추정한다.
 
@@ -311,7 +311,7 @@ $$
 를 이용하여 student generator $$G_\theta$$를 update한다.
 
 
-### Why DMD Accelerates Inference
+#### Why DMD Accelerates Inference
 
 DMD의 주된 목적은 **training 자체를 빠르게 하는 것이 아니라 inference에 필요한 denoising step을 줄이는 것**이다.
 

@@ -37,7 +37,7 @@ The second is the 3D-oriented paradigm. This approach combines a diffusion model
 
 To understand cross-mode post-training, which is the core of FlashWorld, it is first necessary to understand **Diffusion Models** and **Distribution Matching Distillation (DMD)**.
 
-### Diffusion Model
+#### Diffusion Model
 
 A diffusion model typically starts from Gaussian noise and progressively removes the noise to generate samples from the target data distribution.
 
@@ -101,7 +101,7 @@ can be understood as a gradient indicating the direction in which the current sa
 In other words, a diffusion model not only predicts a denoised result but can also provide a **score field** that indicates how the current sample should move toward the data distribution.
 
 
-### Distribution Matching Distillation (DMD)
+#### Distribution Matching Distillation (DMD)
 
 **Distribution Matching Distillation (DMD)** is a method for distilling a diffusion model that requires many denoising steps into a generator that can perform generation in only a few steps.
 
@@ -240,7 +240,7 @@ $$
 thereby training the student generator so that its distribution approaches the real distribution.
 
 
-### Real Score Model and Fake Score Model
+#### Real Score Model and Fake Score Model
 
 In DMD, $$s_{\text{real}}$$ and $$s_{\text{fake}}$$ are not directly available, so each score is estimated using a diffusion model.
 
@@ -311,7 +311,7 @@ $$
 is used to update the student generator $$G_\theta$$.
 
 
-### Why DMD Accelerates Inference
+#### Why DMD Accelerates Inference
 
 The main purpose of DMD is **not to make training itself faster, but to reduce the number of denoising steps required at inference time**.
 
