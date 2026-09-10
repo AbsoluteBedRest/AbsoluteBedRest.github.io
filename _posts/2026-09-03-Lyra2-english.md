@@ -1,5 +1,5 @@
 ---
-title: "[Paper Review, KR] Lyra 2.0: Explorable Generative 3D Worlds"
+title: "[Paper Review, EN] Lyra 2.0: Explorable Generative 3D Worlds"
 date: 2026-09-03
 categories:
   - 3D Vision
