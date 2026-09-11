@@ -523,7 +523,7 @@ $$
 Here, $\lambda$ is the R1 regularization term. Conceptually, the discriminator is trained so that
 
 $$
-D(X_{real}) \rightarrow 1
+D(X_{real}) \rightarrow 1 \\
 D(X_{fake}) \rightarrow 0
 $$
 
