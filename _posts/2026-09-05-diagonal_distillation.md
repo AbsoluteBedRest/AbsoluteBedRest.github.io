@@ -29,6 +29,8 @@ tags:
 
 ## Method & Technical Details
 
+#### Preliminary
+
 다른 논문들과 같이 해당 논문은 diffusion을 설명하는 것부터 시작한다. 원본 데이터 $x \sim p_{real}$ 에 timestep $t$에 따라 noise를 넣으면 이렇게 된다:
 
 $$
@@ -72,6 +74,33 @@ s_{real} - s_{fake}
 $$
 
 이는 **teacher/real distribution의 score와 student가 만든 distribution의 score가 얼마나 다른가?**를 나타내는 식이다. 이를 통해 student를 업데이트한다. DMD에 관련한 자세한 내용은 **Flashworld(ICLR 2026 Oral)** 논문 리뷰 페이지의 Preliminary 섹션에서 확인할 수 있으니 궁금하면 확인하길 바란다.
+
+이제 여기서 저자들은 문제 제기를 한다. DMD는 원래 image generation 중심으로 만들어진 방식이기 때문에, 
+
+$$
+L_{reg} = E_{z,y}d(G_{\theta}(z), y)
+$$
+
+같은 loss는 주로 각 frame 자체의 품질을 맞추는 데 집중한다. 즉, frame 1, frame 2, frame 3 ... 각각의 경우는 teacher와 비슷하게 만들 수는 있지만, Frame 1 $\rightarrow$ Frame 2 $\rightarrow$ ... 과 같이 사이의 motion이나 temporal consistency가 자연스럽게 이어진다는 보장이 없다.
+
+논문에서는 이를 **"기존 DMD의 regression loss가 per-frame quality는 보장하지만 temporal coherence와 long-range dependency를 명시적으로 모델링하지 못한다"**라고 표현한다.
+
+#### Diagonal Deonising & Diagonal Forcing
+
+이 섹션에서는 두 가지 핵심 기술에 대해 설명한다.
+
+> 1. Diagonal Denoising: 앞쪽 chunk는 많이 denoise하고 뒤쪽 chunk는 적게 denoise 해서 속도를 높이는 방법.
+> 2. Diagonal Forcing: 뒤쪽 chunk가 적은 step으로도 안정적으로 생성될 수 있도록, 이전 chunk의 적당히 noisy한 상태를 KV cache/context로 전달하는 방법.
+
+기존 autoregressive video diffusion이라면 모든 chunk에 같은 수의 denoising step을 사용하는 것이 자연스럽다. 그런데 저자들은 앞쪽 chunk가 이후 chunk를 위한 structural prior 역할을 한다고 본다. 
+
+즉, 만약 앞쪽 chunk에서 이미 인물의 모습, 배경, 구조 등등이 정해지면, 뒤쪽 chunk는 이를 context로 받아 생성되므로 처음부터 그만큼 많은 계산을 할 필요가 없다는 주장이다. 그래서 저자들은 chunk가 진행될때마다 denoising step이 줄어드는 **propgressive reduction**을 설명한다:
+
+$$
+X_k = D_{s_k} (Z_k | \tilde{X}_{<k}), s_k = 5,4,3
+$$
+
+여기서 $Z_k \sim \mathcal{N} (0,I)$이므로 각 새로운 chunk 자체는 여전히 Gaussian noise에서 시작한다. $D_{s_k}$는 $s_k$번 denoising하는 distilled model이고, $\tilde{X}_{<k}$는 이전 chunk들에서 전달된 noisy contex다. 즉 **뒤의 chunk가 덜 noisy하게 시작하는 것이 아니라, 좋은 temporal context가 있기 때문에 적은 step으로도 noise를 제거할 수 있다는 아이디어**다.
 
 
 
