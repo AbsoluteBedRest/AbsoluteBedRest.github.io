@@ -16,9 +16,9 @@ sidebar_menu:
         category: "XR"
         url: /categories/xr/
 
-  - title: "📖 PRELIMINARIES"
-    url: /categories/preliminaries/
-    category: "Preliminaries"
+  - title: "🤔 OTHERS"
+    url: /categories/others/
+    category: "Others"
 
   - title: "📚 PUBLICATIONS"
     children:
