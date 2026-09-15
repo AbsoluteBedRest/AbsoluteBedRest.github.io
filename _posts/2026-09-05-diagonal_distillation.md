@@ -10,10 +10,10 @@ tags:
 ---
 
 > **Paper Information** \\
-> **Title:** FlashWorld: High-Quality 3D Scene Generation within Seconds \\
+> **Title:** Streaming Autoregressive Video Generation via Diagonal Distillation \\
 > **Authors:** Jinxiu Liu, Xuanming Liu, Kangfu Mei, Yandong Wen, Ming-Hsuan Yang, Weiyang Liu \\
 > **Venue:** ICLR 2026 \\
-> **Link:** [[Paper](https://arxiv.org/pdf/2603.09488)], [[Project](https://spherelab.ai/diagdistill/)], [[Github](https://github.com/Sphere-AI-Lab/diagdistill)]
+> **Link:** [[Paper](https://arxiv.org/pdf/2603.09488)], [[Project](https://spherelab.ai/diagdistill/)], [[GitHub](https://github.com/Sphere-AI-Lab/diagdistill)]
 
 ## Teaser Image (Poster)
 
@@ -37,7 +37,7 @@ $$
 q_t(x_t | x) \sim \mathcal{N}(\alpha_t x, \sigma_t^2 I) 
 $$
 
-모델이 noisy sample $x_t$를 입력받아서 원래 claen sample에 가까운
+모델이 noisy sample $x_t$를 입력받아서 원래 clean sample에 가까운
 
 $$
 \mu_{real}(x_t, t)
@@ -61,19 +61,19 @@ $$
 
 라고 표현한다.
 
-DMD는 student가 생성한 distribution $p_{fake}$를 real/teacher distrituion $p_{real}$과 비슷하게 만드는 것이다. 즉, 이 둘의 차이를 줄이는 것인데, 논문에는 KL divergence를 이용해서
+DMD는 student가 생성한 distribution $p_{fake}$를 real/teacher distribution $p_{real}$과 비슷하게 만드는 것이다. 즉, 이 둘의 차이를 줄이는 것인데, 논문에는 KL divergence를 이용해서
 
 $$
 KL(p_{fake,t} || p_{real,t})
 $$
 
-를 최소화한다고 표현한다. 핵심은 다음의 sutdent $G_{\theta}$를 업데이트할 때 사용되는 식이다.
+를 최소화한다고 표현한다. 핵심은 다음의 student $G_{\theta}$를 업데이트할 때 사용되는 식이다.
 
 $$
 s_{real} - s_{fake}
 $$
 
-이는 **teacher/real distribution의 score와 student가 만든 distribution의 score가 얼마나 다른가?**를 나타내는 식이다. 이를 통해 student를 업데이트한다. DMD에 관련한 자세한 내용은 **Flashworld(ICLR 2026 Oral)** 논문 리뷰 페이지의 Preliminary 섹션에서 확인할 수 있으니 궁금하면 확인하길 바란다.
+이는 **teacher/real distribution의 score와 student가 만든 distribution의 score가 얼마나 다른가?**를 나타내는 식이다. 이를 통해 student를 업데이트한다. DMD에 관련한 자세한 내용은 **FlashWorld (ICLR 2026 Oral)** 논문 리뷰 페이지의 Preliminary 섹션에서 확인할 수 있으니 궁금하면 확인하길 바란다.
 
 이제 여기서 저자들은 문제 제기를 한다. DMD는 원래 image generation 중심으로 만들어진 방식이기 때문에, 
 
@@ -89,7 +89,7 @@ $$
   <img src="/assets/images/posts/2026-09-05-diagonal_distillation/1789460432729.png" width="70%">
 </p>
 
-#### Diagonal Deonising & Diagonal Forcing
+#### Diagonal Denoising & Diagonal Forcing
 
 이 섹션에서는 두 가지 핵심 기술에 대해 설명한다.
 
@@ -98,13 +98,13 @@ $$
 
 기존 autoregressive video diffusion이라면 모든 chunk에 같은 수의 denoising step을 사용하는 것이 자연스럽다. 그런데 저자들은 앞쪽 chunk가 이후 chunk를 위한 structural prior 역할을 한다고 본다. 
 
-즉, 만약 앞쪽 chunk에서 이미 인물의 모습, 배경, 구조 등등이 정해지면, 뒤쪽 chunk는 이를 context로 받아 생성되므로 처음부터 그만큼 많은 계산을 할 필요가 없다는 주장이다. 그래서 저자들은 chunk가 진행될때마다 denoising step이 줄어드는 **propgressive reduction**을 설명한다:
+즉, 만약 앞쪽 chunk에서 이미 인물의 모습, 배경, 구조 등등이 정해지면, 뒤쪽 chunk는 이를 context로 받아 생성되므로 처음부터 그만큼 많은 계산을 할 필요가 없다는 주장이다. 그래서 저자들은 chunk가 진행될 때마다 denoising step이 줄어드는 **progressive reduction**을 설명한다:
 
 $$
 X_k = D_{s_k} (Z_k | \tilde{X}_{<k}), s_k = 5,4,3
 $$
 
-여기서 $Z_k \sim \mathcal{N} (0,I)$이므로 각 새로운 chunk 자체는 여전히 Gaussian noise에서 시작한다. $D_{s_k}$는 $s_k$번 denoising하는 distilled model이고, $\tilde{X}_{<k}$는 이전 chunk들에서 전달된 noisy contex다. 즉 **뒤의 chunk가 덜 noisy하게 시작하는 것이 아니라, 좋은 temporal context가 있기 때문에 적은 step으로도 noise를 제거할 수 있다는 아이디어**다.
+여기서 $Z_k \sim \mathcal{N} (0,I)$이므로 각 새로운 chunk 자체는 여전히 Gaussian noise에서 시작한다. $D_{s_k}$는 $s_k$번 denoising하는 distilled model이고, $\tilde{X}_{<k}$는 이전 chunk들에서 전달된 noisy context다. 즉 **뒤의 chunk가 덜 noisy하게 시작하는 것이 아니라, 좋은 temporal context가 있기 때문에 적은 step으로도 noise를 제거할 수 있다는 아이디어**다.
 
 Chunk 4 이후에는 2-step으로 고정한다.
 
@@ -118,18 +118,18 @@ $$
 
 즉 이전 chunk 정보를 이용해 $T$ 인 conditioning module을 이용해서 conditioning $C_k$를 만들고, 두 번만 denoising $D_1, D_2$ 한다.
 
-그런데, 단순히 "5 $\rightarrow$ 4 $\rightarrow$ 3 $\rightarrow$ 2" 방식으로 step 수만 줄이면 문제가 있따. Chunk $k$를 만들 때 이전 Chunk $k-1$의 완전히 clean한 결과만 condition으로 준다고 한다면, 
+그런데, 단순히 "5 $\rightarrow$ 4 $\rightarrow$ 3 $\rightarrow$ 2" 방식으로 step 수만 줄이면 문제가 있다. Chunk $k$를 만들 때 이전 Chunk $k-1$의 완전히 clean한 결과만 condition으로 준다고 한다면, 
 
 $$
 \text{Chunk} \; k-1 \rightarrow \text{clean output} \rightarrow \text{KV cache} \rightarrow \text{Chunk k}
 $$
 
-그런데 Chunk $k$는 현재 diffusion/flow denoising의 특정 noise level에 있다. 그러면 모델은 clean context를 보면서 동시에 다음 chunk는 지금 어느 noise level 있어야 하는지까지 암묵적으로 판단해야한다. 
+그런데 Chunk $k$는 현재 diffusion/flow denoising의 특정 noise level에 있다. 그러면 모델은 clean context를 보면서 동시에 다음 chunk는 지금 어느 noise level에 있어야 하는지까지 암묵적으로 판단해야 한다. 
 
-논문이 이에 대해 **implicit next-noise-level prediction** 문제라고 표현하고, 이 prediction에 작은 오차가 생기면 autoregressive하게 누적될 수 있다고 말한다. 그래서 저자들은 clean previous chunk를 그대로 사용하는 것이 아니라 일부러 적당한 noise를 다시 넣어서 사용한다(*정확히는 전 Chunk에서 denoising 중에 나오는 intermediate latent에 nosie를 조금 넣고 이를 KV cache에 저장하는 방식으로 진행한다*):
+논문이 이에 대해 **implicit next-noise-level prediction** 문제라고 표현하고, 이 prediction에 작은 오차가 생기면 autoregressive하게 누적될 수 있다고 말한다. 그래서 저자들은 clean previous chunk를 그대로 사용하는 것이 아니라 일부러 적당한 noise를 다시 넣어서 사용한다(*정확히는 전 Chunk에서 denoising 중에 나오는 intermediate latent에 noise를 조금 넣고 이를 KV cache에 저장하는 방식으로 진행한다*):
 
 $$
-\tilde{X}_{k-1} = \sqrt{\alpha_{k-1}} X_{k-1} + \sqrt{1-\alpha_{k-1} \epsilon}, \; \epsilon \sim \mathcal{N}(0, I)
+\tilde{X}_{k-1} = \sqrt{\alpha_{k-1}} X_{k-1} + \sqrt{1-\alpha_{k-1}} \epsilon, \; \epsilon \sim \mathcal{N}(0, I)
 $$
 
 $X_{k-1}$은 이전 chunk의 clean output이고, $\tilde{X}_{k-1}$은 거기에 controlled noise를 추가한 상태다. 그러면 흐름은 이렇게 바뀐다.
@@ -148,7 +148,7 @@ Clean context를 그대로 주게 된다면, Previous context(Clean)와 Current 
 
 여기서 앞의 Diagonal Denoising 때문에 발생하는 하나의 문제를 또 발견한다. 이는 **few-step으로 줄였을 때 motion이 약해지는 문제**다. 논문에서는 이를 **motion attenuation**이라고 표현하고, teacher가 충분한 denoising step을 거치면 물체가 프레임 사이에서 크게, 자연스럽게 이동하는데, student를 2-step 정도로 강하게 줄이면 spatial appearance는 그럴듯해도 움직임의 크기가 작아진다는 것이다.
 
-저자들은 이 원인을 **denoising trajectory가 너무 짧아지면서 temporal dynamics를 충분히 복원하지 못하는 것**으로 설명한다. 그래서 단순히 DMD로는 부족하고, **motion distribution** 자체도 teacher와 맞춰야 한다라고 말한다:
+저자들은 이 원인을 **denoising trajectory가 너무 짧아지면서 temporal dynamics를 충분히 복원하지 못하는 것**으로 설명한다. 그래서 단순히 DMD로는 부족하고, **motion distribution** 자체도 teacher와 맞춰야 한다고 말한다:
 
 $$
 E_{motion} = D_{KL} (p_{teacher}(F(x) | x_t) || p_{student}(F(x) | x_t))
@@ -182,9 +182,9 @@ $$
 
 의 차이를 이용해 student를 업데이트한다.
 
-기존의 DMD의 경우에는 student image dstribution과 teacher image distribution을 matching하는 방법이었다면, Flow DMD의 경우에는 student motion distribution과 teacher motion distribution을 matching하는 방법이라고 보면된다.
+기존의 DMD의 경우에는 student image distribution과 teacher image distribution을 matching하는 방법이었다면, Flow DMD의 경우에는 student motion distribution과 teacher motion distribution을 matching하는 방법이라고 보면 된다.
 
-그런데, 여기서 중요한게 있다. 여기서 말하는 **FLOW**는 RAFT 같은 optical flow를 말하는 것이 아니다. 대신 video diffusion의 latent space에서 직접 motion feature을 뽑아 사용한다. 정확히는,
+그런데, 여기서 중요한 게 있다. 여기서 말하는 **FLOW**는 RAFT 같은 optical flow를 말하는 것이 아니다. 대신 video diffusion의 latent space에서 직접 motion feature를 뽑아 사용한다. 정확히는,
 
 $$
 (\text{Latent frame t} - \text{Latent frame t+1}) \rightarrow (X_{t+1} - X_t) \rightarrow \text{Convolution layers} \rightarrow \text{MLP} \rightarrow \text{Motion feature} \; F(x)
@@ -198,13 +198,13 @@ $$
 \nabla_{\phi}L_{DMD}^{flow} = \mathbb{E}[\nabla_{\phi}D_{KL}(p_{gen,flow,t} || p_{data,flow,t})]
 $$
 
-로 student가 만드는 motion-feture distribution을 real/teacher 쪽 motion-feature distribution에 가깝게 하겠다는 것이다. 그러면 flow score는
+로 student가 만드는 motion-feature distribution을 real/teacher 쪽 motion-feature distribution에 가깝게 하겠다는 것이다. 그러면 flow score는
 
 $$
 s^{flow} (x_t, t) = \nabla_{x_t} log p(F(x) | x_t)
 $$
 
-로 정의한다. 이는 일반 diffusion과 다르게 **현재 noisy video latent $x_t$를 어느 방향으로 변화시키면 원하는 motion feature $F(x)$가 더 그럴듯해지는지**를 나타내는 graident라고 보면된다.
+로 정의한다. 이는 일반 diffusion과 다르게 **현재 noisy video latent $x_t$를 어느 방향으로 변화시키면 원하는 motion feature $F(x)$가 더 그럴듯해지는지**를 나타내는 gradient라고 보면 된다.
 
 $$
 \nabla_{\phi} L_{\mathrm{DMD}}^{\mathrm{flow}}
@@ -237,7 +237,7 @@ $$
 L_{reg}^{flow} = \mathbb{E} [\lVert F(G_{\phi}^{teacher}) - F(G_{\phi}^{student}) \rVert _2^2]
 $$
 
-즉 같은 조건에서 teacher와 student가 생성한 video를 각각 teacher/student flow extractor$F(\cdot)$에 넣고, 맞추는 방법이다. 그러면 loss 최종 전체 식이
+즉 같은 조건에서 teacher와 student가 생성한 video를 각각 teacher/student flow extractor $F(\cdot)$에 넣고, 맞추는 방법이다. 그러면 최종 loss 식이
 
 $$
 L_{\mathrm{Total}}
