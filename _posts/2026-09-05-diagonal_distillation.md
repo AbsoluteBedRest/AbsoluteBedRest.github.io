@@ -132,7 +132,7 @@ $$
 \tilde{X}_{k-1} = \sqrt{\alpha_{k-1}} X_{k-1} + \sqrt{1-\alpha_{k-1} \epsilon}, \; \epsilon \sim \mathcal{N}(0, I)
 $$
 
-$X_{k-1}$은 이전 chunk의 clean output이고, $tilde{X}_{k-1}$은 거기에 controlled noise를 추가한 상태다. 그러면 흐름은 이렇게 바뀐다.
+$X_{k-1}$은 이전 chunk의 clean output이고, $\tilde{X}_{k-1}$은 거기에 controlled noise를 추가한 상태다. 그러면 흐름은 이렇게 바뀐다.
 
 $$
 \text{Chunk} \; X_{k-1} \rightarrow \text{noise 추가} \rightarrow \text{partially noisy} \; \tilde{X}_{k-1} \rightarrow \text{KV cache} \rightarrow \text{Chunk k}
@@ -258,4 +258,59 @@ $$
 
 이렇게 된다.
 
+## Experiments
 
+#### Implementation Details
+
+Wan2.1-T2V-1.3B를 기반 모델로 사용하며, ODE initialization과 Diagonal Distillation 학습에는 VidProM에서 필터링하고 LLM으로 확장한 text prompt를 사용한다. Inference는 단일 NVIDIA H100 GPU에서 수행하고, Tiny VAE와 chunk size 3 frames의 rolling KV cache를 사용한다. **KV cache는 최근 4개 chunk의 context를 유지**해 memory footprint를 약 17.5 GB로 고정하며, streaming 성능 평가는 throughput(FPS)과 first-frame latency를 함께 측정한다. 평가는 VBench를 사용하며, Temporal Quality는 subject/background consistency, temporal flickering, motion smoothness, dynamic degree의 평균으로, Frame Quality는 aesthetic/imaging quality의 평균으로, Text Alignment는 object, action, color, spatial relation, scene, appearance, style 등 여러 semantic 항목의 평균으로 계산한다.
+
+#### Comparison with state-of-the-art methods
+
+<p align="center">
+  <img src="/assets/images/posts/2026-09-05-diagonal_distillation/1789465793073.png" width="50%">
+</p>
+
+DiagDistill을 Wan2.1, SkyReels-V2, MAGI-1, CausVid, Self-Forcing과 비교한다. DiagDistill은 단일 H100에서 31 FPS, 0.37초 first-frame latency를 기록하며 Wan2.1 대비 277.3× speedup을 달성했고, 기존의 빠른 AR 방식인 CausVid와 Self-Forcing보다도 높은 throughput과 더 낮은 latency를 보였다. 동시에 VBench 기반 평가에서 Total 84.48, Quality 85.26, Semantic 81.73을 기록해 원본 Wan2.1과 유사한 visual quality를 유지하면서도 semantic consistency에서는 경쟁력 있는 성능을 보였으며, qualitative result에서도 복잡한 motion과 texture에서 baseline보다 더 부드러운 transition과 적은 distortion을 보여 속도와 생성 품질 간 trade-off를 효과적으로 개선했음을 확인한다.
+
+#### Ablation Studies
+
+<p align="center">
+  <img src="/assets/images/posts/2026-09-05-diagonal_distillation/1789466093829.png" width="50%">
+</p>
+
+<p align="center">
+  <img src="/assets/images/posts/2026-09-05-diagonal_distillation/1789466139945.png" width="50%">
+</p>
+
+<p align="center">
+  <img src="/assets/images/posts/2026-09-05-diagonal_distillation/1789466184145.png" width="50%">
+</p>
+
+<p align="center">
+  <img src="/assets/images/posts/2026-09-05-diagonal_distillation/1789466218289.png" width="50%">
+</p>
+
+DiagDistill의 핵심 구성요소와 하이퍼파라미터를 각각 제거하거나 변경해 효과를 검증한다. Table 2에서 Diagonal Forcing을 제거하면 전체 성능이 가장 크게 감소하고, Flow Distribution Matching을 제거해도 temporal/frame/text alignment가 모두 하락하는 반면, Diagonal Denoising을 제거하면 품질은 거의 유지되지만 inference cost가 증가해 속도 이점이 사라지는 것을 보여준다. 또한 Figure 5(a)에서는 Diagonal Forcing에 사용하는 noise timestep을 비교해 100 timestep 부근이 가장 좋은 성능을 보였으며, noise가 너무 많으면 structural prior가 약해지고 너무 적으면 over-denoising과 oversaturation 문제가 발생한다고 분석한다. Figure 5(b)에서는 flow loss weight가 1.0일 때 temporal quality, frame quality, text alignment 간의 균형이 가장 좋음을 보이고, Table 3에서는 다양한 denoising schedule을 비교해 5333333이 가장 높은 품질을, 4222222가 가장 높은 throughput을 보였으며, 최종적으로 품질과 속도의 균형이 좋은 4322222를 선택한다. 추가로 Figure 6은 flow loss가 없을 때 motion amplitude가 크게 줄어들고, 이를 적용했을 때 움직임이 보다 뚜렷하게 유지되는 것을 시각적으로 보여준다.
+
+#### Long Video Generation Evaluation
+
+<p align="center">
+  <img src="/assets/images/posts/2026-09-05-diagonal_distillation/1789466362846.png" width="70%">
+</p>
+
+<p align="center">
+  <img src="/assets/images/posts/2026-09-05-diagonal_distillation/1789466408915.png" width="70%">
+</p>
+
+DiagDistill의 장시간 video generation 성능을 평가한다. Figure 8에서 baseline들은 시간이 지날수록 error accumulation으로 perceptual quality가 빠르게 감소하는 반면, DiagDistill은 긴 sequence에서도 비교적 안정적인 quality를 유지한다. 또한 MovieGenBench의 첫 50개 prompt를 대상으로 93명의 참가자가 수행한 user study에서도 overall visual quality, text faithfulness, long-term consistency 측면에서 baseline보다 높은 선호도를 보였으며, 이는 Figure 7의 qualitative comparison에서 CausVid와 Self-Forcing이 장시간 생성 시 saturation distortion과 quality degradation을 보이는 것과도 일치한다. 추가적으로 Figure 9에서는 generation 도중 임의의 시점에 새로운 prompt를 입력할 수 있는 dynamic prompting을 보여주며, 이를 통해 장면이나 action이 변화하는 긴 narrative video도 연속적으로 생성할 수 있음을 보인다.
+
+## Contributions
+
+- 모든 video chunk에 동일한 denoising step을 사용하는 대신, 초기 chunk에는 더 많은 step을, 이후 chunk에는 점점 적은 step을 할당하여 temporal context를 활용하면서 계산량을 줄인다.
+- 이전 chunk의 denoising trajectory와 partially noised representation을 다음 chunk의 contextual prior/KV cache로 전달하여, training과 inference 간의 mismatch를 줄이고 long-video generation에서의 error accumulation을 완화한다.
+- few-step denoising에서 발생하는 motion degradation 및 motion amplitude 감소를 보완하기 위해, teacher와 student의 motion distribution을 맞추는 temporal distillation objective를 추가한다.
+
+## Limitations & Future works
+
+- 실제로 깃허브 페이지에 들어가서 결과물 비디오들을 보면 차량이 앞으로 가는 Scene에서 갑자기 후진하는 Scene으로 변하는 결과물이 등장하는데 이는 물리적, 그리고 time 흐름에 맞는 결과물을 항상 보장하는 건 아닌 것 같다.
+- 실제 real-time 성능은 H100과 Tiny VAE, rolling KV cache 등의 최적화에 기반하므로, 모든 hardware나 base model에서 동일한 31 FPS가 보장된다는 의미는 아니다.
