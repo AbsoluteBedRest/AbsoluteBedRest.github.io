@@ -259,3 +259,126 @@ Teacher model은 현재 bidirectional diffusion model이다. 예를 들어 81 fr
 
 그리고 두 번째로 **attention context가 길이에 따라 달라지면 latency가 일정하지 않다는 점**이다. full causal attention의 경우에 frame의 길이가 길어질수록 과거는 계속 쌓인다. 그리고 context도 같이 커지게 되는데, 이러면 긴 영상을 만들수록 attention cost도 커지게 된다. 이는 실시간 streaming 에서는 치명적이다.
 
+그래서 **Sliding Window Attention**을 사용한다. 이는 단순한 해결책으로서 모든 과거를 보지 않고 최근 일부만 보는 방식이다. 그런데 이 기법 또한 문제가 있다. 오래 생성하다 보면 첫 번째 input image에 대한 정보가 window 밖으로 밀려난다면, error가 frame을 거칠 때마다 조금씩 생기고 이개 누적되는 문제가 발생한다. 이를 **autoregressive error accumulation / drift**다.
+
+그리고 저자들은 self-attention map을 직접 확인한다. 그게 위에 있는 figure 3 이미지다. 이를 통해 bidirectional 이든 causal이든 많은 attention head가 계속해서 초기 frame의 token애 강하게 attention하는 현상을 발견한다. 즉 모델 입장에서 첫 frame은 그냥 오래된 frame 하나가 아니라 **"영상의 identity와 scene을 유지하기 위한 anchor"**의 역할을 수행하고 있다는 것이다. 논문의 저자들은 이를 LLM의 streamingLLM에서 발견된 **attention sink**와 비슷하다고 보았다.
+
+그래서 논문의 저자들은 
+
+> sliding window를 쓰되, 맨 처음 frame은 버리지 않는 방식으로 진행한다. 
+
+논문에서는 첫 chunk는 항상 고정되어 있기 때문에 model이 오래 생성하더라도 원래 scene이나 identity를 계속 anchor 할 수 있다고 말하며, 이를 sink chunk라고 부른다.
+
+자 그러면 논문에서 말하는 **rolling window**에 대해서 알아야 한다. 우리는 앞서 sink와 window의 필요성과 무엇인지에 대해 이해를 했다. 그래서 우리에게는 이제 두 가지 hyperparameter가 존재한다:
+
+$$
+S = \text{number of sink chunks}, W = \text{local window size}
+$$
+
+만약, $S=1, W=2$ 인 상태에서 chunk 11을 생성할 때, $[1,9,10]$이 된다. 즉 sink chunk는 그대로 있고 local window만 이동하게 된다. 
+
+student의 작동 구조는 파악했다. 그런데, bidirectional teacher의 weight를 바로 causal student에 넣으면 잘 동작하지 않는다. teacher는 원래 past와 future을 모두 볼 수 있도록 학습되어있다. 그런데 student는 past만 볼 수 있다. 그래서 먼저 teacher weight로 student를 initialize한 뒤, causal architecture에 적응시키는 단계가 필요하다. 이를 위해 다양한 context window size, attention sink size를 가지는 **attention mask**를 사용한다. 이렇게 되면 student가 특정 하나의 causal pattern에만 익숙해지지 않고 여러 causal context에 적응하도록 한다. 논문의 저자들은 이를 **Causal Adaptation**이라고 표현한다.
+
+이제 본격적으로 distillation 방식을 설명하려고한다. MotionStream의 경우 기존의 Self-forcing 기법 기반의 distillation 방식을 채택한다. Self-forcing 기법을 간단하게 설명하면, 일반적인 autoregressive training에서 학습할 때 보통 ground-truth previous frame을 condition으로 준다. 그리고 그 다음 frame을 예측하도록 하는데, 문제는 infrernce 때는 ground truth가 없다는 점이다.
+
+그래서 자기가 생성한 결과를 다시 condition으로 사용해야한다. 문제는 학습할 때는 깨끗한 input(GT)를 봤는데 inference에서는 자기 error가 들어간 input을 계속 보아야 한다. 이를 **train-test gap**이라고 생각하면 된다. Self Forcing은 이걸 해결하기 위해서 학습 중에도 실제 inference 처럼 자기가 생성한 결과를 다음 입력으로 사용하도록한다.
+
+이제 MotionStream의 distillation 동작에 대해 설명하고자 한다.
+
+먼저, 논문에서는 전체 video latent를 L개의 chunk로 나눈다.
+
+$$
+\{z_t^i\}_{i=1}^L
+$$
+
+여기서 $i$는 chunk index로 사용한다. 현재 $i$번째 chunk를 생성할 때 사용할 context를 논문은
+
+$$
+C_i = \{z_t^i\} \cup \{z_0^j\}_{j \le S} \cup \{z_0^j\}_{\text{max(1, i-W)} \le j < i}
+$$
+
+이렇게 표현한다. 즉, **"현재 noisy chunk + initial sink + recent generated chunks"** 이다. 그래서 전체 video probability는 
+
+$$
+p_{\theta}(z_0^{1:L}) = \prod_{i=1}^{L} p_{\theta}(z_0^i \mid C_i)
+$$
+
+로 표현된다. 이는 chunk 1을 만들고, 그것을 보고 chunk 2를 만들고, 아프이 결과를 보고 chunk 3을 만들고 ... 이 방식이다. 즉, **causal autoregressive generation**이다.
+
+추가적으로, KV Cache를 사용해서 **Rolling KV Cache**라는 컨셉을 사용한다. 모든 과거 KV를 저장하면 결국 memory와 attention cost가 계속 증가하므로 MotionStream은 **Sink KV + Recent window KV**만 남긴다는 것이다. 그래서 KV Cache 에서 업데이트되는 주체는 Sink Chunk가 아니라 window Chunk 부분이 계속 업데이트된다. 예를 들어, $S=1, W=2$라고 한다면 현재 10 chunk를 생성할 때 현재 cache에는 [1,8,9]가 있고, 10 chunk를 생성하고 [1,10,11]로 KV Cache가 갱신되는 것이다.
+
+그리고 training에서도 rolling 방식으로 학습한다. 기존 방법 중에는 training에서 causal attention mask를 쓰고, inference에서만 rolling cache를 사용하는 경우가 있다. 그러면 training과 inference가 정확히 일치하지 않으니 Motion Stream은 학습 중에도 
+
+$$
+\text{self-rollout} + \text{rolling KV cache} + \text{attention sink}
+$$
+
+를 그대로 사용하며 논문은 이를 **extrapolation-aware training*이라고 표현한다. Distillation 방식은 기존의 DMD 방식을 채택한다. DMD관련 설명은 FlashWorld 논문 리뷰 게시글의 Preliminary 섹션에 적혀 있으니 확인하길 바란다.
+
+DMD의 distillation 방식을 사용하는데, 여기서 teacher의 경우 text guidance와 motion guidance를 동시에 사용했다. 그래서 teacher inference 시에는 3 NFE가 필요했는데, student의 경우에는 3 NFE를 유지하면 실시간 생성 목표에 차질이 생긴다. 그래서 이 비싼 guidance를 student에게 distill해서 내장한다. DMD에서는 teacher를 $s_{real}$, 즉 score setimator의 역할로 사용한다.
+
+$$
+s_{\mathrm{real}}
+=
+s_{\mathrm{base}}
++
+w_t
+\left(
+f_\phi(c_t,c_m)-f_\phi(\emptyset,c_m)
+\right)
++
+w_m
+\left(
+f_\phi(c_t,c_m)-f_\phi(c_t,\emptyset)
+\right)
+$$
+
+이는 이전에 보았던 teacher 모델이 학습할 때 최종 guided velocity $\hat{v}$를 예측할 때 사용한 수식과 거의 동일하다. 논문은 이를 real-data score를 만드는 식이라고 말한다. 반면 fake score estimator는 
+
+$$
+s_{fake} = f_{\psi}(c_t, c_m)
+$$
+
+처럼 CFG 없이 한 번의 evaluation만 사용한다. 즉 student는 나중에 inference 할 때 별도로 text CFG와 motion CFG를 계산할 필요가 없다. 그래서 앞서 비싼 guidance를 student에게 distill해서 내장한다는 의미가 여기서 나온 것이다.
+
+그런데 여기서 두 개의 network가 등장한다. $G_{\theta}$ 인 실제 video를 생성하는 student Generator와 $f_{\psi}$인 student가 현재 만들어내는 distribution의 score를 추정하는 fake score estimator다. 
+
+$$
+\nabla_{\theta} L_{\mathrm{DMD}}
+\approx
+-
+\mathbb{E}_{t,\hat{z}_0}
+\left[
+\left(
+s_{\mathrm{real}}(\Psi(\hat{z}_0,t),t)
+-
+s_{\mathrm{fake}}(\Psi(\hat{z}_0,t),t)
+\right)
+\cdot
+\frac{\partial \hat{z}_0}{\partial \theta}
+\right]
+$$
+
+그럼이제 DMD 수식을 살펴보면 논문이 목표로 하는 Generator를 real-time에서 생성할 수 있도록 하는 것이 보인다. 즉, Generator의 $\theta$를 업데이트 시키는 것이 목적이고, 이를 위해 critic이 추정한 score $s_{fkae}$와 teacher score의 $s_{real}$의 차이를 통해 업데이트 시키는 것이다.
+
+논문에서는 generator와 critic update 비율을 1:5로 둔다. critic을 더 자주 학습시켜서 현재 generaotr distribution을 잘 추적하도록 하는 것이다.
+
+이 이외에도 **Gradient truncation**이라는 기법도 사용한다. Autoregressive self-rollout 전체에 gradient를 다 저장하면 memory가 많이 필요하다. Chunk $L$ 전부에 대해 여러 denoising step의 computation graph를 저장해야하기 때문에 Self-Forcing에서 사용하는 gradient truncation을 적용한다. 
+
+denoising step 중 하나를 랜덤하게 고르고 그 step에 대해서만 gradient를 backpropagation 한다. 또 이전 frame의 KV cache는 **stop-gradient**처리하여 과거 cache까지 gradient를 계속 따라가지 않는다. 이 덕분에 memory usage를 크게 줄일 수 있다.
+
+#### Inference
+
+이렇게 DMD 기법을 활용한 Student Generator의 학습이 끝나고 inference 에서는
+
+$$
+\text{sink chunks} + \text{recent local chunks}
+$$
+
+만 KV Cache에 유지한다. 그리고 새 chunk가 생성될 때마다 local window를 한 칸씩 굴린다. 그래서 영상이 아무리 길어져도 attention context 크기가 증가하지 않는다. 결과적으로 video length가 길어져도 per-chunk computational cost는 constant에 approximation 되어 유지할 수 있다. 
+
+
+
+
+
+
