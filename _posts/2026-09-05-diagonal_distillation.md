@@ -1,6 +1,6 @@
 ---
 title: "[Paper Review, KR] Streaming Autoregressive Video Generation via Diagonal Distillation"
-date: 2026-09-15
+date: 2026-09-05
 categories:
   - Others
 tags:

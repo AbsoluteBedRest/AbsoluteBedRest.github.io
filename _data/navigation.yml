@@ -16,6 +16,10 @@ sidebar_menu:
         category: "XR"
         url: /categories/xr/
 
+      - title: "❔ Other Fields"
+        category: "Other Fields"
+        url: /categories/other-fields/
+
   - title: "🤔 OTHERS"
     url: /categories/others/
     category: "Others"
