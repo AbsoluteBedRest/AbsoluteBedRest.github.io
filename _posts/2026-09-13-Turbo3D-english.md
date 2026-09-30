@@ -342,7 +342,7 @@ That is, although Latent GS-LRM takes latents as input, the predicted 3D Gaussia
 
 #### Setup
 
-The Objaverse dataset is used for training. For multi-view generation, objects are normalized to the range $[-1, 1]^3$, and 16 azimuth views are rendered at an elevation of $20\degree$. For reconstruction training, 32 random views around each object are used, with a total of 730K objects rendered.
+The Objaverse dataset is used for training. For multi-view generation, objects are normalized to the range $[-1, 1]^3$, and 16 azimuth views are rendered at an elevation of $20^\circ$. For reconstruction training, 32 random views around each object are used, with a total of 730K objects rendered.
 
 The baselines are Instant3D, LGM, TripoSR, and SV3D. Evaluation uses 400 DreamFusion prompts; for each generated object, 10 random views are rendered to measure the CLIP score, VQA score, and inference time.
 
