@@ -315,7 +315,7 @@ inference 때는 $\Delta G_{4D}$와 STDF는 제거하고, $G_{4D}$ canonical 4D 
 
 #### Optimization
 
-
+이 논문에서는 generated video까지 reconstruction에 
 
 
 
