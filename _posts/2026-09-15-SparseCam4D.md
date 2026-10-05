@@ -79,7 +79,7 @@ $$
 처럼 canonical Gaussian $G$가 시간 $t$에서 어떻게 변형되는지를 예측하는 데 사용된다. 최종적으로 변형된 Gaussian은
 
 $$
-G^' = G+\Delta G
+G' = G + \Delta G
 $$
 
 가 되고, 이를 이용해 해당 시점의 이미지를 렌더링한다.
