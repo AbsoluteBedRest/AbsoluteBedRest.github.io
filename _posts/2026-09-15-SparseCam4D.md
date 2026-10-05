@@ -98,7 +98,7 @@ $$
 V_I = \{(I_s^t, [R|T]_s) | t=0,...,L, \; s=0,...,N\}
 $$
 
-여기서 $t$는 time index이고, $s$는 camera/view index다. 그리고 $I_s^t$는 camera $s$에서 시간 $t$에 촬영한 image고, $[R|T]_s$는 해당 camera pose다. 
+여기서 $t$는 time index이고, $s$는 camera/view index다. 그리고 $I_s^t$는 camera $s$에서 시간 $t$에 촬영한 image고, $[R | T]_s$는 해당 camera pose다.
 
 그리고 video diffusion model을 이요해 실제로 존재하지 않았던 새로운 camera trajectory의 video를 생성하고, 이를 generated views $V_G$라고 정의한다.
 
