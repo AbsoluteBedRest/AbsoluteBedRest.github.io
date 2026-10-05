@@ -47,7 +47,10 @@ $$
 특정 시간 $t$의 장면을 렌더링할 대는 이 4D Gaussian을 그 시점의 3D Gaussian으로 slice한다. 
 
 $$
-
+G_{3D}(x,t)
+=
+e^{-\frac{1}{2}\lambda(t-\mu_t)^2}
+e^{-\frac{1}{2}[x-\mu(t)]^T\Sigma_{3D}^{-1}[x-\mu(t)]}
 $$
 
 해당 수식에서 시간 $t$가 Gaussian의 temporal center $\mu_t$와 얼마나 가까운지에 따라 해당  Gaussian이 그 시점에서 얼마나 기여할지가 결정된다. 여기서 첫 번째 항은 시간 방향의 영향도, 두 번째 항은 일반적인 3D Gaussian의 공간적 영향도라고 이해하면 된다. 이후 렌더링은 일반 3DGS의 differentiable splatting을 사용한다.
