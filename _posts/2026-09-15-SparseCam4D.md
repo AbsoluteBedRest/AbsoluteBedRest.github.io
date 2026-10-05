@@ -95,15 +95,15 @@ sparse camera로 실제 관측한 영상만으로 4DGS를 학습하기에는 정
 먼저 입력으로 $N$개의 sparse camera video가 있고, 각 video는 $L$개의 frame을 가진다. 논문은 실제 camera에서 얻은 영상과 pose를 다음과 같이 input views $V_I$로 정의한다.
 
 $$
-V_I = \{(I_s^t, [R|T]_s) | t=0,...,L, \; s=0,...,N\}
+V_I = \{(I_s^t, [R | T]_s) | t=0,...,L, \; s=0,...,N\}
 $$
 
 여기서 $t$는 time index이고, $s$는 camera/view index다. 그리고 $I_s^t$는 camera $s$에서 시간 $t$에 촬영한 image고, $[R | T]_s$는 해당 camera pose다.
 
-그리고 video diffusion model을 이요해 실제로 존재하지 않았던 새로운 camera trajectory의 video를 생성하고, 이를 generated views $V_G$라고 정의한다.
+그리고 video diffusion model을 이용해 실제로 존재하지 않았던 새로운 camera trajectory의 video를 생성하고, 이를 generated views $V_G$라고 정의한다.
 
 $$
-V_G = \{(I_s^t, [R|T]_s) | t=0,...,L,\; s=0,...,M\}
+V_G = \{(I_s^t, [R | T]_s) | t=0,...,L,\; s=0,...,M\}
 $$
 
 즉 최종적으로 4DGS는 단순히 실제 sparse camera만 사용하는 것이 아니라,
